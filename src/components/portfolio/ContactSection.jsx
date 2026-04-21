@@ -21,6 +21,8 @@ export default function ContactSection() {
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         {
+          name: form.name,
+          email: form.email,
           from_name: form.name,
           from_email: form.email,
           subject: form.subject,
