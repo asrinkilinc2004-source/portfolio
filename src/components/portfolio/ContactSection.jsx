@@ -28,7 +28,7 @@ export default function ContactSection() {
           subject: form.subject,
           message: form.message,
         },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+        { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY }
       );
       setSent(true);
       setForm({ name: "", email: "", subject: "", message: "" });
