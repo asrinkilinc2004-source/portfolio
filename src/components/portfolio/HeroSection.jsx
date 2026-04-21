@@ -99,7 +99,7 @@ export default function HeroSection() {
               <img
                 src={AVATAR_URL}
                 alt="Profile"
-                className="w-full h-full object-cover" />
+                className="w-full h-full object-cover scale-125 object-top" />
               
             </div>
             <div className="px-5 rounded-full absolute -inset-4 border border-primary/10 animate-pulse" />
