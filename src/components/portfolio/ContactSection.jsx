@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Send } from "lucide-react";
-import { base44 } from "@/api/base44clients";
+import emailjs from "@emailjs/browser";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -10,18 +10,28 @@ export default function ContactSection() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSending(true);
+    setError(false);
     try {
-      await base44.integrations.Core.SendEmail({
-        to: "asrinkilinc@hotmail.com",
-        subject: `[Portfolio Contact] ${form.subject}`,
-        body: `Naam: ${form.name}\nE-mail: ${form.email}\n\n${form.message}`,
-      });
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: form.name,
+          from_email: form.email,
+          subject: form.subject,
+          message: form.message,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
       setSent(true);
       setForm({ name: "", email: "", subject: "", message: "" });
+    } catch {
+      setError(true);
     } finally {
       setSending(false);
     }
@@ -85,6 +95,11 @@ export default function ContactSection() {
             {sent && (
               <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 text-primary text-sm">
                 Bericht verzonden! Ik neem zo snel mogelijk contact op.
+              </div>
+            )}
+            {error && (
+              <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+                Er ging iets mis. Probeer het opnieuw of mail direct naar asrinkilinc@hotmail.com.
               </div>
             )}
             <div className="grid sm:grid-cols-2 gap-4">
