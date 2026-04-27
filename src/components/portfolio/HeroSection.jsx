@@ -6,16 +6,22 @@ import { useLanguage } from "@/lib/LanguageContext";
 const AVATAR_URL = "https://media.base44.com/images/public/69d65fddb630545f5349caa8/d7f83ed85_WhatsAppImage2026-04-08at124316.jpg";
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
+const START_DELAY = isMobile ? 350 : 850;
+
 function useTypingLoop(text, typeSpeed = 55, deleteSpeed = 25, pauseMs = 10000) {
   const [displayed, setDisplayed] = useState("");
-  const [phase, setPhase] = useState("typing");
+  const [phase, setPhase] = useState("idle");
 
+  // Reset and wait for entrance animation before starting
   useEffect(() => {
     setDisplayed("");
-    setPhase("typing");
+    setPhase("idle");
+    const timer = setTimeout(() => setPhase("typing"), START_DELAY);
+    return () => clearTimeout(timer);
   }, [text]);
 
   useEffect(() => {
+    if (phase === "idle") return;
     let timeout;
     if (phase === "typing") {
       if (displayed.length < text.length) {
