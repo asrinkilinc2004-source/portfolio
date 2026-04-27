@@ -21,7 +21,13 @@ export default function Navbar() {
   ];
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 40);
+      // Clear active section when back in the hero (top half of first viewport)
+      if (window.scrollY < window.innerHeight * 0.5) {
+        setActiveSection("");
+      }
+    };
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);

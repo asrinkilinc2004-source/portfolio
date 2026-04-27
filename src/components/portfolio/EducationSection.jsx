@@ -24,7 +24,7 @@ export default function EducationSection() {
                   <div className="w-2 h-2 rounded-full bg-primary" />
                 </div>
                 <span className="font-mono text-xs text-primary tracking-wider">{item.year}</span>
-                <h3 className="text-xl font-bold mt-1 mb-1">{item.title}</h3>
+                <h3 className="text-xl font-bold mt-1 mb-1"><span className="marker-highlight">{item.title}</span></h3>
                 <p className="text-sm text-muted-foreground mb-2">{item.institution}</p>
                 <p className="text-muted-foreground leading-relaxed">{item.description}</p>
               </motion.div>
