@@ -75,7 +75,7 @@ export default function ProjectsSection() {
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{label}</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">{title}</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight"><span className="marker-highlight">{title}</span></h2>
         </motion.div>
         <div className="space-y-8">
           {items.map((project, i) => <TiltCard key={project.title} project={project} index={i} />)}

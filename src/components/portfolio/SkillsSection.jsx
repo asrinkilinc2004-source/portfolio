@@ -39,7 +39,7 @@ export default function SkillsSection() {
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{label}</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">{title}</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight"><span className="marker-highlight">{title}</span></h2>
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">

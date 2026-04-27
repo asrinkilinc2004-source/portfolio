@@ -36,7 +36,7 @@ export default function ContactSection() {
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{c.label}</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">{c.title}</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight"><span className="marker-highlight">{c.title}</span></h2>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16">
