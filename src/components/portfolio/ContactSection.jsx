@@ -62,7 +62,7 @@ export default function ContactSection() {
                 </div>
               </div>
               <a
-                href="https://www.linkedin.com/in/asrin-kilinc/"
+                href="https://www.linkedin.com/in/asrin-k/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 group"
@@ -72,7 +72,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">LinkedIn</p>
-                  <p className="text-foreground group-hover:text-primary transition-colors">linkedin.com/in/asrin-kilinc</p>
+                  <p className="text-foreground group-hover:text-primary transition-colors">linkedin.com/in/asrin-k</p>
                 </div>
               </a>
             </div>
