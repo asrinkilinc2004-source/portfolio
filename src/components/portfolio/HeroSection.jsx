@@ -34,9 +34,7 @@ export default function HeroSection() {
             <h1 className="text-5xl md:text-7xl font-inter font-bold tracking-tight leading-[1.1] mb-6">
               <span className="text-foreground">Asrin Kilinc</span>
               <br />
-              <span className="bg-clip-text text-sky-500 text-3xl from-primary to-accent">Business, IT & Management student
-
-              </span>
+              <span className="text-primary text-3xl">Business, IT & Management student</span>
             </h1>
             
 
