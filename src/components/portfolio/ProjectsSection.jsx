@@ -1,102 +1,43 @@
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
-
-const projects = [
-  {
-    semester: "Semester 3",
-    title: "Ministerie van Defensie — Epicflow Dashboard",
-    description:
-      "Een inkoopbeheerdashboard voor het Nederlandse Ministerie van Defensie, gebouwd onder het Epicflow-merk. Visualiseert contractrisiconiveaus, leveranciersprestaties, budget vs. uitgaven en inkooptijdlijnen. Bijgedragen aan requirementsanalyse, UX-structuur en datapresentatie.",
-    tags: ["Dashboard", "Overheid", "Datavisualisatie", "Inkoop"],
-    image: "https://media.base44.com/images/public/69d65fddb630545f5349caa8/2bc8d0b12_hi-fi.jpg",
-  },
-  {
-    semester: "Semester 2",
-    title: "Rituals — CO₂ Emissions Dashboard",
-    description:
-      "Een duurzaamheidsdashboard dat CO₂-uitstoot per regio en maand bijhoudt voor Rituals Cosmetics. Bevat datavisualisatie, maandelijkse trendanalyse en rapportagetools. Gericht op het vertalen van duurzaamheids-KPI's naar bruikbare inzichten.",
-    tags: ["Duurzaamheid", "Dashboard", "CO₂", "Data-analyse"],
-    image: "https://media.base44.com/images/public/69d65fddb630545f5349caa8/521c94e01_Afbeelding1.png",
-  },
-  {
-    semester: "Semester 1",
-    title: "DOKKI€ — Group Expense Splitter",
-    description:
-      "Een webapp waarmee je moeiteloos gedeelde uitgaven binnen een vriendengroep kunt bijhouden en automatisch verdelen. Bijgedragen aan productvisiee, UX-flows en overall requirements.",
-    tags: ["Web App", "UX Design", "JavaScript", "Product"],
-    image: "https://media.base44.com/images/public/69d65fddb630545f5349caa8/eb1415f00_nieuwe-versie.jpg",
-  },
-  {
-    semester: "Semester 1",
-    title: "SafeNotes — Secure Note-Taking App",
-    description:
-      "Een privacy-first notitieplatform met gebruikersauthenticatie, snelle invoer en veilige opslag. Sleutelrol gespeeld bij het definiëren van requirements, gebruikersflows en de authenticatie-ervaring.",
-    tags: ["React", "Node.js", "Auth", "HvA Project"],
-    image: "https://media.base44.com/images/public/69d65fddb630545f5349caa8/ef1cf4343_safenotes1.jpg",
-  },
-];
+import { useLanguage } from "@/lib/LanguageContext";
 
 function TiltCard({ project, index }) {
-  const cardRef = useRef(null);
-
-  const handleMouseMove = (e) => {
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    card.style.transition = "transform 0.05s linear";
-    card.style.transform = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 6}deg) scale3d(1.02,1.02,1.02)`;
+  const ref = useRef(null);
+  const onMove = (e) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - 0.5;
+    const y = (e.clientY - r.top)  / r.height - 0.5;
+    el.style.transition = "transform 0.05s linear";
+    el.style.transform  = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 6}deg) scale3d(1.02,1.02,1.02)`;
   };
-
-  const handleMouseLeave = () => {
-    const card = cardRef.current;
-    if (!card) return;
-    card.style.transition = "transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)";
-    card.style.transform = "perspective(900px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)";
+  const onLeave = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.transition = "transform 0.5s cubic-bezier(0.23,1,0.32,1)";
+    el.style.transform  = "perspective(900px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)";
   };
 
   return (
-    <motion.div
-      key={project.title}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-    >
-      <div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+    <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: index * 0.1 }}>
+      <div ref={ref} onMouseMove={onMove} onMouseLeave={onLeave}
         className="group relative rounded-xl overflow-hidden bg-card border border-border hover:border-primary/30 transition-colors duration-300"
-        style={{ willChange: "transform" }}
-      >
+        style={{ willChange: "transform" }}>
         <div className="flex flex-col lg:flex-row">
           <div className="lg:w-1/2 overflow-hidden">
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-56 lg:h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
+            <img src={project.image} alt={project.title} className="w-full h-56 lg:h-full object-cover group-hover:scale-105 transition-transform duration-500" />
           </div>
           <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col justify-center">
             <span className="inline-block font-mono text-xs text-primary bg-primary/10 border border-primary/20 rounded-md px-2 py-1 mb-3 w-fit">
               {project.semester}
             </span>
-            <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-              {project.title}
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">
-              {project.description}
-            </p>
-            <div className="flex flex-wrap gap-2 mb-6">
+            <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">{project.title}</h3>
+            <p className="text-muted-foreground leading-relaxed mb-6">{project.description}</p>
+            <div className="flex flex-wrap gap-2">
               {project.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20"
-                >
-                  {tag}
-                </span>
+                <span key={tag} className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20">{tag}</span>
               ))}
             </div>
           </div>
@@ -107,24 +48,18 @@ function TiltCard({ project, index }) {
 }
 
 export default function ProjectsSection() {
+  const { t } = useLanguage();
+  const { label, title, items } = t.projects;
+
   return (
     <section id="projects" className="py-32 px-6">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <span className="font-mono text-sm text-primary tracking-wider">03 —</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">Projecten</h2>
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-16">
+          <span className="font-mono text-sm text-primary tracking-wider">{label}</span>
+          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">{title}</h2>
         </motion.div>
-
         <div className="space-y-8">
-          {projects.map((project, i) => (
-            <TiltCard key={project.title} project={project} index={i} />
-          ))}
+          {items.map((project, i) => <TiltCard key={project.title} project={project} index={i} />)}
         </div>
       </div>
     </section>
