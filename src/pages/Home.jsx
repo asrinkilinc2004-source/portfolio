@@ -1,4 +1,5 @@
 import React from "react";
+import { useLenis } from "../lib/useLenis";
 import Navbar from "../components/portfolio/Navbar";
 import HeroSection from "../components/portfolio/HeroSection";
 import AboutSection from "../components/portfolio/AboutSection";
@@ -11,6 +12,7 @@ import CustomCursor from "../components/portfolio/CustomCursor";
 import { LanguageProvider } from "../lib/LanguageContext";
 
 export default function Home() {
+  useLenis();
   return (
     <LanguageProvider>
       <div className="min-h-screen bg-background text-foreground">
