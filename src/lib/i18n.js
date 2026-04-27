@@ -160,7 +160,7 @@ export const translations = {
     education: {
       label: "04 —", title: "Education",
       timeline: [
-        { year: "Sept 2017 — July 2022", title: "HAVO — Nature & Technology with Maths B", institution: "Lyceum Sancta Maria", description: "Completed secondary school at HAVO level with the Nature & Technology profile and Maths B." },
+        { year: "Sept 2017 — July 2022", title: "HAVO — Science & Engineering + advanced mathematics", institution: "Lyceum Sancta Maria", description: "Completed secondary school at HAVO level with the Science & Engineering profile and advanced mathematics." },
         { year: "May 2024", title: "Certificate Physics for Pilots", institution: "Wismon, Utrecht", description: "Obtained the Module Physics for Pilots certificate — an additional qualification in applied physics." },
         { year: "Sept 2024 — Present", title: "Bachelor's in Information Technology", institution: "Amsterdam University of Applied Sciences (HvA)", description: "Studying IT with a consulting focus — covering software, systems, project management and stakeholder communication. Every semester revolves around real client projects." },
         { year: "Semester 1 · 2024/2025", title: "DOKKI€ & SafeNotes", institution: "HvA — First Semester Projects", description: "Two applications built in the first semester: DOKKI€, a group expense splitter, and SafeNotes, a secure note-taking platform with authentication." },
