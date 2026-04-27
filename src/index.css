@@ -78,6 +78,13 @@ html {
   scroll-behavior: smooth;
 }
 
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
 @media (pointer: fine) {
   *, *::before, *::after {
     cursor: none !important;

@@ -5,6 +5,14 @@ import { fadeUp } from "@/lib/motion";
 
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
+// Per-project image overrides (index-based, language-independent)
+const IMAGE_CLASS = [
+  "scale-[1.22] group-hover:scale-[1.28]", // Defensie — zoom to hide black borders
+  "group-hover:scale-105",
+  "group-hover:scale-105",
+  "group-hover:scale-105",
+];
+
 function TiltCard({ project, index }) {
   const ref = useRef(null);
   const onMove = (e) => {
@@ -32,7 +40,13 @@ function TiltCard({ project, index }) {
         style={{ willChange: "transform" }}>
         <div className="flex flex-col lg:flex-row">
           <div className="lg:w-1/2 overflow-hidden">
-            <img src={project.image} alt={project.title} className="w-full h-56 lg:h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <img
+              src={project.image}
+              alt={project.title}
+              draggable={false}
+              onContextMenu={(e) => e.preventDefault()}
+              className={`w-full h-56 lg:h-full object-cover transition-transform duration-500 ${IMAGE_CLASS[index] ?? "group-hover:scale-105"}`}
+            />
           </div>
           <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col justify-center">
             <span className="inline-block font-mono text-xs text-primary bg-primary/10 border border-primary/20 rounded-md px-2 py-1 mb-3 w-fit">
