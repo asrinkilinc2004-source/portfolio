@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Linkedin, Mail } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
+import MagneticButton from "./MagneticButton";
 
 const AVATAR_URL = "https://media.base44.com/images/public/69d65fddb630545f5349caa8/d7f83ed85_WhatsAppImage2026-04-08at124316.jpg";
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
@@ -12,7 +13,6 @@ function useTypingLoop(text, typeSpeed = 55, deleteSpeed = 25, pauseMs = 10000) 
   const [displayed, setDisplayed] = useState("");
   const [phase, setPhase] = useState("idle");
 
-  // Reset and wait for entrance animation before starting
   useEffect(() => {
     setDisplayed("");
     setPhase("idle");
@@ -45,15 +45,42 @@ function useTypingLoop(text, typeSpeed = 55, deleteSpeed = 25, pauseMs = 10000) 
 export default function HeroSection() {
   const { t } = useLanguage();
   const { displayed, showCursor } = useTypingLoop(t.hero.subtitle);
+  const sectionRef = useRef(null);
+  const [glow, setGlow] = useState({ x: 50, y: 50 });
+
+  useEffect(() => {
+    if (isMobile) return;
+    const onMove = (e) => {
+      const r = sectionRef.current?.getBoundingClientRect();
+      if (!r) return;
+      setGlow({
+        x: ((e.clientX - r.left) / r.width) * 100,
+        y: ((e.clientY - r.top) / r.height) * 100,
+      });
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6">
-      {/* Gradient orbs — skipped on mobile (expensive filter) */}
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden px-6">
+      {/* Gradient orbs — skipped on mobile */}
       {!isMobile && (
         <>
           <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
         </>
+      )}
+
+      {/* Ambient cursor glow — desktop only */}
+      {!isMobile && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `radial-gradient(700px circle at ${glow.x}% ${glow.y}%, hsl(var(--primary) / 0.07), transparent 55%)`,
+            transition: "background 0.1s ease",
+          }}
+        />
       )}
 
       <div
@@ -86,13 +113,17 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: isMobile ? 0.3 : 0.7, delay: isMobile ? 0.1 : 0.3 }}
-            className="flex items-center gap-4 mt-8 justify-center lg:justify-start">
-            <a href="#contact" className="bg-[hsl(var(--ring))] text-primary-foreground px-6 py-3 text-sm font-medium rounded-lg hover:opacity-90 transition-opacity">
-              {t.hero.cta_contact}
-            </a>
-            <a href="#projects" className="bg-[hsl(var(--input))] text-foreground px-6 py-3 text-sm font-medium rounded-lg border border-border hover:border-primary/50 transition-colors">
-              {t.hero.cta_projects}
-            </a>
+            className="flex items-center gap-4 mt-8 justify-center lg:justify-start flex-wrap">
+            <MagneticButton>
+              <a href="#contact" className="inline-block bg-[hsl(var(--ring))] text-primary-foreground px-6 py-3 text-sm font-medium rounded-lg hover:opacity-90 transition-opacity">
+                {t.hero.cta_contact}
+              </a>
+            </MagneticButton>
+            <MagneticButton>
+              <a href="#projects" className="inline-block bg-[hsl(var(--input))] text-foreground px-6 py-3 text-sm font-medium rounded-lg border border-border hover:border-primary/50 transition-colors">
+                {t.hero.cta_projects}
+              </a>
+            </MagneticButton>
           </motion.div>
 
           <motion.div
@@ -104,12 +135,14 @@ export default function HeroSection() {
               { icon: Linkedin, href: "https://www.linkedin.com/in/asrin-k/" },
               { icon: Mail,     href: "#contact" },
             ].map(({ icon: Icon, href }, i) => (
-              <a key={i} href={href}
-                target={href.startsWith("http") ? "_blank" : undefined}
-                rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors duration-200">
-                <Icon className="w-4 h-4" />
-              </a>
+              <MagneticButton key={i}>
+                <a href={href}
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors duration-200">
+                  <Icon className="w-4 h-4" />
+                </a>
+              </MagneticButton>
             ))}
           </motion.div>
         </div>

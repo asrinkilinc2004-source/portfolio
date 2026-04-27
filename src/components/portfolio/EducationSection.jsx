@@ -16,7 +16,13 @@ export default function EducationSection() {
         </motion.div>
 
         <div className="relative">
-          <div className="absolute left-5 md:left-8 top-0 bottom-0 w-px bg-border" />
+          <motion.div
+            className="absolute left-5 md:left-8 top-0 bottom-0 w-px bg-border origin-top"
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true, margin: "-5%" }}
+            transition={{ duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+          />
           <div className="space-y-12">
             {timeline.map((item, i) => (
               <motion.div key={i} {...fadeLeft(i * 0.08)} className="relative pl-16 md:pl-20 group">

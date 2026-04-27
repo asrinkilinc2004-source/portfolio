@@ -10,6 +10,7 @@ import ContactSection from "../components/portfolio/ContactSection";
 import Footer from "../components/portfolio/Footer";
 import CustomCursor from "../components/portfolio/CustomCursor";
 import BackToTop from "../components/portfolio/BackToTop";
+import ScrollProgressBar from "../components/portfolio/ScrollProgressBar";
 import { LanguageProvider } from "../lib/LanguageContext";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
   return (
     <LanguageProvider>
       <div className="min-h-screen bg-background text-foreground">
+        <ScrollProgressBar />
         <CustomCursor />
         <Navbar />
         <HeroSection />
