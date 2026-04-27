@@ -43,6 +43,7 @@ function TiltCard({ project, index }) {
             <img
               src={project.image}
               alt={project.title}
+              loading="lazy"
               draggable={false}
               onContextMenu={(e) => e.preventDefault()}
               className={`w-full h-56 lg:h-full object-cover transition-transform duration-500 ${IMAGE_CLASS[index] ?? "group-hover:scale-105"}`}

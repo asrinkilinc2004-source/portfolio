@@ -9,6 +9,7 @@ import EducationSection from "../components/portfolio/EducationSection";
 import ContactSection from "../components/portfolio/ContactSection";
 import Footer from "../components/portfolio/Footer";
 import CustomCursor from "../components/portfolio/CustomCursor";
+import BackToTop from "../components/portfolio/BackToTop";
 import { LanguageProvider } from "../lib/LanguageContext";
 
 export default function Home() {
@@ -25,6 +26,7 @@ export default function Home() {
         <EducationSection />
         <ContactSection />
         <Footer />
+        <BackToTop />
       </div>
     </LanguageProvider>
   );

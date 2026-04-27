@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Send } from "lucide-react";
+import { Mail, MapPin, Send, Linkedin } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -61,6 +61,20 @@ export default function ContactSection() {
                   <p className="text-foreground">{c.location_value}</p>
                 </div>
               </div>
+              <a
+                href="https://www.linkedin.com/in/asrin-kilinc/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <Linkedin className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">LinkedIn</p>
+                  <p className="text-foreground group-hover:text-primary transition-colors">linkedin.com/in/asrin-kilinc</p>
+                </div>
+              </a>
             </div>
           </motion.div>
 
