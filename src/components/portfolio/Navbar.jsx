@@ -51,7 +51,18 @@ export default function Navbar() {
 
         {/* Theme toggle */}
         <button
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          onClick={(e) => {
+            const next = theme === "dark" ? "light" : "dark";
+            if (!document.startViewTransition) {
+              setTheme(next);
+              return;
+            }
+            const x = e.clientX;
+            const y = e.clientY;
+            document.documentElement.style.setProperty("--theme-toggle-x", `${x}px`);
+            document.documentElement.style.setProperty("--theme-toggle-y", `${y}px`);
+            document.startViewTransition(() => setTheme(next));
+          }}
           className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-all duration-200">
           {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
