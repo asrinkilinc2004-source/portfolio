@@ -1,6 +1,9 @@
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
+import { fadeUp } from "@/lib/motion";
+
+const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
 function TiltCard({ project, index }) {
   const ref = useRef(null);
@@ -21,8 +24,10 @@ function TiltCard({ project, index }) {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: index * 0.1 }}>
-      <div ref={ref} onMouseMove={onMove} onMouseLeave={onLeave}
+    <motion.div {...fadeUp(index * 0.08)}>
+      <div ref={ref}
+        onMouseMove={isMobile ? undefined : onMove}
+        onMouseLeave={isMobile ? undefined : onLeave}
         className="group relative rounded-xl overflow-hidden bg-card border border-border hover:border-primary/30 transition-colors duration-300"
         style={{ willChange: "transform" }}>
         <div className="flex flex-col lg:flex-row">
@@ -54,7 +59,7 @@ export default function ProjectsSection() {
   return (
     <section id="projects" className="py-32 px-6">
       <div className="max-w-6xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-16">
+        <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{label}</span>
           <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">{title}</h2>
         </motion.div>

@@ -1,6 +1,9 @@
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
+import { fadeUp } from "@/lib/motion";
+
+const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
 function TiltCard({ children, className }) {
   const ref = useRef(null);
@@ -20,7 +23,8 @@ function TiltCard({ children, className }) {
     el.style.transform  = "perspective(800px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)";
   };
   return (
-    <div ref={ref} onMouseMove={onMove} onMouseLeave={onLeave} className={className} style={{ willChange: "transform" }}>
+    <div ref={ref} onMouseMove={isMobile ? undefined : onMove} onMouseLeave={isMobile ? undefined : onLeave}
+      className={className} style={{ willChange: "transform" }}>
       {children}
     </div>
   );
@@ -33,14 +37,14 @@ export default function SkillsSection() {
   return (
     <section id="skills" className="py-32 px-6">
       <div className="max-w-6xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-16">
+        <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{label}</span>
           <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">{title}</h2>
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((cat, i) => (
-            <motion.div key={cat.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}>
+            <motion.div key={cat.title} {...fadeUp(i * 0.08)}>
               <TiltCard className="p-6 rounded-xl bg-card border border-border h-full">
                 <h3 className="font-mono text-sm text-primary mb-5 tracking-wider">{cat.title}</h3>
                 <div className="flex flex-wrap gap-2">

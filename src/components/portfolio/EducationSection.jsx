@@ -1,9 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { GraduationCap, Award } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
-
-const ICONS = [GraduationCap, Award, GraduationCap, Award, Award, Award, Award];
+import { fadeLeft, fadeUp } from "@/lib/motion";
 
 export default function EducationSection() {
   const { t } = useLanguage();
@@ -12,7 +10,7 @@ export default function EducationSection() {
   return (
     <section id="education" className="py-32 px-6">
       <div className="max-w-6xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-16">
+        <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{label}</span>
           <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">{title}</h2>
         </motion.div>
@@ -21,7 +19,7 @@ export default function EducationSection() {
           <div className="absolute left-5 md:left-8 top-0 bottom-0 w-px bg-border" />
           <div className="space-y-12">
             {timeline.map((item, i) => (
-              <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }} className="relative pl-16 md:pl-20">
+              <motion.div key={i} {...fadeLeft(i * 0.08)} className="relative pl-16 md:pl-20">
                 <div className="absolute left-3 md:left-6 top-1 w-5 h-5 rounded-full border-2 border-primary bg-background flex items-center justify-center">
                   <div className="w-2 h-2 rounded-full bg-primary" />
                 </div>

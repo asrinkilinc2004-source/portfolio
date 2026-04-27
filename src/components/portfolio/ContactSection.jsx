@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/LanguageContext";
+import { fadeUp } from "@/lib/motion";
 
 export default function ContactSection() {
   const { t } = useLanguage();
@@ -33,13 +34,13 @@ export default function ContactSection() {
   return (
     <section id="contact" className="py-32 px-6">
       <div className="max-w-6xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-16">
+        <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{c.label}</span>
           <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">{c.title}</h2>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+          <motion.div {...fadeUp(0.1)}>
             <p className="text-muted-foreground text-lg leading-relaxed mb-8">{c.intro}</p>
             <div className="space-y-5">
               <div className="flex items-center gap-4">
@@ -63,7 +64,7 @@ export default function ContactSection() {
             </div>
           </motion.div>
 
-          <motion.form initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="space-y-5" onSubmit={handleSubmit}>
+          <motion.form {...fadeUp(0.15)} className="space-y-5" onSubmit={handleSubmit}>
             {sent  && <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 text-primary text-sm">{c.form.success}</div>}
             {error && <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">{c.form.error}</div>}
             <div className="grid sm:grid-cols-2 gap-4">

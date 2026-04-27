@@ -43,7 +43,8 @@ export default function Navbar() {
 
   const toggleTheme = (e) => {
     const next = theme === "dark" ? "light" : "dark";
-    if (!document.startViewTransition) { setTheme(next); return; }
+    const isMobile = window.matchMedia("(pointer: coarse)").matches;
+    if (!document.startViewTransition || isMobile) { setTheme(next); return; }
     document.documentElement.style.setProperty("--theme-toggle-x", `${e.clientX}px`);
     document.documentElement.style.setProperty("--theme-toggle-y", `${e.clientY}px`);
     document.startViewTransition(() => setTheme(next));
