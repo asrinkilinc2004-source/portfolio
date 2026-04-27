@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { motion } from "framer-motion";
 
 const projects = [
@@ -36,6 +36,76 @@ const projects = [
   },
 ];
 
+function TiltCard({ project, index }) {
+  const cardRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transition = "transform 0.05s linear";
+    card.style.transform = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 6}deg) scale3d(1.02,1.02,1.02)`;
+  };
+
+  const handleMouseLeave = () => {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.transition = "transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)";
+    card.style.transform = "perspective(900px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)";
+  };
+
+  return (
+    <motion.div
+      key={project.title}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+    >
+      <div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className="group relative rounded-xl overflow-hidden bg-card border border-border hover:border-primary/30 transition-colors duration-300"
+        style={{ willChange: "transform" }}
+      >
+        <div className="flex flex-col lg:flex-row">
+          <div className="lg:w-1/2 overflow-hidden">
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-56 lg:h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+          <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col justify-center">
+            <span className="inline-block font-mono text-xs text-primary bg-primary/10 border border-primary/20 rounded-md px-2 py-1 mb-3 w-fit">
+              {project.semester}
+            </span>
+            <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+              {project.title}
+            </h3>
+            <p className="text-muted-foreground leading-relaxed mb-6">
+              {project.description}
+            </p>
+            <div className="flex flex-wrap gap-2 mb-6">
+              {project.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function ProjectsSection() {
   return (
     <section id="projects" className="py-32 px-6">
@@ -53,46 +123,7 @@ export default function ProjectsSection() {
 
         <div className="space-y-8">
           {projects.map((project, i) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group relative rounded-xl overflow-hidden bg-card border border-border hover:border-primary/30 transition-all duration-300"
-            >
-              <div className="flex flex-col lg:flex-row">
-                <div className="lg:w-1/2 overflow-hidden">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-56 lg:h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col justify-center">
-                  <span className="inline-block font-mono text-xs text-primary bg-primary/10 border border-primary/20 rounded-md px-2 py-1 mb-3 w-fit">
-                    {project.semester}
-                  </span>
-                  <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                </div>
-              </div>
-            </motion.div>
+            <TiltCard key={project.title} project={project} index={i} />
           ))}
         </div>
       </div>
