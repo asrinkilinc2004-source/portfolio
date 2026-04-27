@@ -42,10 +42,21 @@ export default function Navbar() {
           <a
             key={link.href}
             href={link.href}
-            className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200">
-            
-              {link.label}
-            </a>
+            className="relative text-sm text-muted-foreground hover:text-primary transition-colors duration-200 group pb-1">
+            {link.label}
+            <span className="absolute bottom-0 left-0 h-[6px] w-0 group-hover:w-full transition-[width] duration-300 ease-out overflow-hidden pointer-events-none text-primary">
+              <svg height="6" width="100%" preserveAspectRatio="none" viewBox="0 0 100 6">
+                <path
+                  d="M1,4.5 C10,1.5 20,5.5 33,3 C46,0.5 55,5 67,3 C78,1 88,5 99,3.5"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </a>
           )}
         </div>
 
