@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Linkedin, Mail } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
@@ -45,42 +45,15 @@ function useTypingLoop(text, typeSpeed = 55, deleteSpeed = 25, pauseMs = 10000) 
 export default function HeroSection() {
   const { t } = useLanguage();
   const { displayed, showCursor } = useTypingLoop(t.hero.subtitle);
-  const sectionRef = useRef(null);
-  const [glow, setGlow] = useState({ x: 50, y: 50 });
-
-  useEffect(() => {
-    if (isMobile) return;
-    const onMove = (e) => {
-      const r = sectionRef.current?.getBoundingClientRect();
-      if (!r) return;
-      setGlow({
-        x: ((e.clientX - r.left) / r.width) * 100,
-        y: ((e.clientY - r.top) / r.height) * 100,
-      });
-    };
-    window.addEventListener("mousemove", onMove, { passive: true });
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden px-6">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6">
       {/* Gradient orbs — skipped on mobile */}
       {!isMobile && (
         <>
           <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
         </>
-      )}
-
-      {/* Ambient cursor glow — desktop only */}
-      {!isMobile && (
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: `radial-gradient(700px circle at ${glow.x}% ${glow.y}%, hsl(var(--primary) / 0.07), transparent 55%)`,
-            transition: "background 0.1s ease",
-          }}
-        />
       )}
 
       <div

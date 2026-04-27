@@ -1,11 +1,25 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeLeft, fadeUp } from "@/lib/motion";
 
 export default function EducationSection() {
   const { t } = useLanguage();
   const { label, title, timeline } = t.education;
+  const containerRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 85%", "end 60%"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 80,
+    damping: 20,
+    restDelta: 0.001,
+  });
+
+  const scaleY = useTransform(smoothProgress, [0, 1], [0, 1]);
 
   return (
     <section id="education" className="py-32 px-6">
@@ -15,13 +29,10 @@ export default function EducationSection() {
           <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight"><span className="marker-highlight">{title}</span></h2>
         </motion.div>
 
-        <div className="relative">
+        <div ref={containerRef} className="relative">
           <motion.div
             className="absolute left-5 md:left-8 top-0 bottom-0 w-px bg-border origin-top"
-            initial={{ scaleY: 0 }}
-            whileInView={{ scaleY: 1 }}
-            viewport={{ once: true, margin: "-5%" }}
-            transition={{ duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            style={{ scaleY }}
           />
           <div className="space-y-12">
             {timeline.map((item, i) => (
