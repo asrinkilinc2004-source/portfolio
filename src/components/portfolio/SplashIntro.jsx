@@ -1,33 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Pre-compute random start positions once per page load
-const makeLetters = (word) =>
-  word.split("").map((char) => ({
-    char,
-    y:      (Math.random() > 0.5 ? -1 : 1) * (60 + Math.random() * 100),
-    x:      (Math.random() - 0.5) * 70,
-    rotate: (Math.random() - 0.5) * 55,
-    scale:  0.3 + Math.random() * 0.4,
-  }));
+// Pre-compute random start data once per page load
+const mkLetter = (char) => ({
+  char,
+  fromY:    (Math.random() > 0.5 ? -1 : 1) * (120 + Math.random() * 180),
+  fromX:    (Math.random() - 0.5) * 90,
+  rotate:   (Math.random() - 0.5) * 70,
+  duration: 0.65 + Math.random() * 0.25,
+});
 
-const FIRST = makeLetters("Asrin");
-const LAST  = makeLetters("Kilinc");
+const FIRST = "Asrin".split("").map(mkLetter);
+const LAST  = "Kilinc".split("").map(mkLetter);
 
-const SPRING = { type: "spring", stiffness: 200, damping: 14, mass: 0.8 };
+// Gelly squash-and-stretch keyframes (cartoon physics)
+const gelly = ({ fromY, fromX, rotate, duration }) => ({
+  hidden: { y: fromY, x: fromX, rotate, scaleX: 0.35, scaleY: 0.35, opacity: 0 },
+  visible: {
+    y:      [fromY, fromY * 0.08, -22, 8, -4, 0],
+    x:      [fromX, fromX * 0.2, 0, 0, 0, 0],
+    scaleX: [0.35, 0.85, 1.55, 0.82, 1.08, 1],   // squash wide on impact
+    scaleY: [0.35, 1.15, 0.48, 1.28, 0.92, 1],   // flatten then stretch tall
+    rotate: [rotate, rotate * 0.25, 0, 0, 0, 0],
+    opacity:[0, 0.7, 1, 1, 1, 1],
+    transition: {
+      duration,
+      times: [0, 0.32, 0.52, 0.68, 0.82, 1],
+      ease: "easeOut",
+    },
+  },
+});
 
 export default function SplashIntro({ onDone }) {
-  const [show,   setShow]   = useState(false);
+  const [show,    setShow]    = useState(false);
   const [wipeOut, setWipeOut] = useState(false);
 
   useEffect(() => {
     if (!sessionStorage.getItem("splash")) {
       sessionStorage.setItem("splash", "1");
       setShow(true);
-      // Start wipe after letters have settled
-      const t1 = setTimeout(() => setWipeOut(true), 1700);
-      // Notify parent when fully gone
-      const t2 = setTimeout(() => { setShow(false); onDone?.(); }, 2400);
+      const t1 = setTimeout(() => setWipeOut(true), 1900);
+      const t2 = setTimeout(() => { setShow(false); onDone?.(); }, 2650);
       return () => { clearTimeout(t1); clearTimeout(t2); };
     } else {
       onDone?.();
@@ -39,10 +52,12 @@ export default function SplashIntro({ onDone }) {
       {show && (
         <motion.div
           className="fixed inset-0 z-[200] bg-background flex items-center justify-center overflow-hidden"
-          animate={wipeOut ? { y: "-100%" } : { y: 0 }}
-          transition={wipeOut ? { duration: 0.65, ease: [0.76, 0, 0.24, 1] } : {}}
+          animate={wipeOut ? { y: "-102%" } : { y: 0 }}
+          transition={wipeOut
+            ? { duration: 0.72, ease: [0.76, 0, 0.24, 1] }
+            : {}}
         >
-          {/* Subtle grid (matches hero) */}
+          {/* Background grid */}
           <div
             className="absolute inset-0 opacity-[0.03] pointer-events-none"
             style={{
@@ -52,55 +67,54 @@ export default function SplashIntro({ onDone }) {
             }}
           />
 
-          <div className="relative flex flex-col items-center gap-1 select-none">
+          <div className="relative flex flex-col items-center gap-0 select-none" style={{ perspective: 800 }}>
             {/* "Asrin" */}
             <motion.div
               className="flex"
               initial="hidden"
               animate="visible"
-              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } } }}
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } } }}
             >
-              {FIRST.map(({ char, y, x, rotate, scale }, i) => (
+              {FIRST.map((d, i) => (
                 <motion.span
                   key={i}
-                  className="text-[clamp(3rem,12vw,7rem)] font-bold text-foreground leading-none tracking-tight"
-                  variants={{
-                    hidden:  { y, x, rotate, scale, opacity: 0 },
-                    visible: { y: 0, x: 0, rotate: 0, scale: 1, opacity: 1, transition: SPRING },
-                  }}
+                  custom={d}
+                  variants={gelly(d)}
+                  className="font-bold text-foreground leading-none"
+                  style={{ fontSize: "clamp(3.5rem, 13vw, 8rem)", display: "inline-block", letterSpacing: "-0.02em" }}
                 >
-                  {char}
+                  {d.char}
                 </motion.span>
               ))}
             </motion.div>
 
-            {/* "Kilinc" */}
+            {/* "Kilinc" in primary */}
             <motion.div
               className="flex"
               initial="hidden"
               animate="visible"
-              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06, delayChildren: 0.4 } } }}
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07, delayChildren: 0.38 } } }}
             >
-              {LAST.map(({ char, y, x, rotate, scale }, i) => (
+              {LAST.map((d, i) => (
                 <motion.span
                   key={i}
-                  className="text-[clamp(3rem,12vw,7rem)] font-bold text-primary leading-none tracking-tight"
-                  variants={{
-                    hidden:  { y, x, rotate, scale, opacity: 0 },
-                    visible: { y: 0, x: 0, rotate: 0, scale: 1, opacity: 1, transition: SPRING },
-                  }}
+                  custom={d}
+                  variants={gelly(d)}
+                  className="font-bold text-primary leading-none"
+                  style={{ fontSize: "clamp(3.5rem, 13vw, 8rem)", display: "inline-block", letterSpacing: "-0.02em" }}
                 >
-                  {char}
+                  {d.char}
                 </motion.span>
               ))}
             </motion.div>
 
-            {/* Underline that draws itself after letters land */}
+            {/* Underline draws after letters settle */}
             <motion.div
-              className="h-[3px] bg-primary rounded-full mt-3"
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: "100%", opacity: 1 }}
-              transition={{ delay: 1.1, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="h-[3px] bg-primary rounded-full mt-4"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              style={{ transformOrigin: "left", width: "100%" }}
+              transition={{ delay: 1.2, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
             />
           </div>
         </motion.div>

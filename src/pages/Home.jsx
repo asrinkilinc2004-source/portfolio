@@ -27,15 +27,15 @@ export default function Home() {
       <div
         className="min-h-screen bg-background text-foreground"
         style={{
-          // Keep page invisible until splash wipes out, avoids hero flicker
-          opacity: splashDone ? 1 : 0,
-          transition: "opacity 0.3s ease",
+          opacity:   splashDone ? 1 : 0,
+          transform: splashDone ? "translateY(0)" : "translateY(10px)",
+          transition: "opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
         }}
       >
         <ScrollProgressBar />
         <CustomCursor />
         <Navbar />
-        <HeroSection />
+        <HeroSection splashReady={splashDone} />
         <AboutSection />
         <SkillsSection />
         <ProjectsSection />

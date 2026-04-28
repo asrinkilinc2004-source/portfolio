@@ -9,16 +9,18 @@ const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: c
 
 const START_DELAY = isMobile ? 350 : 850;
 
-function useTypingLoop(text, typeSpeed = 55, deleteSpeed = 25, pauseMs = 10000) {
+function useTypingLoop(text, ready, typeSpeed = 55, deleteSpeed = 25, pauseMs = 10000) {
   const [displayed, setDisplayed] = useState("");
   const [phase, setPhase] = useState("idle");
 
+  // Only start when splash is done
   useEffect(() => {
+    if (!ready) return;
     setDisplayed("");
     setPhase("idle");
     const timer = setTimeout(() => setPhase("typing"), START_DELAY);
     return () => clearTimeout(timer);
-  }, [text]);
+  }, [text, ready]);
 
   useEffect(() => {
     if (phase === "idle") return;
@@ -42,9 +44,9 @@ function useTypingLoop(text, typeSpeed = 55, deleteSpeed = 25, pauseMs = 10000) 
   return { displayed, showCursor: phase === "typing" && displayed.length < text.length };
 }
 
-export default function HeroSection() {
+export default function HeroSection({ splashReady = true }) {
   const { t } = useLanguage();
-  const { displayed, showCursor } = useTypingLoop(t.hero.subtitle);
+  const { displayed, showCursor } = useTypingLoop(t.hero.subtitle, splashReady);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6">
