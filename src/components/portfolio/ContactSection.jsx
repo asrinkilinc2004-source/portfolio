@@ -8,6 +8,21 @@ import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
 import SplitText from "./SplitText";
 
+/* Wrapper that adds glow + left accent bar on focus */
+function GlowField({ children }) {
+  return (
+    <div className="glow-field group/glow relative">
+      {/* Left accent bar — slides in on focus */}
+      <span
+        className="absolute left-0 top-[20%] bottom-[20%] w-[2px] rounded-full bg-primary
+          scale-y-0 group-focus-within/glow:scale-y-100
+          transition-transform duration-300 ease-out origin-center z-10"
+      />
+      {children}
+    </div>
+  );
+}
+
 export default function ContactSection() {
   const { t } = useLanguage();
   const c = t.contact;
@@ -32,12 +47,17 @@ export default function ContactSection() {
     finally { setSending(false); }
   };
 
+  const inputCls =
+    "bg-card border-border hover:border-primary/40 focus:border-primary/70 focus:bg-primary/[0.025] h-12 transition-all duration-300 pl-4";
+
   return (
     <section id="contact" className="py-32 px-6">
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{c.label}</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight"><span className="marker-highlight"><SplitText text={c.title} delay={0.3} /></span></h2>
+          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">
+            <span className="marker-highlight"><SplitText text={c.title} delay={0.3} /></span>
+          </h2>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16">
@@ -82,12 +102,49 @@ export default function ContactSection() {
           <motion.form {...fadeUp(0.15)} className="space-y-5" onSubmit={handleSubmit}>
             {sent  && <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 text-primary text-sm">{c.form.success}</div>}
             {error && <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">{c.form.error}</div>}
+
             <div className="grid sm:grid-cols-2 gap-4">
-              <Input placeholder={c.form.name}  className="bg-card border-border focus:border-primary/50 h-12" value={form.name}    onChange={(e) => setForm({ ...form, name:    e.target.value })} required />
-              <Input placeholder={c.form.email} type="email" className="bg-card border-border focus:border-primary/50 h-12" value={form.email}   onChange={(e) => setForm({ ...form, email:   e.target.value })} required />
+              <GlowField>
+                <Input
+                  placeholder={c.form.name}
+                  className={inputCls}
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  required
+                />
+              </GlowField>
+              <GlowField>
+                <Input
+                  placeholder={c.form.email}
+                  type="email"
+                  className={inputCls}
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  required
+                />
+              </GlowField>
             </div>
-            <Input placeholder={c.form.subject} className="bg-card border-border focus:border-primary/50 h-12" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} required />
-            <Textarea placeholder={c.form.message} className="bg-card border-border focus:border-primary/50 min-h-[140px] resize-none" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required />
+
+            <GlowField>
+              <Input
+                placeholder={c.form.subject}
+                className={inputCls}
+                value={form.subject}
+                onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                required
+              />
+            </GlowField>
+
+            <GlowField>
+              <Textarea
+                placeholder={c.form.message}
+                className="bg-card border-border hover:border-primary/40 focus:border-primary/70 focus:bg-primary/[0.025] min-h-[140px] resize-none transition-all duration-300 pl-4"
+                value={form.message}
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
+                required
+              />
+            </GlowField>
+
             <Button type="submit" disabled={sending} className="bg-primary text-primary-foreground hover:opacity-90 h-12 px-8">
               <Send className="w-4 h-4 mr-2" />
               {sending ? c.form.sending : c.form.send}
