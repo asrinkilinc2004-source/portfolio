@@ -4,7 +4,7 @@ import { ArrowDown, Linkedin, Mail } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import MagneticButton from "./MagneticButton";
 
-const AVATAR_URL = "https://media.base44.com/images/public/69d65fddb630545f5349caa8/d7f83ed85_WhatsAppImage2026-04-08at124316.jpg";
+const AVATAR_URL = "/avatar.jpeg";
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
 const START_DELAY = isMobile ? 350 : 850;
