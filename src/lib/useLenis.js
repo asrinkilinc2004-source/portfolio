@@ -7,9 +7,8 @@ export function useLenis() {
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smooth: true,
+      lerp: 0.07,        // physics-based: 7% closer to target each frame → buttery deceleration
+      smoothWheel: true, // intercept wheel events
     });
 
     let raf;
