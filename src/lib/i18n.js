@@ -14,7 +14,7 @@ export const translations = {
     },
     hero: {
       subtitle: "Business, IT & Management student",
-      cta_contact: "Contact", cta_projects: "Projecten",
+      cta_contact: "Contact", cta_projects: "Projecten", cta_cv: "Download CV",
     },
     about: {
       label: "01 —", title: "Over mij",
@@ -116,7 +116,7 @@ export const translations = {
     },
     hero: {
       subtitle: "Business, IT & Management student",
-      cta_contact: "Contact", cta_projects: "Projects",
+      cta_contact: "Contact", cta_projects: "Projects", cta_cv: "Download CV",
     },
     about: {
       label: "01 —", title: "About me",
@@ -218,7 +218,7 @@ export const translations = {
     },
     hero: {
       subtitle: "طالب إدارة الأعمال وتكنولوجيا المعلومات",
-      cta_contact: "اتصل بي", cta_projects: "المشاريع",
+      cta_contact: "اتصل بي", cta_projects: "المشاريع", cta_cv: "تحميل السيرة الذاتية",
     },
     about: {
       label: "01 —", title: "عني",
@@ -320,7 +320,7 @@ export const translations = {
     },
     hero: {
       subtitle: "Estudiante de Negocios, IT y Gestión",
-      cta_contact: "Contacto", cta_projects: "Proyectos",
+      cta_contact: "Contacto", cta_projects: "Proyectos", cta_cv: "Descargar CV",
     },
     about: {
       label: "01 —", title: "Sobre mí",
@@ -422,7 +422,7 @@ export const translations = {
     },
     hero: {
       subtitle: "商业、IT与管理专业学生",
-      cta_contact: "联系我", cta_projects: "项目",
+      cta_contact: "联系我", cta_projects: "项目", cta_cv: "下载简历",
     },
     about: {
       label: "01 —", title: "关于我",

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Linkedin, Mail } from "lucide-react";
+import { ArrowDown, Linkedin, Mail, Download } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import MagneticButton from "./MagneticButton";
 
@@ -90,6 +90,12 @@ export default function HeroSection({ splashReady = true }) {
             <MagneticButton>
               <a href="#projects" className="inline-block bg-[hsl(var(--input))] text-foreground px-6 py-3 text-sm font-medium rounded-lg border border-border hover:border-primary/50 transition-colors">
                 {t.hero.cta_projects}
+              </a>
+            </MagneticButton>
+            <MagneticButton>
+              <a href="/cv.pdf" download className="inline-flex items-center gap-2 bg-[hsl(var(--input))] text-foreground px-6 py-3 text-sm font-medium rounded-lg border border-border hover:border-primary/50 transition-colors">
+                <Download className="w-4 h-4" />
+                {t.hero.cta_cv}
               </a>
             </MagneticButton>
           </motion.div>
