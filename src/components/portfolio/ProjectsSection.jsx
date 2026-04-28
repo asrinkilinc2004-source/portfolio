@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
 import SplitText from "./SplitText";
@@ -90,10 +90,6 @@ function TiltCard({ project, index, currentLabel }) {
             )}
             {/* Gradient slide-up overlay */}
             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary/50 via-primary/20 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]" />
-            {/* Arrow icon */}
-            <div className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-300 bg-white/20 backdrop-blur-sm">
-              <ArrowUpRight className="w-4 h-4 text-white" />
-            </div>
           </div>
 
           <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col justify-center">
