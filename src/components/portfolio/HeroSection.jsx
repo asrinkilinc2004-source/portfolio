@@ -128,7 +128,7 @@ export default function HeroSection({ splashReady = true }) {
           className="flex-shrink-0">
           <div className="relative">
             <div className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-primary/20 shadow-2xl shadow-primary/10">
-              <img src={AVATAR_URL} alt="Profile" className="w-full h-full object-cover object-top" />
+              <img src={AVATAR_URL} alt="Profile" className="w-full h-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:scale-110" />
             </div>
             <div className="px-5 rounded-full absolute -inset-4 border border-primary/10 animate-pulse" />
           </div>
