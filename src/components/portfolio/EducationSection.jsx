@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeLeft, fadeUp } from "@/lib/motion";
+import SplitText from "./SplitText";
 
 export default function EducationSection() {
   const { t } = useLanguage();
@@ -26,7 +27,7 @@ export default function EducationSection() {
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{label}</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight"><span className="marker-highlight">{title}</span></h2>
+          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight"><span className="marker-highlight"><SplitText text={title} delay={0.3} /></span></h2>
         </motion.div>
 
         <div ref={containerRef} className="relative">

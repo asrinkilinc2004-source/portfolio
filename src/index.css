@@ -182,6 +182,16 @@ img {
   }
 }
 
+/* Marquee infinite scroll */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.group:hover .marquee-track {
+  animation-play-state: paused;
+}
+
 /* Mobile performance: disable expensive GPU effects on touch devices */
 @media (pointer: coarse) {
   .blur-3xl {

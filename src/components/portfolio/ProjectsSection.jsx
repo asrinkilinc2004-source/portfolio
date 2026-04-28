@@ -1,7 +1,9 @@
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
+import SplitText from "./SplitText";
 
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
@@ -39,7 +41,9 @@ function TiltCard({ project, index }) {
         className="group relative rounded-xl overflow-hidden bg-card border border-border hover:border-primary/30 transition-colors duration-300"
         style={{ willChange: "transform" }}>
         <div className="flex flex-col lg:flex-row">
-          <div className="lg:w-1/2 overflow-hidden">
+
+          {/* Image with hover reveal overlay */}
+          <div className="lg:w-1/2 overflow-hidden relative">
             <img
               src={project.image}
               alt={project.title}
@@ -48,7 +52,14 @@ function TiltCard({ project, index }) {
               onContextMenu={(e) => e.preventDefault()}
               className={`w-full h-56 lg:h-full object-cover transition-transform duration-500 ${IMAGE_CLASS[index] ?? "group-hover:scale-105"}`}
             />
+            {/* Gradient slide-up overlay */}
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary/50 via-primary/20 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]" />
+            {/* Arrow icon */}
+            <div className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-300 bg-white/20 backdrop-blur-sm">
+              <ArrowUpRight className="w-4 h-4 text-white" />
+            </div>
           </div>
+
           <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col justify-center">
             <span className="inline-block font-mono text-xs text-primary bg-primary/10 border border-primary/20 rounded-md px-2 py-1 mb-3 w-fit">
               {project.semester}
@@ -57,7 +68,7 @@ function TiltCard({ project, index }) {
             <p className="text-muted-foreground leading-relaxed mb-6">{project.description}</p>
             <div className="flex flex-wrap gap-2">
               {project.tags.map((tag) => (
-                <span key={tag} className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20">{tag}</span>
+                <span key={tag} className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20 group-hover:bg-primary/15 transition-colors">{tag}</span>
               ))}
             </div>
           </div>
@@ -76,7 +87,11 @@ export default function ProjectsSection() {
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{label}</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight"><span className="marker-highlight">{title}</span></h2>
+          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">
+            <span className="marker-highlight">
+              <SplitText text={title} delay={0.3} />
+            </span>
+          </h2>
         </motion.div>
         <div className="space-y-8">
           {items.map((project, i) => <TiltCard key={project.title} project={project} index={i} />)}

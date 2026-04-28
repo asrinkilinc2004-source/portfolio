@@ -2,6 +2,8 @@ import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
+import SplitText from "./SplitText";
+import Marquee from "./Marquee";
 
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
@@ -37,10 +39,17 @@ export default function SkillsSection() {
   return (
     <section id="skills" className="py-32 px-6">
       <div className="max-w-6xl mx-auto">
-        <motion.div {...fadeUp()} className="mb-16">
+        <motion.div {...fadeUp()} className="mb-6">
           <span className="font-mono text-sm text-primary tracking-wider">{label}</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight"><span className="marker-highlight">{title}</span></h2>
+          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">
+            <span className="marker-highlight">
+              <SplitText text={title} delay={0.3} />
+            </span>
+          </h2>
         </motion.div>
+
+        {/* Infinite marquee */}
+        <Marquee />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((cat, i) => (

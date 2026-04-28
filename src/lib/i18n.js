@@ -26,6 +26,12 @@ export const translations = {
         { label: "Tech-Savvy",          desc: "Begrijp code, architectuur & systemen" },
         { label: "Hands-On Builder",    desc: "Echte apps gebouwd van idee tot lancering" },
       ],
+      stats: [
+        { value: 4,  suffix: "",  label: "Projecten" },
+        { value: 3,  suffix: "",  label: "Semesters" },
+        { value: 22, suffix: "",  label: "Jaar oud" },
+        { value: 5,  suffix: "+", label: "Tech tools" },
+      ],
     },
     skills: {
       label: "02 —", title: "Vaardigheden & Tech",
@@ -113,6 +119,12 @@ export const translations = {
         { label: "IT Student",          desc: "Studying Information Technology at HvA" },
         { label: "Tech-Savvy",          desc: "Understand code, architecture & systems" },
         { label: "Hands-On Builder",    desc: "Built real-world apps from idea to launch" },
+      ],
+      stats: [
+        { value: 4,  suffix: "",  label: "Projects" },
+        { value: 3,  suffix: "",  label: "Semesters" },
+        { value: 22, suffix: "",  label: "Years old" },
+        { value: 5,  suffix: "+", label: "Tech tools" },
       ],
     },
     skills: {
@@ -202,6 +214,12 @@ export const translations = {
         { label: "متمكن من التقنية",     desc: "فهم الكود والبنية والأنظمة" },
         { label: "مبني بالممارسة",       desc: "بناء تطبيقات حقيقية من الفكرة للإطلاق" },
       ],
+      stats: [
+        { value: 4,  suffix: "",  label: "مشاريع" },
+        { value: 3,  suffix: "",  label: "فصول" },
+        { value: 22, suffix: "",  label: "عامًا" },
+        { value: 5,  suffix: "+", label: "أدوات تقنية" },
+      ],
     },
     skills: {
       label: "02 —", title: "المهارات والتقنيات",
@@ -290,6 +308,12 @@ export const translations = {
         { label: "Conocedor de Tecnología",desc: "Entiendo código, arquitectura y sistemas" },
         { label: "Constructor Práctico",   desc: "Apps reales construidas desde idea hasta lanzamiento" },
       ],
+      stats: [
+        { value: 4,  suffix: "",  label: "Proyectos" },
+        { value: 3,  suffix: "",  label: "Semestres" },
+        { value: 22, suffix: "",  label: "Años" },
+        { value: 5,  suffix: "+", label: "Tech tools" },
+      ],
     },
     skills: {
       label: "02 —", title: "Habilidades y Tecnología",
@@ -377,6 +401,12 @@ export const translations = {
         { label: "IT学生",     desc: "在阿姆斯特丹应用科技大学学习信息技术" },
         { label: "技术达人",   desc: "理解代码、架构与系统" },
         { label: "实践构建者", desc: "从创意到上线构建真实应用" },
+      ],
+      stats: [
+        { value: 4,  suffix: "",  label: "个项目" },
+        { value: 3,  suffix: "",  label: "个学期" },
+        { value: 22, suffix: "",  label: "岁" },
+        { value: 5,  suffix: "+", label: "技术工具" },
       ],
     },
     skills: {
