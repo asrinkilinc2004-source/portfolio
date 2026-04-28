@@ -24,16 +24,17 @@ export default function Home() {
   return (
     <LanguageProvider>
       <SplashIntro onDone={() => setSplashDone(true)} />
+      {/* CustomCursor lives outside the fading div so it's always visible */}
+      <CustomCursor />
       <div
         className="min-h-screen bg-background text-foreground"
         style={{
           opacity:   splashDone ? 1 : 0,
-          transform: splashDone ? "translateY(0)" : "translateY(10px)",
+          transform: splashDone ? "translateY(0)" : "translateY(12px)",
           transition: "opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
         }}
       >
         <ScrollProgressBar />
-        <CustomCursor />
         <Navbar />
         <HeroSection splashReady={splashDone} />
         <AboutSection />
