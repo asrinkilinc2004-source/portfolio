@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
+const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
 export default function ScrollProgressBar() {
-  const [progress, setProgress] = useState(0);
+  const barRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => {
       const total = document.body.scrollHeight - window.innerHeight;
-      setProgress(total > 0 ? (window.scrollY / total) * 100 : 0);
+      const pct = total > 0 ? (window.scrollY / total) * 100 : 0;
+      if (barRef.current) {
+        barRef.current.style.width = `${pct}%`;
+      }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -15,8 +20,13 @@ export default function ScrollProgressBar() {
   return (
     <div className="fixed top-0 left-0 right-0 z-[60] h-[2px]">
       <div
+        ref={barRef}
         className="h-full bg-primary"
-        style={{ width: `${progress}%`, transition: "width 0.05s linear" }}
+        style={{
+          width: "0%",
+          transition: isMobile ? "none" : "width 0.05s linear",
+          willChange: "width",
+        }}
       />
     </div>
   );
