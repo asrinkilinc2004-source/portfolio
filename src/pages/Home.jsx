@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLenis } from "../lib/useLenis";
 import Navbar from "../components/portfolio/Navbar";
 import HeroSection from "../components/portfolio/HeroSection";
@@ -11,13 +11,27 @@ import Footer from "../components/portfolio/Footer";
 import CustomCursor from "../components/portfolio/CustomCursor";
 import BackToTop from "../components/portfolio/BackToTop";
 import ScrollProgressBar from "../components/portfolio/ScrollProgressBar";
+import SplashIntro from "../components/portfolio/SplashIntro";
 import { LanguageProvider } from "../lib/LanguageContext";
 
 export default function Home() {
   useLenis();
+  const [splashDone, setSplashDone] = useState(
+    // If already shown this session, skip immediately
+    () => !!sessionStorage.getItem("splash")
+  );
+
   return (
     <LanguageProvider>
-      <div className="min-h-screen bg-background text-foreground">
+      <SplashIntro onDone={() => setSplashDone(true)} />
+      <div
+        className="min-h-screen bg-background text-foreground"
+        style={{
+          // Keep page invisible until splash wipes out, avoids hero flicker
+          opacity: splashDone ? 1 : 0,
+          transition: "opacity 0.3s ease",
+        }}
+      >
         <ScrollProgressBar />
         <CustomCursor />
         <Navbar />
