@@ -48,13 +48,6 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6">
-      {/* Gradient orbs — skipped on mobile */}
-      {!isMobile && (
-        <>
-          <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
-        </>
-      )}
 
       <div
         className="absolute inset-0 opacity-[0.03]"
