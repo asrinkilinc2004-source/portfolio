@@ -43,6 +43,8 @@ export default function SplitText({ text, delay = 0 }) {
               display: "inline-block",
               overflow: "hidden",
               verticalAlign: "bottom",
+              paddingBottom: "0.15em",
+              marginBottom: "-0.15em",
             }}
           >
             <motion.span style={{ display: "inline-block" }} variants={wordVariant}>
