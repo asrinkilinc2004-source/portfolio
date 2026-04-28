@@ -16,10 +16,7 @@ import { LanguageProvider } from "../lib/LanguageContext";
 
 export default function Home() {
   useLenis();
-  const [splashDone, setSplashDone] = useState(
-    // If already shown this session, skip immediately
-    () => !!sessionStorage.getItem("splash")
-  );
+  const [splashDone, setSplashDone] = useState(false);
 
   return (
     <LanguageProvider>

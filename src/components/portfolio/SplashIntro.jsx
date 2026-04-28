@@ -18,8 +18,6 @@ export default function SplashIntro({ onDone }) {
   }));
 
   useEffect(() => {
-    if (sessionStorage.getItem("splash")) { onDone?.(); return; }
-    sessionStorage.setItem("splash", "1");
     setShow(true);
 
     let lockedCount = 0;
