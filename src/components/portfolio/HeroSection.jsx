@@ -124,10 +124,11 @@ export default function HeroSection({ splashReady = true }) {
         <motion.div
           initial={{ opacity: 0, scale: isMobile ? 0.95 : 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.06 }}
           transition={{ duration: isMobile ? 0.3 : 0.8, delay: isMobile ? 0.1 : 0.2 }}
-          className="flex-shrink-0">
+          className="flex-shrink-0 cursor-pointer">
           <div className="relative">
-            <div className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-primary/20 shadow-2xl shadow-primary/10 transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:scale-105 cursor-pointer">
+            <div className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-primary/20 shadow-2xl shadow-primary/10">
               <img src={AVATAR_URL} alt="Profile" className="w-full h-full object-cover object-top" />
             </div>
             <div className="px-5 rounded-full absolute -inset-4 border border-primary/10 animate-pulse" />
