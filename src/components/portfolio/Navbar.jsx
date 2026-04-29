@@ -12,6 +12,20 @@ export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
 
+  // Each link gets a unique hand-drawn underline path
+  const UNDERLINES = [
+    // About — gentle single S-wave
+    "M1,4.5 C18,1.5 38,5.5 55,2.8 C72,0.5 88,4.8 99,3.2",
+    // Skills — tight high-frequency squiggle
+    "M1,3.5 C10,1 19,5.5 28,3 C37,0.5 46,5 55,3 C64,0.5 73,5.5 82,3 C90,1 96,4.5 99,3.5",
+    // Projects — one deep asymmetric dip
+    "M1,2.5 C22,2 38,6 55,3.5 C68,1.5 82,4.5 99,2",
+    // Education — two peaks like a heartbeat
+    "M1,4 C12,4 18,1 28,1 C38,1 44,5 55,5 C64,5 72,1 82,1 C90,1 95,3.5 99,3.5",
+    // Contact — starts high, ends with a final flick
+    "M1,2 C20,2 40,5 58,4 C72,3 84,1.5 92,3 C95,3.8 97,5 99,4.5",
+  ];
+
   const links = [
     { label: t.nav.about,     href: "#about"     },
     { label: t.nav.skills,    href: "#skills"    },
@@ -67,7 +81,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
-          {links.map((link) => {
+          {links.map((link, i) => {
             const isActive = activeSection === link.href;
             return (
               <a key={link.href} href={link.href}
@@ -79,7 +93,7 @@ export default function Navbar() {
                   isActive ? "w-full" : "w-0 group-hover:w-full"
                 }`}>
                   <svg height="6" width="100%" preserveAspectRatio="none" viewBox="0 0 100 6">
-                    <path d="M1,4.5 C10,1.5 20,5.5 33,3 C46,0.5 55,5 67,3 C78,1 88,5 99,3.5"
+                    <path d={UNDERLINES[i]}
                       stroke="currentColor" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </span>
