@@ -49,7 +49,7 @@ export default function HeroSection({ splashReady = true }) {
   const { displayed, showCursor } = useTypingLoop(t.hero.subtitle, splashReady);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6">
+    <section className="relative min-h-screen flex items-center justify-center overflow-x-hidden px-6">
 
       <div
         className="absolute inset-0 opacity-[0.03]"
@@ -129,11 +129,11 @@ export default function HeroSection({ splashReady = true }) {
           <motion.div
             whileHover={{ scale: 1.1 }}
             transition={{ type: "tween", duration: 0.15, ease: "easeOut" }}
-            className="relative cursor-pointer">
-            <div className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-primary/20 shadow-2xl shadow-primary/10">
+            className="relative cursor-pointer p-6">
+            <div className="w-48 h-48 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-primary/20 shadow-2xl shadow-primary/10">
               <img src={AVATAR_URL} alt="Profile" className="w-full h-full object-cover object-top" />
             </div>
-            <div className="px-5 rounded-full absolute -inset-4 border border-primary/10 animate-pulse" />
+            <div className="rounded-full absolute inset-0 border border-primary/10 animate-pulse" />
           </motion.div>
         </motion.div>
       </div>
