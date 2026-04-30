@@ -163,9 +163,12 @@ export default function HeroSection({ splashReady = true }) {
                   initial={{ pathLength: 0, opacity: 0 }}
                   animate={{
                     pathLength: photoHovered ? 1 : 0,
-                    opacity: photoHovered ? (i === 0 ? 0.8 : 0.55) : 0,
+                    opacity: photoHovered ? 1 : 0,
                   }}
-                  transition={{ duration: 0.45, delay: photoHovered ? i * 0.18 : 0, ease: [0.4, 0, 0.2, 1] }}
+                  transition={{
+                    pathLength: { duration: 0.45, delay: photoHovered ? i * 0.18 : 0, ease: [0.4, 0, 0.2, 1] },
+                    opacity: { duration: 0, delay: photoHovered ? i * 0.18 : 0 },
+                  }}
                 />
               ))}
             </svg>
