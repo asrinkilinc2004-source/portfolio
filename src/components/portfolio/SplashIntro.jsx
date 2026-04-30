@@ -22,7 +22,6 @@ export default function SplashIntro({ onDone }) {
   }));
   const [glitch,     setGlitch]     = useState(false);
   const [chromatic,  setChromatic]  = useState(false);
-  const [flash,      setFlash]      = useState(false);
   const [slice,      setSlice]      = useState(null); // { y, h, shift }
 
   const triggerGlitch = useCallback((intensity = 1) => {
@@ -30,7 +29,6 @@ export default function SplashIntro({ onDone }) {
 
     setGlitch(true);
     setChromatic(true);
-    setFlash(Math.random() > 0.5);
 
     // VHS slice: random horizontal band that shifts sideways
     setSlice({
@@ -42,7 +40,6 @@ export default function SplashIntro({ onDone }) {
     setTimeout(() => {
       setGlitch(false);
       setChromatic(false);
-      setFlash(false);
       setSlice(null);
 
       // Second micro-flash 40% of the time
@@ -188,13 +185,6 @@ export default function SplashIntro({ onDone }) {
               opacity: 0.07,
             }}
           />
-
-          {/* Flash overlay */}
-          {flash && (
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ background: "hsl(var(--primary)/0.09)", mixBlendMode: "screen" }}
-            />
-          )}
 
           {/* Main name block */}
           <motion.div
