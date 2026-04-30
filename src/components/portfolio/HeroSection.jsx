@@ -166,8 +166,11 @@ export default function HeroSection({ splashReady = true }) {
                     opacity: photoHovered ? 1 : 0,
                   }}
                   transition={{
-                    pathLength: { duration: 0.45, delay: photoHovered ? i * 0.18 : 0, ease: [0.4, 0, 0.2, 1] },
-                    opacity: { duration: 0, delay: photoHovered ? i * 0.18 : 0 },
+                    pathLength: { duration: 0.45, delay: photoHovered ? i * 0.18 : (SCRIBBLE_PATHS.length - 1 - i) * 0.18, ease: [0.4, 0, 0.2, 1] },
+                    opacity: {
+                      duration: 0,
+                      delay: photoHovered ? i * 0.18 : 0.45 + (SCRIBBLE_PATHS.length - 1) * 0.18,
+                    },
                   }}
                 />
               ))}
