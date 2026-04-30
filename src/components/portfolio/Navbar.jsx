@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -9,6 +9,7 @@ export default function Navbar() {
   const [scrolled,       setScrolled]       = useState(false);
   const [mobileOpen,     setMobileOpen]     = useState(false);
   const [activeSection,  setActiveSection]  = useState("");
+  const [hovered,        setHovered]        = useState(null);
   const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
 
@@ -83,18 +84,25 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8">
           {links.map((link, i) => {
             const isActive = activeSection === link.href;
+            const drawn = isActive || hovered === i;
             return (
               <a key={link.href} href={link.href}
-                className={`relative text-sm transition-colors duration-200 group pb-1 ${
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+                className={`relative text-sm transition-colors duration-200 pb-1 ${
                   isActive ? "text-primary" : "text-muted-foreground hover:text-primary"
                 }`}>
                 {link.label}
-                <span className={`absolute bottom-0 left-0 h-[6px] overflow-hidden pointer-events-none text-primary transition-[width] duration-300 ease-out ${
-                  isActive ? "w-full" : "w-0 group-hover:w-full"
-                }`}>
+                <span className="absolute bottom-0 left-0 w-full h-[6px] pointer-events-none text-primary">
                   <svg height="6" width="100%" preserveAspectRatio="none" viewBox="0 0 100 6">
-                    <path d={UNDERLINES[i]}
-                      stroke="currentColor" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                    <motion.path
+                      d={UNDERLINES[i]}
+                      stroke="currentColor" strokeWidth="2.2" fill="none"
+                      strokeLinecap="round" strokeLinejoin="round"
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: drawn ? 1 : 0, opacity: drawn ? 1 : 0 }}
+                      transition={{ duration: 0.35, ease: "easeInOut" }}
+                    />
                   </svg>
                 </span>
               </a>
