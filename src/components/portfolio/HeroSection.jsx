@@ -7,6 +7,17 @@ import MagneticButton from "./MagneticButton";
 const AVATAR_URL = "/avatar.jpeg";
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
+// Title scribble — horizontal paths spanning the text, viewBox 0 0 520 90
+// BEHIND layer (rendered under the text)
+const TITLE_SCRIBBLE_BEHIND = [
+  "M -5,20 C 40,10 85,28 132,16 C 179,4 224,24 272,13 C 318,2 364,22 410,11 C 447,3 487,18 525,14",
+  "M -5,70 C 38,62 84,78 130,67 C 176,56 222,76 268,65 C 314,54 360,72 406,63 C 443,56 485,70 525,66",
+];
+// FRONT layer (rendered over the text — creates 3D/parallax)
+const TITLE_SCRIBBLE_FRONT = [
+  "M -5,45 C 58,35 115,55 175,43 C 235,31 292,52 352,44 C 398,38 453,52 525,47",
+];
+
 // Three organic scribble loops around the photo (viewBox 300x300, center 150,150)
 const SCRIBBLE_PATHS = [
   // Outer wobbly orbit
@@ -57,7 +68,8 @@ function useTypingLoop(text, ready, typeSpeed = 55, deleteSpeed = 25, pauseMs = 
 export default function HeroSection({ splashReady = true }) {
   const { t } = useLanguage();
   const { displayed, showCursor } = useTypingLoop(t.hero.subtitle, splashReady);
-  const [photoHovered, setPhotoHovered] = useState(false);
+  const [photoHovered,  setPhotoHovered]  = useState(false);
+  const [titleHovered,  setTitleHovered]  = useState(false);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-x-hidden px-6">
@@ -77,7 +89,53 @@ export default function HeroSection({ splashReady = true }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: isMobile ? 0.3 : 0.7 }}>
             <h1 className="text-5xl md:text-7xl font-inter font-bold tracking-tight leading-[1.1] mb-6">
-              <span className="text-foreground">Asrin Kilinc</span>
+              {/* Asrin Kilinc — hover scale + layered scribble */}
+              <motion.span
+                className="relative inline-block cursor-default"
+                onHoverStart={() => setTitleHovered(true)}
+                onHoverEnd={() => setTitleHovered(false)}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "tween", duration: 0.15, ease: "easeOut" }}
+              >
+                {/* BEHIND layer */}
+                <span className="absolute pointer-events-none" style={{ inset: "-18px -8px 0", zIndex: 0, overflow: "visible" }}>
+                  <svg width="100%" height="100%" viewBox="0 0 520 90" preserveAspectRatio="none" style={{ overflow: "visible" }}>
+                    {TITLE_SCRIBBLE_BEHIND.map((d, i) => (
+                      <motion.path key={i} d={d}
+                        stroke="hsl(var(--primary))" strokeWidth="2" fill="none"
+                        strokeLinecap="round" strokeLinejoin="round"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: titleHovered ? 1 : 0, opacity: titleHovered ? 1 : 0 }}
+                        transition={{
+                          pathLength: { duration: 0.38, delay: titleHovered ? i * 0.15 : (1 - i) * 0.15, ease: [0.4, 0, 0.2, 1] },
+                          opacity:    { duration: 0,    delay: titleHovered ? i * 0.15 : 0.38 + 0.30 },
+                        }}
+                      />
+                    ))}
+                  </svg>
+                </span>
+
+                {/* Text — middle layer */}
+                <span className="relative text-foreground" style={{ zIndex: 1 }}>Asrin Kilinc</span>
+
+                {/* FRONT layer — overlaps text for 3D depth */}
+                <span className="absolute pointer-events-none" style={{ inset: "-18px -8px 0", zIndex: 2, overflow: "visible" }}>
+                  <svg width="100%" height="100%" viewBox="0 0 520 90" preserveAspectRatio="none" style={{ overflow: "visible" }}>
+                    {TITLE_SCRIBBLE_FRONT.map((d, i) => (
+                      <motion.path key={i} d={d}
+                        stroke="hsl(var(--primary))" strokeWidth="2.2" fill="none"
+                        strokeLinecap="round" strokeLinejoin="round"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: titleHovered ? 1 : 0, opacity: titleHovered ? 1 : 0 }}
+                        transition={{
+                          pathLength: { duration: 0.38, delay: titleHovered ? 0.30 : 0, ease: [0.4, 0, 0.2, 1] },
+                          opacity:    { duration: 0,    delay: titleHovered ? 0.30 : 0.38 + 0.30 },
+                        }}
+                      />
+                    ))}
+                  </svg>
+                </span>
+              </motion.span>
               <br />
               <span className="text-primary text-3xl">
                 {displayed}
