@@ -7,21 +7,8 @@ import MagneticButton from "./MagneticButton";
 const AVATAR_URL = "/avatar.jpeg";
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
-// Title scribble — messy multi-path, viewBox 0 0 520 90
-const TITLE_SCRIBBLE_BEHIND = [
-  // Top tight high-freq squiggle
-  "M -8,12 C 22,3 44,20 70,10 C 96,0 118,18 146,8 C 174,-2 196,16 226,6 C 256,-4 278,14 308,5 C 338,-4 362,14 392,5 C 422,-4 458,12 492,4 C 510,0 520,8 528,6",
-  // Bottom gentle wave
-  "M -8,78 C 48,70 104,84 162,73 C 220,62 275,80 335,70 C 395,60 445,78 495,70 C 512,67 522,72 528,70",
-  // Subtle diagonal sweep (bottom-left to upper-right)
-  "M -8,68 C 65,60 138,52 210,42 C 282,32 355,38 428,28 C 472,22 502,30 528,26",
-];
-const TITLE_SCRIBBLE_FRONT = [
-  // Tight zigzag through the middle of the text
-  "M -8,40 C 18,30 38,50 65,38 C 92,26 112,48 140,38 C 168,28 190,50 220,40 C 250,30 272,52 304,42 C 336,32 360,54 392,44 C 424,34 452,54 484,44 C 506,37 520,48 528,44",
-  // Short upper accent crossing top-third
-  "M 30,22 C 88,13 148,28 208,17 C 268,6 328,22 388,14 C 428,8 470,18 508,12",
-];
+// Title scribble — single wavy line drawn under/through the title, viewBox 0 0 520 30
+const TITLE_SCRIBBLE_PATH = "M -5,18 C 55,8 115,24 178,14 C 241,4 302,22 365,12 C 415,4 468,18 528,12";
 
 // Three organic scribble loops around the photo (viewBox 300x300, center 150,150)
 const SCRIBBLE_PATHS = [
@@ -102,58 +89,25 @@ export default function HeroSection({ splashReady = true }) {
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "tween", duration: 0.15, ease: "easeOut" }}
               >
-                {/* BEHIND layer */}
-                <span className="absolute pointer-events-none" style={{ inset: "-18px -8px 0", zIndex: 0, overflow: "visible" }}>
-                  <svg width="100%" height="100%" viewBox="0 0 520 90" preserveAspectRatio="none" style={{ overflow: "visible" }}>
-                    {TITLE_SCRIBBLE_BEHIND.map((d, i) => {
-                      const nb = TITLE_SCRIBBLE_BEHIND.length;
-                      const nf = TITLE_SCRIBBLE_FRONT.length;
-                      const enterDelay = i * 0.12;
-                      const exitDelay  = (nb - 1 - i + nf) * 0.12;
-                      const exitOpacityDelay = 0.38 + (nb - 1 + nf) * 0.12;
-                      return (
-                        <motion.path key={i} d={d}
-                          stroke="hsl(var(--primary))" strokeWidth="1.8" fill="none"
-                          strokeLinecap="round" strokeLinejoin="round"
-                          initial={{ pathLength: 0, opacity: 0 }}
-                          animate={{ pathLength: titleHovered ? 1 : 0, opacity: titleHovered ? 1 : 0 }}
-                          transition={{
-                            pathLength: { duration: 0.38, delay: titleHovered ? enterDelay : exitDelay, ease: [0.4, 0, 0.2, 1] },
-                            opacity:    { duration: 0,    delay: titleHovered ? enterDelay : exitOpacityDelay },
-                          }}
-                        />
-                      );
-                    })}
+                {/* Single scribble line — sits under/half-behind the title */}
+                <span className="absolute pointer-events-none" style={{ bottom: "-6px", left: "-8px", right: "-8px", height: "30px", zIndex: 0, overflow: "visible" }}>
+                  <svg width="100%" height="100%" viewBox="0 0 520 30" preserveAspectRatio="none" style={{ overflow: "visible" }}>
+                    <motion.path
+                      d={TITLE_SCRIBBLE_PATH}
+                      stroke="hsl(var(--primary))" strokeWidth="3.5" fill="none"
+                      strokeLinecap="round" strokeLinejoin="round"
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: titleHovered ? 1 : 0, opacity: titleHovered ? 1 : 0 }}
+                      transition={{
+                        pathLength: { duration: 0.45, ease: [0.4, 0, 0.2, 1] },
+                        opacity:    { duration: 0, delay: titleHovered ? 0 : 0.45 },
+                      }}
+                    />
                   </svg>
                 </span>
 
-                {/* Text — middle layer */}
+                {/* Text */}
                 <span className="relative text-foreground" style={{ zIndex: 1 }}>Asrin Kilinc</span>
-
-                {/* FRONT layer — overlaps text for 3D depth */}
-                <span className="absolute pointer-events-none" style={{ inset: "-18px -8px 0", zIndex: 2, overflow: "visible" }}>
-                  <svg width="100%" height="100%" viewBox="0 0 520 90" preserveAspectRatio="none" style={{ overflow: "visible" }}>
-                    {TITLE_SCRIBBLE_FRONT.map((d, i) => {
-                      const nb = TITLE_SCRIBBLE_BEHIND.length;
-                      const nf = TITLE_SCRIBBLE_FRONT.length;
-                      const enterDelay = (nb + i) * 0.12;
-                      const exitDelay  = (nf - 1 - i) * 0.12;
-                      const exitOpacityDelay = 0.38 + (nb - 1 + nf) * 0.12;
-                      return (
-                        <motion.path key={i} d={d}
-                          stroke="hsl(var(--primary))" strokeWidth="2.2" fill="none"
-                          strokeLinecap="round" strokeLinejoin="round"
-                          initial={{ pathLength: 0, opacity: 0 }}
-                          animate={{ pathLength: titleHovered ? 1 : 0, opacity: titleHovered ? 1 : 0 }}
-                          transition={{
-                            pathLength: { duration: 0.38, delay: titleHovered ? enterDelay : exitDelay, ease: [0.4, 0, 0.2, 1] },
-                            opacity:    { duration: 0,    delay: titleHovered ? enterDelay : exitOpacityDelay },
-                          }}
-                        />
-                      );
-                    })}
-                  </svg>
-                </span>
               </motion.span>
               <br />
               <span className="text-primary text-3xl">
