@@ -101,7 +101,10 @@ export default function Navbar() {
                       strokeLinecap="round" strokeLinejoin="round"
                       initial={{ pathLength: 0, opacity: 0 }}
                       animate={{ pathLength: drawn ? 1 : 0, opacity: drawn ? 1 : 0 }}
-                      transition={{ duration: 0.35, ease: "easeInOut" }}
+                      transition={{
+                        pathLength: { duration: 0.35, ease: "easeInOut" },
+                        opacity: { duration: 0, delay: drawn ? 0 : 0.35 },
+                      }}
                     />
                   </svg>
                 </span>
