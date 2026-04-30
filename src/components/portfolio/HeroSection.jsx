@@ -155,14 +155,16 @@ export default function HeroSection({ splashReady = true }) {
                 <motion.path
                   key={i}
                   d={d}
-                  stroke="#00ffea"
+                  stroke="hsl(var(--primary))"
                   strokeWidth={i === 0 ? 2 : 1.6}
                   fill="none"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  style={{ opacity: i === 0 ? 0.7 : 0.5 }}
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: photoHovered ? 1 : 0 }}
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={{
+                    pathLength: photoHovered ? 1 : 0,
+                    opacity: photoHovered ? (i === 0 ? 0.8 : 0.55) : 0,
+                  }}
                   transition={{ duration: 0.45, delay: photoHovered ? i * 0.18 : 0, ease: [0.4, 0, 0.2, 1] }}
                 />
               ))}
