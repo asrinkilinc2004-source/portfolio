@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Linkedin, Mail, Download } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
@@ -6,6 +6,16 @@ import MagneticButton from "./MagneticButton";
 
 const AVATAR_URL = "/avatar.jpeg";
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+
+// Three organic scribble loops around the photo (viewBox 300x300, center 150,150)
+const SCRIBBLE_PATHS = [
+  // Outer wobbly orbit
+  "M 148,18 C 175,8 210,14 235,32 C 260,50 272,80 270,112 C 268,144 255,175 238,197 C 221,219 196,235 168,244 C 140,253 108,250 82,236 C 56,222 37,196 30,166 C 23,136 30,100 48,74 C 66,48 98,26 130,18 C 138,16 143,20 148,18",
+  // Second crossing loop — starts from bottom-left
+  "M 55,215 C 35,192 24,160 28,130 C 32,100 48,72 72,54 C 96,36 128,28 158,32 C 188,36 216,52 232,76 C 248,100 252,132 244,160 C 236,188 218,212 194,226 C 170,240 140,244 112,238 C 88,232 65,228 55,215",
+  // Inner tighter loop with slight irregularity
+  "M 150,42 C 178,36 208,50 224,74 C 240,98 240,130 228,156 C 216,182 192,200 164,206 C 136,212 104,202 86,182 C 68,162 64,130 74,104 C 84,78 108,58 136,48 C 142,46 148,44 150,42",
+];
 
 const START_DELAY = isMobile ? 350 : 850;
 
@@ -47,6 +57,13 @@ function useTypingLoop(text, ready, typeSpeed = 55, deleteSpeed = 25, pauseMs = 
 export default function HeroSection({ splashReady = true }) {
   const { t } = useLanguage();
   const { displayed, showCursor } = useTypingLoop(t.hero.subtitle, splashReady);
+  const [scribbleDrawn, setScribbleDrawn] = useState(false);
+
+  useEffect(() => {
+    if (!splashReady) return;
+    const t = setTimeout(() => setScribbleDrawn(true), 600);
+    return () => clearTimeout(t);
+  }, [splashReady]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-x-hidden px-6">
@@ -130,10 +147,35 @@ export default function HeroSection({ splashReady = true }) {
             whileHover={{ scale: 1.1 }}
             transition={{ type: "tween", duration: 0.15, ease: "easeOut" }}
             className="relative cursor-pointer p-6">
-            <div className="w-48 h-48 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-primary/20 shadow-2xl shadow-primary/10">
+
+            {/* Hand-drawn scribble behind the photo */}
+            <svg
+              className="absolute pointer-events-none"
+              style={{ width: "135%", height: "135%", top: "-17.5%", left: "-17.5%", overflow: "visible", zIndex: 0 }}
+              viewBox="0 0 300 300"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {SCRIBBLE_PATHS.map((d, i) => (
+                <motion.path
+                  key={i}
+                  d={d}
+                  stroke="hsl(var(--primary))"
+                  strokeWidth={i === 0 ? 2 : 1.6}
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ opacity: i === 0 ? 0.22 : 0.15 }}
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: scribbleDrawn ? 1 : 0 }}
+                  transition={{ duration: 0.55, delay: i * 0.22, ease: [0.4, 0, 0.2, 1] }}
+                />
+              ))}
+            </svg>
+
+            <div className="relative z-10 w-48 h-48 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-primary/20 shadow-2xl shadow-primary/10">
               <img src={AVATAR_URL} alt="Profile" className="w-full h-full object-cover object-top" />
             </div>
-            <div className="rounded-full absolute inset-0 border border-primary/10 animate-pulse" />
+            <div className="rounded-full absolute inset-0 border border-primary/10 animate-pulse" style={{ zIndex: 10 }} />
           </motion.div>
         </motion.div>
       </div>
