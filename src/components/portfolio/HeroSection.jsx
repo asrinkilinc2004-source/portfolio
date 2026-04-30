@@ -57,13 +57,7 @@ function useTypingLoop(text, ready, typeSpeed = 55, deleteSpeed = 25, pauseMs = 
 export default function HeroSection({ splashReady = true }) {
   const { t } = useLanguage();
   const { displayed, showCursor } = useTypingLoop(t.hero.subtitle, splashReady);
-  const [scribbleDrawn, setScribbleDrawn] = useState(false);
-
-  useEffect(() => {
-    if (!splashReady) return;
-    const t = setTimeout(() => setScribbleDrawn(true), 600);
-    return () => clearTimeout(t);
-  }, [splashReady]);
+  const [photoHovered, setPhotoHovered] = useState(false);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-x-hidden px-6">
@@ -145,6 +139,8 @@ export default function HeroSection({ splashReady = true }) {
           className="flex-shrink-0">
           <motion.div
             whileHover={{ scale: 1.1 }}
+            onHoverStart={() => setPhotoHovered(true)}
+            onHoverEnd={() => setPhotoHovered(false)}
             transition={{ type: "tween", duration: 0.15, ease: "easeOut" }}
             className="relative cursor-pointer p-6">
 
@@ -159,15 +155,15 @@ export default function HeroSection({ splashReady = true }) {
                 <motion.path
                   key={i}
                   d={d}
-                  stroke="hsl(var(--primary))"
+                  stroke="#00ffea"
                   strokeWidth={i === 0 ? 2 : 1.6}
                   fill="none"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  style={{ opacity: i === 0 ? 0.22 : 0.15 }}
+                  style={{ opacity: i === 0 ? 0.7 : 0.5 }}
                   initial={{ pathLength: 0 }}
-                  animate={{ pathLength: scribbleDrawn ? 1 : 0 }}
-                  transition={{ duration: 0.55, delay: i * 0.22, ease: [0.4, 0, 0.2, 1] }}
+                  animate={{ pathLength: photoHovered ? 1 : 0 }}
+                  transition={{ duration: 0.45, delay: photoHovered ? i * 0.18 : 0, ease: [0.4, 0, 0.2, 1] }}
                 />
               ))}
             </svg>
