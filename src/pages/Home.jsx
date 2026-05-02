@@ -24,7 +24,7 @@ export default function Home() {
       if (!patternRef.current) return;
       const heroH = window.innerHeight;
       const t = Math.min(Math.max((window.scrollY - heroH * 0.4) / (heroH * 0.4), 0), 1);
-      patternRef.current.style.opacity = (t * 0.055).toString();
+      patternRef.current.style.opacity = (t * 0.12).toString();
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -33,16 +33,17 @@ export default function Home() {
   return (
     <LanguageProvider>
       {/* Fixed parallax background pattern — fades in after hero, never scrolls */}
+      {/* Fixed parallax background pattern — overlay above content, below navbar */}
       <div
         ref={patternRef}
         aria-hidden="true"
         className="fixed inset-0 pointer-events-none"
-        style={{ zIndex: 0, opacity: 0 }}
+        style={{ zIndex: 10, opacity: 0 }}
       >
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="bg-pattern" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
-              <circle cx="1" cy="1" r="1" fill="hsl(var(--primary))" />
+              <circle cx="1"  cy="1"  r="1"   fill="hsl(var(--primary))" />
               <circle cx="14" cy="14" r="0.6" fill="hsl(var(--primary))" />
             </pattern>
           </defs>
