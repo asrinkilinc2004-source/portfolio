@@ -28,9 +28,10 @@ export default function Home() {
       <div
         className="min-h-screen bg-background text-foreground"
         style={{
-          opacity:   splashDone ? 1 : 0,
-          transform: splashDone ? "translateY(0)" : "translateY(12px)",
-          transition: "opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+          opacity:       splashDone ? 1 : 0,
+          transform:     splashDone ? "translateY(0)" : "translateY(12px)",
+          transition:    "opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+          pointerEvents: splashDone ? "auto" : "none",
         }}
       >
         <HeroSection splashReady={splashDone} />

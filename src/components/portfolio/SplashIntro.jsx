@@ -167,6 +167,7 @@ export default function SplashIntro({ onDone }) {
       {show && (
         <motion.div
           className="fixed inset-0 z-[200] bg-background flex flex-col items-center justify-center gap-6 overflow-hidden"
+          style={{ pointerEvents: wipeOut ? "none" : "auto" }}
           animate={wipeOut ? { y: "-102%" } : { y: 0 }}
           transition={wipeOut ? { duration: 0.72, ease: [0.76, 0, 0.24, 1] } : {}}
         >
