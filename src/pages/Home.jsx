@@ -17,17 +17,24 @@ import { LanguageProvider } from "../lib/LanguageContext";
 export default function Home() {
   useLenis();
   const [splashDone, setSplashDone] = useState(false);
-  const patternRef = useRef(null);
+  const patternRef  = useRef(null);
+  const pattern2Ref = useRef(null);
 
   useEffect(() => {
     const onScroll = () => {
-      if (!patternRef.current) return;
       const scrollY = window.scrollY;
-      const heroH = window.innerHeight;
-      const t = Math.min(Math.max((scrollY - heroH * 0.4) / (heroH * 0.4), 0), 1);
-      patternRef.current.style.opacity = (t * 0.12).toString();
-      // Scrolls at 35% of page speed → parallax depth
-      patternRef.current.style.transform = `translateY(${-scrollY * 0.35}px)`;
+      const heroH   = window.innerHeight;
+      const t       = Math.min(Math.max((scrollY - heroH * 0.4) / (heroH * 0.4), 0), 1);
+      const isDark  = document.documentElement.classList.contains("dark");
+
+      if (patternRef.current) {
+        patternRef.current.style.opacity   = (t * (isDark ? 0.12 : 0.28)).toString();
+        patternRef.current.style.transform = `translateY(${-scrollY * 0.35}px)`;
+      }
+      if (pattern2Ref.current) {
+        pattern2Ref.current.style.opacity   = (t * (isDark ? 0.07 : 0.18)).toString();
+        pattern2Ref.current.style.transform = `translateY(${-scrollY * 0.6}px)`;
+      }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -35,14 +42,9 @@ export default function Home() {
 
   return (
     <LanguageProvider>
-      {/* Fixed parallax background pattern — fades in after hero, never scrolls */}
-      {/* Fixed parallax background pattern — overlay above content, below navbar */}
-      <div
-        ref={patternRef}
-        aria-hidden="true"
-        className="fixed pointer-events-none"
-        style={{ zIndex: 10, opacity: 0, top: "-150vh", left: "-10%", width: "120%", height: "500vh" }}
-      >
+      {/* Layer 1 — background, dense dots, 35% scroll speed */}
+      <div ref={patternRef} aria-hidden="true" className="fixed pointer-events-none"
+        style={{ zIndex: 10, opacity: 0, top: "-150vh", left: "-10%", width: "120%", height: "500vh" }}>
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="bg-pattern" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
@@ -51,6 +53,19 @@ export default function Home() {
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#bg-pattern)" />
+        </svg>
+      </div>
+
+      {/* Layer 2 — middle, sparse dots, different color, 60% scroll speed */}
+      <div ref={pattern2Ref} aria-hidden="true" className="fixed pointer-events-none"
+        style={{ zIndex: 11, opacity: 0, top: "-150vh", left: "-10%", width: "120%", height: "500vh" }}>
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="bg-pattern-2" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+              <circle cx="1" cy="1" r="1.4" fill="hsl(var(--muted-foreground))" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#bg-pattern-2)" />
         </svg>
       </div>
 
