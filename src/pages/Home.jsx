@@ -32,7 +32,7 @@ export default function Home() {
         patternRef.current.style.transform = `translateY(${-scrollY * 0.35}px)`;
       }
       if (pattern2Ref.current) {
-        pattern2Ref.current.style.opacity   = (t * (isDark ? 0.07 : 0.18)).toString();
+        pattern2Ref.current.style.opacity   = (t * (isDark ? 0.18 : 0.35)).toString();
         pattern2Ref.current.style.transform = `translateY(${-scrollY * 0.6}px)`;
       }
     };
