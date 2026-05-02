@@ -27,7 +27,7 @@ export default function Home() {
       const t = Math.min(Math.max((scrollY - heroH * 0.4) / (heroH * 0.4), 0), 1);
       patternRef.current.style.opacity = (t * 0.12).toString();
       // Scrolls at 35% of page speed → parallax depth
-      patternRef.current.style.transform = `translateY(${scrollY * 0.35}px)`;
+      patternRef.current.style.transform = `translateY(${-scrollY * 0.35}px)`;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -40,8 +40,8 @@ export default function Home() {
       <div
         ref={patternRef}
         aria-hidden="true"
-        className="fixed inset-0 pointer-events-none"
-        style={{ zIndex: 10, opacity: 0 }}
+        className="fixed pointer-events-none"
+        style={{ zIndex: 10, opacity: 0, top: "-150vh", left: "-10%", width: "120%", height: "500vh" }}
       >
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
