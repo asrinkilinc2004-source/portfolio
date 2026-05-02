@@ -22,9 +22,12 @@ export default function Home() {
   useEffect(() => {
     const onScroll = () => {
       if (!patternRef.current) return;
+      const scrollY = window.scrollY;
       const heroH = window.innerHeight;
-      const t = Math.min(Math.max((window.scrollY - heroH * 0.4) / (heroH * 0.4), 0), 1);
+      const t = Math.min(Math.max((scrollY - heroH * 0.4) / (heroH * 0.4), 0), 1);
       patternRef.current.style.opacity = (t * 0.12).toString();
+      // Scrolls at 35% of page speed → parallax depth
+      patternRef.current.style.transform = `translateY(${scrollY * 0.35}px)`;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
