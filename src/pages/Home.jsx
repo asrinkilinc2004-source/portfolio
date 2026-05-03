@@ -66,7 +66,7 @@ export default function Home() {
           zIndex: 11, opacity: 0,
           top: "-200vh", left: "-10%", width: "120%", height: "900vh",
           willChange: "transform",
-          backgroundImage: "radial-gradient(circle, hsl(var(--muted-foreground)) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, hsl(var(--muted-foreground)) 1.5px, transparent 1.5px)",
           backgroundSize: "95px 95px",
         }}
       />
