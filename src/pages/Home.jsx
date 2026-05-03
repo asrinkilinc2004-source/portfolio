@@ -32,7 +32,7 @@ export default function Home() {
         const isDark  = document.documentElement.classList.contains("dark");
 
         if (patternRef.current) {
-          patternRef.current.style.opacity   = (t * (isDark ? 0.12 : 0.28)).toString();
+          patternRef.current.style.opacity   = (t * (isDark ? 0.08 : 0.20)).toString();
           patternRef.current.style.transform = `translate3d(0,${-scrollY * 0.35}px,0)`;
         }
         if (pattern2Ref.current) {
