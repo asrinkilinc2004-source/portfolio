@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 const X_SVG = encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" width="95" height="95"><line x1="42" y1="42" x2="53" y2="53" stroke="#888" stroke-width="1.6" stroke-linecap="round"/><line x1="53" y1="42" x2="42" y2="53" stroke="#888" stroke-width="1.6" stroke-linecap="round"/></svg>`
+  `<svg xmlns="http://www.w3.org/2000/svg" width="95" height="95"><line x1="44" y1="44" x2="51" y2="51" stroke="#888" stroke-width="1.4" stroke-linecap="round"/><line x1="51" y1="44" x2="44" y2="51" stroke="#888" stroke-width="1.4" stroke-linecap="round"/></svg>`
 );
 const X_PATTERN = `url("data:image/svg+xml,${X_SVG}")`;
 import { useLenis } from "../lib/useLenis";
