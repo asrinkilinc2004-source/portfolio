@@ -1,4 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+
+const X_SVG = encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="95" height="95"><line x1="42" y1="42" x2="53" y2="53" stroke="#888" stroke-width="1.6" stroke-linecap="round"/><line x1="53" y1="42" x2="42" y2="53" stroke="#888" stroke-width="1.6" stroke-linecap="round"/></svg>`
+);
+const X_PATTERN = `url("data:image/svg+xml,${X_SVG}")`;
 import { useLenis } from "../lib/useLenis";
 import Navbar from "../components/portfolio/Navbar";
 import HeroSection from "../components/portfolio/HeroSection";
@@ -65,7 +70,7 @@ export default function Home() {
           zIndex: 11, opacity: 0,
           top: "-200vh", left: "-10%", width: "120%", height: "900vh",
           willChange: "transform",
-          backgroundImage: "radial-gradient(circle, hsl(var(--muted-foreground)) 1.4px, transparent 1.4px)",
+          backgroundImage: X_PATTERN,
           backgroundSize: "95px 95px",
         }}
       />
