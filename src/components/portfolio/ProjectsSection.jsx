@@ -1,5 +1,7 @@
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
@@ -19,6 +21,7 @@ const IMAGE_CLASS = [
 
 function TiltCard({ project, index, currentLabel }) {
   const ref = useRef(null);
+  const navigate = useNavigate();
   const onMove = (e) => {
     const el = ref.current;
     if (!el) return;
@@ -115,6 +118,15 @@ function TiltCard({ project, index, currentLabel }) {
                 <span key={tag} className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20 group-hover:bg-primary/15 transition-colors">{tag}</span>
               ))}
             </div>
+            {project.current && (
+              <button
+                onClick={() => navigate("/semester4")}
+                className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:opacity-90 active:scale-95 transition-all duration-150 w-fit"
+              >
+                Bekijk semester 4
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
       </div>
