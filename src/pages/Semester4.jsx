@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Users, Calendar, Cpu, Eye } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Cpu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import Navbar from "../components/portfolio/Navbar";
@@ -208,38 +208,22 @@ function Semester4Content() {
           {/* Left column */}
           <div className="lg:col-span-2 space-y-8">
 
-            {/* Placeholder visual */}
-            <motion.div {...fadeUp(0.05)}>
-              <TiltCard>
-                <div
-                  style={{
-                    background:
-                      "linear-gradient(135deg, hsl(var(--primary)/0.08) 0%, hsl(var(--primary)/0.18) 50%, hsl(var(--primary)/0.06) 100%)",
-                    minHeight: "320px",
-                  }}
-                >
-                  <div className="relative w-full h-full min-h-[320px] flex flex-col items-center justify-center gap-4 overflow-hidden rounded-xl">
-                    <div className="absolute inset-0 opacity-[0.07]" style={GRID_STYLE} />
-                    <div
-                      className="absolute inset-0 opacity-40"
-                      style={{
-                        background:
-                          "radial-gradient(ellipse 60% 50% at 50% 50%, hsl(var(--primary)/0.3) 0%, transparent 70%)",
-                        animation: "pulse 3s ease-in-out infinite",
-                      }}
+            {/* Project photos */}
+            <div className="grid grid-cols-2 gap-4">
+              {["/webcam1.jpeg", "/webcam2.jpeg"].map((src, i) => (
+                <motion.div key={i} {...fadeUp(0.05 + i * 0.07)}>
+                  <TiltCard className="overflow-hidden">
+                    <img
+                      src={src}
+                      alt={`AI Face Tracking Camera ${i + 1}`}
+                      draggable={false}
+                      onContextMenu={(e) => e.preventDefault()}
+                      className="w-full h-64 object-cover hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="relative flex flex-col items-center gap-3 select-none">
-                      <div className="w-16 h-16 rounded-full border-2 border-primary/40 flex items-center justify-center">
-                        <Eye className="w-7 h-7 text-primary/70" />
-                      </div>
-                      <span className="font-mono text-sm text-primary/60 tracking-widest uppercase">
-                        {s.photo_placeholder}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </TiltCard>
-            </motion.div>
+                  </TiltCard>
+                </motion.div>
+              ))}
+            </div>
 
             {/* Over het project */}
             <motion.div {...fadeUp(0.1)}>
