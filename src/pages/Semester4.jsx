@@ -80,6 +80,9 @@ function Semester4Content() {
   const patternRef  = useRef(null);
   const pattern2Ref = useRef(null);
 
+  // Always start at top when navigating to this page
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
   // Same parallax scroll handler as Home.jsx
   useEffect(() => {
     let ticking = false;
