@@ -231,16 +231,21 @@ function Semester4Content() {
                 {TEAM.map((member, i) => (
                   <div
                     key={i}
-                    className={`flex items-center justify-between text-sm py-2 px-3 rounded-lg ${
+                    className={`flex items-center gap-3 py-2.5 px-3 rounded-lg ${
                       member.highlight
                         ? "bg-primary/10 border border-primary/20"
                         : "bg-muted/30"
                     }`}
                   >
-                    <span className={member.highlight ? "text-primary font-semibold" : "text-muted-foreground"}>
-                      {member.name}
-                    </span>
-                    <span className="font-mono text-xs text-muted-foreground">{member.role}</span>
+                    {member.highlight && (
+                      <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                    )}
+                    <div className="flex flex-col min-w-0">
+                      <span className={`text-sm font-medium leading-tight ${member.highlight ? "text-primary font-semibold" : "text-foreground"}`}>
+                        {member.name}
+                      </span>
+                      <span className="font-mono text-xs text-muted-foreground mt-0.5">{member.role}</span>
+                    </div>
                   </div>
                 ))}
               </div>
