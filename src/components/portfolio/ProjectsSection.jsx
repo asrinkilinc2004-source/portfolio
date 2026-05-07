@@ -41,7 +41,7 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
   const hasImage = !!project.image;
 
   return (
-    <motion.div {...fadeUp(index * 0.08)}>
+    <motion.div {...fadeUp(index * 0.08)} id={project.current ? "ai-project" : undefined}>
       <div ref={ref}
         onMouseMove={isMobile ? undefined : onMove}
         onMouseLeave={isMobile ? undefined : onLeave}

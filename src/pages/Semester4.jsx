@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Users, Calendar, Cpu, Eye } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import Navbar from "../components/portfolio/Navbar";
 import CustomCursor from "../components/portfolio/CustomCursor";
@@ -72,6 +72,7 @@ function TiltCard({ children, className = "" }) {
 
 function Semester4Content() {
   useLenis();
+  const navigate = useNavigate();
 
   const { t } = useLanguage();
   const s = t.semester4;
@@ -157,13 +158,13 @@ function Semester4Content() {
 
         <div className="relative max-w-6xl mx-auto w-full">
           <motion.div {...fadeUp(0)}>
-            <Link
-              to="/#projects"
+            <button
+              onClick={() => navigate("/", { state: { scrollTo: "ai-project" } })}
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8 group"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               {s.back}
-            </Link>
+            </button>
           </motion.div>
 
           <motion.div {...fadeUp(0.08)} className="flex flex-wrap items-center gap-2 mb-4">

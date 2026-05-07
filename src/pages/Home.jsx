@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 
 import { useLenis } from "../lib/useLenis";
 import Navbar from "../components/portfolio/Navbar";
@@ -17,7 +18,31 @@ import { LanguageProvider } from "../lib/LanguageContext";
 
 export default function Home() {
   useLenis();
-  const [splashDone, setSplashDone] = useState(false);
+  const location = useLocation();
+
+  // Skip splash when returning from a subpage (e.g. Semester4)
+  const skipSplash = !!location.state?.scrollTo || sessionStorage.getItem("splashShown") === "true";
+  const [splashDone, setSplashDone] = useState(skipSplash);
+
+  // Remember splash was shown so it won't replay this session
+  useEffect(() => { sessionStorage.setItem("splashShown", "true"); }, []);
+
+  // Scroll to target element when navigating back
+  useEffect(() => {
+    if (!location.state?.scrollTo) return;
+    const id = location.state.scrollTo;
+    const attempt = (tries = 0) => {
+      const el = document.getElementById(id);
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 90;
+        window.scrollTo({ top, behavior: "smooth" });
+      } else if (tries < 8) {
+        setTimeout(() => attempt(tries + 1), 80);
+      }
+    };
+    setTimeout(() => attempt(), 120);
+  }, [location.state]);
+
   const patternRef  = useRef(null);
   const pattern2Ref = useRef(null);
 
@@ -71,7 +96,7 @@ export default function Home() {
         }}
       />
 
-      <SplashIntro onDone={() => setSplashDone(true)} />
+      {!skipSplash && <SplashIntro onDone={() => setSplashDone(true)} />}
       {/* These stay visible at all times — outside the fading div */}
       <CustomCursor />
       <Navbar />
