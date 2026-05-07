@@ -19,7 +19,7 @@ const IMAGE_CLASS = [
   "group-hover:scale-105",
 ];
 
-function TiltCard({ project, index, currentLabel }) {
+function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
   const ref = useRef(null);
   const navigate = useNavigate();
   const onMove = (e) => {
@@ -123,7 +123,7 @@ function TiltCard({ project, index, currentLabel }) {
                 onClick={() => navigate("/semester4")}
                 className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:opacity-90 active:scale-95 transition-all duration-150 w-fit"
               >
-                Bekijk semester 4
+                {viewCurrentLabel}
                 <ArrowRight className="w-4 h-4" />
               </button>
             )}
@@ -136,7 +136,7 @@ function TiltCard({ project, index, currentLabel }) {
 
 export default function ProjectsSection() {
   const { t } = useLanguage();
-  const { label, title, items, current_label } = t.projects;
+  const { label, title, items, current_label, view_current } = t.projects;
 
   return (
     <section id="projects" className="py-32 px-6">
@@ -151,7 +151,7 @@ export default function ProjectsSection() {
         </motion.div>
         <div className="space-y-8">
           {items.map((project, i) => (
-            <TiltCard key={project.title} project={project} index={i} currentLabel={current_label} />
+            <TiltCard key={project.title} project={project} index={i} currentLabel={current_label} viewCurrentLabel={view_current} />
           ))}
         </div>
       </div>

@@ -43,7 +43,7 @@ export const translations = {
       ],
     },
     projects: {
-      label: "03 —", title: "Projecten", current_label: "Huidig project",
+      label: "03 —", title: "Projecten", current_label: "Huidig project", view_current: "Bekijk semester 4",
       items: [
         {
           semester: "Semester 1",
@@ -107,6 +107,25 @@ export const translations = {
       },
     },
     footer: { rights: "All rights reserved." },
+    semester4: {
+      back: "Terug naar projecten",
+      in_progress: "In uitvoering",
+      subtitle: "Een AI-gestuurde camera die gezichten detecteert en volgt — en daarmee het ongemakkelijke gevoel creëert altijd in de gaten gehouden te worden. Gebouwd in een team van 5 onder het thema",
+      about_title: "Over het project",
+      about_p1: "In het Studio Semester van de HvA werken we in een team van 5 aan een project onder het profiel AI Engineer. Het thema dit semester is Dark Tech — technologie die een duistere of ongemakkelijke kant laat zien.",
+      about_p2: "Ons project: een camera die realtime gezichten detecteert met behulp van OpenCV en een servo-mechanisme aanstuurt om het gezicht te volgen. Het resultaat is een installatie die letterlijk naar je kijkt zodra je in beeld komt — en dat gevoel van bewaakt worden tastbaar maakt.",
+      about_p3: "De hardware draait op een Raspberry Pi, de gezichtsdetectie is gebouwd in Python met OpenCV, en de camera beweegt via een pan-tilt servo systeem.",
+      progress_title: "Voortgang",
+      soon: "binnenkort",
+      progress_label: "Voortgang",
+      photo_placeholder: "In progress — foto volgt",
+      tech_title: "Tech stack",
+      team_title: "Team van 5",
+      info_title: "Semester info",
+      info: { study_label: "Opleiding", study_value: "Business IT & Management", school_label: "Instelling", school_value: "Hogeschool van Amsterdam", period_label: "Periode", period_value: "Semester 4 · 2026", profile_label: "Profiel", profile_value: "AI Engineer", theme_label: "Thema", theme_value: "Dark Tech" },
+      milestones: ["Concept & onderzoek", "Hardware setup", "Gezichtsdetectie (OpenCV)", "Camera tracking mechanisme", "Camera bekleden voor eindpresentatie", "Eindpresentatie"],
+      btn: "Bekijk semester 4",
+    },
   },
 
   en: {
@@ -145,7 +164,7 @@ export const translations = {
       ],
     },
     projects: {
-      label: "03 —", title: "Projects", current_label: "Current project",
+      label: "03 —", title: "Projects", current_label: "Current project", view_current: "View semester 4",
       items: [
         {
           semester: "Semester 1",
@@ -209,6 +228,25 @@ export const translations = {
       },
     },
     footer: { rights: "All rights reserved." },
+    semester4: {
+      back: "Back to projects",
+      in_progress: "In progress",
+      subtitle: "An AI-driven camera that detects and tracks faces — creating the unsettling feeling of always being watched. Built in a team of 5 under the",
+      about_title: "About the project",
+      about_p1: "In HvA's Studio Semester, we are working in a team of 5 on a project under the AI Engineer profile. The theme this semester is Dark Tech — technology that reveals a dark or unsettling side.",
+      about_p2: "Our project: a camera that detects faces in real-time using OpenCV and controls a servo mechanism to track the face. The result is an installation that literally looks at you the moment you appear on screen — making that feeling of being watched tangible.",
+      about_p3: "The hardware runs on a Raspberry Pi, the face detection is built in Python with OpenCV, and the camera moves via a pan-tilt servo system.",
+      progress_title: "Progress",
+      soon: "coming soon",
+      progress_label: "Progress",
+      photo_placeholder: "In progress — photo coming soon",
+      tech_title: "Tech stack",
+      team_title: "Team of 5",
+      info_title: "Semester info",
+      info: { study_label: "Programme", study_value: "Business IT & Management", school_label: "Institution", school_value: "Amsterdam University of Applied Sciences", period_label: "Period", period_value: "Semester 4 · 2026", profile_label: "Profile", profile_value: "AI Engineer", theme_label: "Theme", theme_value: "Dark Tech" },
+      milestones: ["Concept & research", "Hardware setup", "Face detection (OpenCV)", "Camera tracking mechanism", "Camera dressing for final presentation", "Final presentation"],
+      btn: "View semester 4",
+    },
   },
 
   ar: {
@@ -247,7 +285,7 @@ export const translations = {
       ],
     },
     projects: {
-      label: "03 —", title: "المشاريع", current_label: "المشروع الحالي",
+      label: "03 —", title: "المشاريع", current_label: "المشروع الحالي", view_current: "عرض الفصل الرابع",
       items: [
         {
           semester: "الفصل 1",
@@ -311,6 +349,25 @@ export const translations = {
       },
     },
     footer: { rights: "جميع الحقوق محفوظة." },
+    semester4: {
+      back: "العودة إلى المشاريع",
+      in_progress: "قيد التنفيذ",
+      subtitle: "كاميرا مدعومة بالذكاء الاصطناعي تكتشف الوجوه وتتبعها — مما يخلق شعورًا غير مريح بالمراقبة الدائمة. مبنية في فريق من 5 أفراد تحت موضوع",
+      about_title: "عن المشروع",
+      about_p1: "في فصل الاستوديو بجامعة HvA، نعمل في فريق من 5 أفراد على مشروع تحت مسار مهندس الذكاء الاصطناعي. موضوع هذا الفصل هو Dark Tech — التكنولوجيا التي تكشف جانبًا مظلمًا أو مزعزعًا للاستقرار.",
+      about_p2: "مشروعنا: كاميرا تكتشف الوجوه في الوقت الفعلي باستخدام OpenCV وتتحكم في آلية سيرفو لتتبع الوجه. النتيجة هي تركيب يحدق فيك حرفيًا لحظة ظهورك أمام الكاميرا — مما يجعل شعور المراقبة ملموسًا.",
+      about_p3: "يعمل الجهاز على Raspberry Pi، ويُبنى اكتشاف الوجه بلغة Python مع OpenCV، وتتحرك الكاميرا عبر نظام سيرفو pan-tilt.",
+      progress_title: "التقدم",
+      soon: "قريبًا",
+      progress_label: "التقدم",
+      photo_placeholder: "قيد التنفيذ — الصورة قريبًا",
+      tech_title: "مكدس التقنيات",
+      team_title: "فريق من 5",
+      info_title: "معلومات الفصل",
+      info: { study_label: "البرنامج", study_value: "إدارة الأعمال وتكنولوجيا المعلومات", school_label: "المؤسسة", school_value: "Hogeschool van Amsterdam", period_label: "الفترة", period_value: "الفصل 4 · 2026", profile_label: "التخصص", profile_value: "مهندس الذكاء الاصطناعي", theme_label: "الموضوع", theme_value: "Dark Tech" },
+      milestones: ["المفهوم والبحث", "إعداد الأجهزة", "اكتشاف الوجه (OpenCV)", "آلية تتبع الكاميرا", "تزيين الكاميرا للعرض النهائي", "العرض النهائي"],
+      btn: "عرض الفصل الرابع",
+    },
   },
 
   es: {
@@ -349,7 +406,7 @@ export const translations = {
       ],
     },
     projects: {
-      label: "03 —", title: "Proyectos", current_label: "Proyecto actual",
+      label: "03 —", title: "Proyectos", current_label: "Proyecto actual", view_current: "Ver semestre 4",
       items: [
         {
           semester: "Semestre 1",
@@ -413,6 +470,25 @@ export const translations = {
       },
     },
     footer: { rights: "Todos los derechos reservados." },
+    semester4: {
+      back: "Volver a proyectos",
+      in_progress: "En progreso",
+      subtitle: "Una cámara impulsada por IA que detecta y sigue rostros — creando la incómoda sensación de ser siempre observado. Construida en un equipo de 5 bajo el tema",
+      about_title: "Sobre el proyecto",
+      about_p1: "En el Semestre Estudio de la HvA, trabajamos en equipo de 5 en un proyecto bajo el perfil de Ingeniero de IA. El tema de este semestre es Dark Tech — tecnología que revela un lado oscuro o inquietante.",
+      about_p2: "Nuestro proyecto: una cámara que detecta rostros en tiempo real con OpenCV y controla un mecanismo servo para seguir el rostro. El resultado es una instalación que literalmente te mira en el momento en que apareces en pantalla — haciendo tangible esa sensación de ser vigilado.",
+      about_p3: "El hardware corre en una Raspberry Pi, la detección de rostros está construida en Python con OpenCV, y la cámara se mueve mediante un sistema servo pan-tilt.",
+      progress_title: "Progreso",
+      soon: "próximamente",
+      progress_label: "Progreso",
+      photo_placeholder: "En progreso — foto próximamente",
+      tech_title: "Stack tecnológico",
+      team_title: "Equipo de 5",
+      info_title: "Info del semestre",
+      info: { study_label: "Programa", study_value: "Business IT & Management", school_label: "Institución", school_value: "Hogeschool van Amsterdam", period_label: "Período", period_value: "Semestre 4 · 2026", profile_label: "Perfil", profile_value: "AI Engineer", theme_label: "Tema", theme_value: "Dark Tech" },
+      milestones: ["Concepto e investigación", "Configuración de hardware", "Detección facial (OpenCV)", "Mecanismo de seguimiento", "Decorar cámara para presentación final", "Presentación final"],
+      btn: "Ver semestre 4",
+    },
   },
 
   zh: {
@@ -451,7 +527,7 @@ export const translations = {
       ],
     },
     projects: {
-      label: "03 —", title: "项目", current_label: "当前项目",
+      label: "03 —", title: "项目", current_label: "当前项目", view_current: "查看第4学期",
       items: [
         {
           semester: "第1学期",
@@ -515,5 +591,24 @@ export const translations = {
       },
     },
     footer: { rights: "版权所有。" },
+    semester4: {
+      back: "返回项目",
+      in_progress: "进行中",
+      subtitle: "一款AI驱动的摄像头，实时检测并跟踪人脸——营造出一种始终被注视的不安感。由5人团队在暗黑科技主题下构建。主题：",
+      about_title: "关于项目",
+      about_p1: "在HvA的工作室学期，我们5人团队以AI工程师方向完成项目。本学期主题为Dark Tech——展现技术黑暗或令人不安一面的探索。",
+      about_p2: "我们的项目：一台利用OpenCV实时检测人脸、并通过舵机系统跟踪人脸的摄像头。当你出现在画面中，摄像头会字面意义上地盯着你看——将被监视的感受具体化。",
+      about_p3: "硬件运行在Raspberry Pi上，人脸检测基于Python与OpenCV构建，摄像头通过云台舵机系统运动。",
+      progress_title: "进度",
+      soon: "即将推出",
+      progress_label: "进度",
+      photo_placeholder: "进行中 — 照片即将上传",
+      tech_title: "技术栈",
+      team_title: "5人团队",
+      info_title: "学期信息",
+      info: { study_label: "专业", study_value: "商业IT与管理", school_label: "院校", school_value: "阿姆斯特丹应用科技大学", period_label: "时间", period_value: "第4学期 · 2026", profile_label: "方向", profile_value: "AI工程师", theme_label: "主题", theme_value: "Dark Tech" },
+      milestones: ["概念与研究", "硬件搭建", "人脸检测（OpenCV）", "摄像头跟踪机制", "摄像头装饰（终展准备）", "最终展示"],
+      btn: "查看第4学期",
+    },
   },
 };
