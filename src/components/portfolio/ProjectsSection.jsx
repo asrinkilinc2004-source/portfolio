@@ -10,12 +10,12 @@ import SplitText from "./SplitText";
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
 // Per-project image overrides (index-based, language-independent)
-// Order: DOKKI€ (0), SafeNotes (1), Rituals (2), Defensie (3), AI Camera (4)
+// Order: AI Camera (0), Defensie (1), Rituals (2), SafeNotes (3), DOKKI€ (4)
 const IMAGE_CLASS = [
   "group-hover:scale-105",
-  "group-hover:scale-105",
-  "group-hover:scale-105",
   "scale-[1.22] group-hover:scale-[1.28]", // Defensie — zoom to hide black borders
+  "group-hover:scale-105",
+  "group-hover:scale-105",
   "group-hover:scale-105",
 ];
 
