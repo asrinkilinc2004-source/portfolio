@@ -4,6 +4,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes non-clickable-popup {
+  0%   { opacity: 0; transform: translate(-50%, -160%); }
+  15%  { opacity: 1; transform: translate(-50%, -140%); }
+  75%  { opacity: 1; transform: translate(-50%, -140%); }
+  100% { opacity: 0; transform: translate(-50%, -150%); }
+}
+
+.animate-non-clickable-popup {
+  animation: non-clickable-popup 1.8s ease forwards;
+}
+
 @layer base {
   :root {
     --background: 0 0% 98%;
