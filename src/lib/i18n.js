@@ -126,6 +126,7 @@ export const translations = {
       milestones: ["Concept & onderzoek", "Hardware setup", "Gezichtsdetectie (OpenCV)", "Camera tracking mechanisme", "Camera bekleden voor eindpresentatie", "Eindpresentatie"],
       btn: "Bekijk semester 4",
     },
+    notClickable: "Niet klikbaar",
   },
 
   en: {
@@ -247,6 +248,7 @@ export const translations = {
       milestones: ["Concept & research", "Hardware setup", "Face detection (OpenCV)", "Camera tracking mechanism", "Camera dressing for final presentation", "Final presentation"],
       btn: "View semester 4",
     },
+    notClickable: "Not clickable",
   },
 
   ar: {
@@ -368,6 +370,7 @@ export const translations = {
       milestones: ["المفهوم والبحث", "إعداد الأجهزة", "اكتشاف الوجه (OpenCV)", "آلية تتبع الكاميرا", "تزيين الكاميرا للعرض النهائي", "العرض النهائي"],
       btn: "عرض الفصل الرابع",
     },
+    notClickable: "غير قابل للنقر",
   },
 
   es: {
@@ -489,6 +492,7 @@ export const translations = {
       milestones: ["Concepto e investigación", "Configuración de hardware", "Detección facial (OpenCV)", "Mecanismo de seguimiento", "Decorar cámara para presentación final", "Presentación final"],
       btn: "Ver semestre 4",
     },
+    notClickable: "No es clicable",
   },
 
   zh: {
@@ -610,5 +614,6 @@ export const translations = {
       milestones: ["概念与研究", "硬件搭建", "人脸检测（OpenCV）", "摄像头跟踪机制", "摄像头装饰（终展准备）", "最终展示"],
       btn: "查看第4学期",
     },
+    notClickable: "不可点击",
   },
 };

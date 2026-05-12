@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLanguage } from '@/lib/LanguageContext';
 
 /**
  * Toont een kleine popup wanneer de gebruiker op een niet-klikbaar element klikt.
@@ -34,6 +35,7 @@ function isClickable(element) {
 }
 
 export default function NonClickablePopup() {
+  const { t } = useLanguage();
   const [popup, setPopup] = useState(null); // { x, y, id }
   const timerRef = useRef(null);
 
@@ -89,7 +91,7 @@ export default function NonClickablePopup() {
           userSelect: 'none',
         }}
       >
-        Niet klikbaar
+        {t.notClickable}
       </div>
     </div>
   );
