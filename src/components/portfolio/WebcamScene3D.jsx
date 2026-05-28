@@ -1,15 +1,17 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-// Cubic ease-in-out for the surveillance sweep
 function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
 /**
- * Logitech-style wireframe webcam.
- * Only the camera HEAD pans (surveillance CCTV motion).
- * The mount/clip stays completely static.
+ * Logitech C270-style wireframe webcam.
+ * - Rounded pill body (CapsuleGeometry, horizontal)
+ * - Large lens on the LEFT side of front face
+ * - Speaker/mic dot-grid on the RIGHT
+ * - Servo pan-tilt bracket as stand (static)
+ * - Only the HEAD pans (CCTV surveillance motion)
  */
 export default function WebcamScene3D({ className = "" }) {
   const mountRef = useRef(null);
@@ -18,20 +20,21 @@ export default function WebcamScene3D({ className = "" }) {
     const el = mountRef.current;
     if (!el) return;
 
-    // ── Read --primary CSS variable at runtime ────────────────────────
+    // ── CSS primary colour ────────────────────────────────────────────
     const raw = getComputedStyle(document.documentElement)
       .getPropertyValue("--primary").trim();           // "174 100% 50%"
-    const parts = raw.split(/\s+/);
-    const hh = parseFloat(parts[0]) / 360;
-    const ss = parseFloat(parts[1]) / 100;
-    const ll = parseFloat(parts[2]) / 100;
+    const [hRaw, sRaw, lRaw] = raw.split(/\s+/);
+    const hh = parseFloat(hRaw) / 360;
+    const ss = parseFloat(sRaw) / 100;
+    const ll = parseFloat(lRaw) / 100;
     const primaryColor = new THREE.Color().setHSL(hh, ss, ll);
-    const dimColor     = new THREE.Color().setHSL(hh, ss * 0.55, ll * 0.55);
+    const dimColor     = new THREE.Color().setHSL(hh, ss * 0.5, ll * 0.5);
 
     const mat  = (op) => new THREE.LineBasicMaterial({ color: primaryColor, transparent: true, opacity: op });
     const dmat = (op) => new THREE.LineBasicMaterial({ color: dimColor,     transparent: true, opacity: op });
+    const edgesOf = (geo, m) => new THREE.LineSegments(new THREE.EdgesGeometry(geo), m);
 
-    // ── Renderer ──────────────────────────────────────────────────────
+    // ── Renderer & scene ──────────────────────────────────────────────
     const w0 = el.clientWidth, h0 = el.clientHeight;
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(w0, h0);
@@ -39,130 +42,159 @@ export default function WebcamScene3D({ className = "" }) {
     renderer.setClearColor(0x000000, 0);
     el.appendChild(renderer.domElement);
 
-    // ── Scene & camera ────────────────────────────────────────────────
-    const scene    = new THREE.Scene();
-    const cam      = new THREE.PerspectiveCamera(36, w0 / h0, 0.1, 100);
-    cam.position.set(0, 0.55, 4.8);
-    cam.lookAt(0, 0.25, 0);
+    const scene = new THREE.Scene();
+    const cam   = new THREE.PerspectiveCamera(36, w0 / h0, 0.1, 100);
+    cam.position.set(0, 0.55, 5.2);
+    cam.lookAt(0, 0.2, 0);
 
-    // ── Helper ────────────────────────────────────────────────────────
-    const edgesOf = (geo, m) =>
-      new THREE.LineSegments(new THREE.EdgesGeometry(geo), m);
-
-    // ── ROOT ──────────────────────────────────────────────────────────
     const root = new THREE.Group();
     scene.add(root);
 
     // =================================================================
-    // STAND  (never rotates)
+    //  STAND — servo pan-tilt bracket style (never rotates)
     // =================================================================
     const stand = new THREE.Group();
     root.add(stand);
 
-    // Hinge ball joint at origin (connection point between head & stand)
-    stand.add(edgesOf(new THREE.SphereGeometry(0.09, 12, 8),           mat(0.80)));
+    // Thin vertical bracket arm
+    const armGeo = new THREE.BoxGeometry(0.12, 0.60, 0.09);
+    const arm = edgesOf(armGeo, mat(0.72));
+    arm.position.y = -0.52;
+    stand.add(arm);
 
-    // Short neck piece going down
-    const neck = edgesOf(new THREE.CylinderGeometry(0.052, 0.052, 0.24, 8), mat(0.60));
-    neck.position.y = -0.20;
-    stand.add(neck);
+    // Top horizontal crossbar (connects bracket to camera base)
+    const topBarGeo = new THREE.BoxGeometry(0.42, 0.065, 0.09);
+    const topBar = edgesOf(topBarGeo, mat(0.68));
+    topBar.position.y = -0.225;
+    stand.add(topBar);
 
-    // Horizontal clip arm
-    const clipArm = edgesOf(new THREE.BoxGeometry(1.15, 0.09, 0.38),   mat(0.65));
-    clipArm.position.y = -0.37;
-    stand.add(clipArm);
+    // Bottom horizontal crossbar
+    const botBarGeo = new THREE.BoxGeometry(0.42, 0.065, 0.09);
+    const botBar = edgesOf(botBarGeo, mat(0.65));
+    botBar.position.y = -0.82;
+    stand.add(botBar);
 
-    // Front grip tooth (hooks over monitor)
-    const fg = edgesOf(new THREE.BoxGeometry(0.16, 0.24, 0.07),        mat(0.60));
-    fg.position.set(0, -0.52, 0.22);
-    stand.add(fg);
-
-    // Back grip tooth
-    const bg = edgesOf(new THREE.BoxGeometry(0.16, 0.24, 0.07),        mat(0.60));
-    bg.position.set(0, -0.52, -0.22);
-    stand.add(bg);
+    // Bracket screw holes (tiny circles on sides of arm)
+    for (const [x, y] of [[-0.22, -0.38], [0.22, -0.38], [-0.22, -0.66], [0.22, -0.66]]) {
+      const sh = edgesOf(new THREE.CircleGeometry(0.028, 8), dmat(0.32));
+      sh.position.set(x, y, 0.05);
+      stand.add(sh);
+    }
 
     // =================================================================
-    // HEAD  (pans on Y — surveillance motion)
+    //  HEAD — Logitech pill body (rotates Y on surveillance pan)
     // =================================================================
     const head = new THREE.Group();
-    head.position.y = 0.38;   // sits above the hinge
+    head.position.y = 0.30;
     root.add(head);
 
-    // ── Main body — short squat box (Logitech proportions ~2.8:1) ────
-    head.add(edgesOf(new THREE.BoxGeometry(1.48, 0.52, 0.44, 4, 2, 2), mat(0.48)));
+    // ── 1. Pill / capsule body ────────────────────────────────────────
+    // CapsuleGeometry(radius, length, capSegments, radialSegments)
+    // Low segment counts keep the wireframe clean / sketch-like
+    const bodyGeo = new THREE.CapsuleGeometry(0.265, 0.90, 5, 14);
+    const bodyMesh = edgesOf(bodyGeo, mat(0.48));
+    bodyMesh.rotation.z = Math.PI / 2;  // lay it horizontal
+    head.add(bodyMesh);
 
-    // Left & right end-cap circles (give the rounded-edge feel)
-    for (const xSide of [-0.74, 0.74]) {
-      const cap = edgesOf(new THREE.CircleGeometry(0.26, 20),           dmat(0.28));
-      cap.position.x = xSide;
-      cap.rotation.y = xSide > 0 ? Math.PI / 2 : -Math.PI / 2;
-      head.add(cap);
+    // Front face of pill (the Z-forward face of the body)
+    // Approximated as a stadium-shaped line (ellipse is close enough)
+    const FACE_Z = 0.266;   // front face of body
+    const facePoints = [];
+    const W = 0.71, H = 0.265;   // half-width, half-height of front face
+    for (let i = 0; i <= 64; i++) {
+      const a = (i / 64) * Math.PI * 2;
+      // Stadium shape: box + semicircles
+      const cosA = Math.cos(a), sinA = Math.sin(a);
+      const x = W * cosA;
+      const y = H * sinA;
+      facePoints.push(new THREE.Vector3(x, y, 0));
     }
+    const faceLine = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(facePoints),
+      mat(0.30)
+    );
+    faceLine.position.z = FACE_Z;
+    head.add(faceLine);
 
-    // ── Lens assembly (all at z = 0.22, the front face) ──────────────
-    const FZ = 0.22;
+    // ── 2. Lens assembly — LEFT of centre ────────────────────────────
+    const LX = -0.25;   // horizontal offset (left)
+    const LZ = FACE_Z;
 
-    // Outer ring (the big lens bezel)
-    const outerRing = edgesOf(new THREE.TorusGeometry(0.205, 0.040, 10, 40), mat(0.90));
-    outerRing.position.z = FZ;
-    head.add(outerRing);
-
-    // Middle ring (focus ring groove)
-    const midRing = edgesOf(new THREE.TorusGeometry(0.135, 0.028, 8, 32),   mat(0.85));
-    midRing.position.z = FZ + 0.01;
-    head.add(midRing);
-
-    // Lens dome (a convex sphere protruding from front)
-    const lensMesh = edgesOf(new THREE.SphereGeometry(0.105, 18, 12),        dmat(0.50));
-    lensMesh.position.z = FZ + 0.07;
-    head.add(lensMesh);
-
-    // Iris (tiny filled circle — the pupil)
-    const iris = edgesOf(new THREE.CircleGeometry(0.048, 18),                mat(1.00));
-    iris.position.z = FZ + 0.14;
-    head.add(iris);
-
-    // Front bezel circle (ring flush with body)
-    const bezel = edgesOf(new THREE.CircleGeometry(0.225, 32),               mat(0.60));
-    bezel.position.z = FZ - 0.01;
+    // Outer bezel ring (thick ring around lens housing)
+    const bezelGeo = new THREE.TorusGeometry(0.190, 0.040, 10, 44);
+    const bezel = edgesOf(bezelGeo, mat(0.90));
+    bezel.position.set(LX, 0, LZ);
     head.add(bezel);
 
-    // ── LED indicator (right of lens) ─────────────────────────────────
-    const led = edgesOf(new THREE.SphereGeometry(0.027, 6, 4),              mat(0.95));
-    led.position.set(0.30, 0.01, FZ + 0.01);
+    // Second ring (inner focusing groove)
+    const groove = edgesOf(new THREE.TorusGeometry(0.122, 0.026, 8, 32), mat(0.85));
+    groove.position.set(LX, 0, LZ + 0.015);
+    head.add(groove);
+
+    // Glass dome (convex lens element)
+    const dome = edgesOf(new THREE.SphereGeometry(0.098, 16, 12), dmat(0.45));
+    dome.position.set(LX, 0, LZ + 0.068);
+    head.add(dome);
+
+    // Iris (dark circle in centre of lens)
+    const iris = edgesOf(new THREE.CircleGeometry(0.042, 20), mat(1.0));
+    iris.position.set(LX, 0, LZ + 0.145);
+    head.add(iris);
+
+    // ── 3. Mic / speaker grille — RIGHT side ─────────────────────────
+    // 3 × 4 dot grid (like the Logitech grille holes)
+    const GX = 0.275, GZ = FACE_Z + 0.005;
+    const COLS = 4, ROWS = 3, SPACING = 0.044;
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const dot = edgesOf(new THREE.CircleGeometry(0.013, 7), dmat(0.42));
+        dot.position.set(
+          GX + (c - (COLS - 1) / 2) * SPACING,
+          (r - (ROWS - 1) / 2) * SPACING,
+          GZ
+        );
+        head.add(dot);
+      }
+    }
+    // Grille outline rectangle
+    const gOutline = edgesOf(
+      new THREE.PlaneGeometry(COLS * SPACING + 0.03, ROWS * SPACING + 0.03),
+      dmat(0.30)
+    );
+    gOutline.position.set(GX, 0, GZ - 0.001);
+    head.add(gOutline);
+
+    // ── 4. LED indicator (between lens and grille) ────────────────────
+    const led = edgesOf(new THREE.SphereGeometry(0.022, 6, 4), mat(0.95));
+    led.position.set(0.04, 0.005, LZ + 0.005);
     head.add(led);
 
-    // ── Mic grille (2 small circles, left of lens) ────────────────────
-    for (const [mx, my] of [[-0.30, 0], [-0.40, 0]]) {
-      const mic = edgesOf(new THREE.CircleGeometry(0.022, 10),              dmat(0.38));
-      mic.position.set(mx, my, FZ);
-      head.add(mic);
-    }
+    // ── 5. Top ridge / grip bump ──────────────────────────────────────
+    const ridge = edgesOf(
+      new THREE.BoxGeometry(0.80, 0.055, 0.05),
+      dmat(0.22)
+    );
+    ridge.position.set(0, 0.268, 0.12);
+    head.add(ridge);
 
-    // ── Bottom connector (head → hinge) ──────────────────────────────
-    const hc = edgesOf(new THREE.CylinderGeometry(0.068, 0.068, 0.10, 10), mat(0.65));
-    hc.position.y = -0.31;
-    head.add(hc);
+    // ── 6. Bottom pin (connects head to bracket) ──────────────────────
+    const pin = edgesOf(new THREE.CylinderGeometry(0.055, 0.055, 0.11, 10), mat(0.65));
+    pin.position.y = -0.275;
+    head.add(pin);
 
     // =================================================================
-    // SURVEILLANCE ANIMATION STATE MACHINE
+    //  SURVEILLANCE PAN ANIMATION
+    //  0=sweep L→R  1=hold R  2=sweep R→L  3=hold L
     // =================================================================
-    // States:  0 = sweep L→R   1 = hold at R
-    //          2 = sweep R→L   3 = hold at L
-    const MAX_ANGLE = 0.78;   // ≈ 45°
-    const SWEEP_DUR = 3.4;    // seconds per sweep
-    const HOLD_DUR  = 2.2;    // seconds to hold at extreme
+    const MAX_ANGLE = 0.75;
+    const SWEEP_DUR = 3.2;
+    const HOLD_DUR  = 2.0;
 
-    let state  = 1;           // start: holding at right
+    let state  = 1;           // start holding right
     let stateT = 0;
     let prevT  = 0;
-
     head.rotation.y = MAX_ANGLE;
 
-    // =================================================================
-    // ANIMATION LOOP
-    // =================================================================
     let animId;
     const clock = new THREE.Clock();
 
@@ -174,32 +206,32 @@ export default function WebcamScene3D({ className = "" }) {
       stateT += dt;
 
       switch (state) {
-        case 0: {   // Sweep L → R
+        case 0: {
           const p = Math.min(stateT / SWEEP_DUR, 1);
           head.rotation.y = THREE.MathUtils.lerp(-MAX_ANGLE, MAX_ANGLE, easeInOutCubic(p));
           if (p >= 1) { state = 1; stateT = 0; }
           break;
         }
-        case 1: {   // Hold at R
+        case 1: {
           head.rotation.y = MAX_ANGLE;
           if (stateT >= HOLD_DUR) { state = 2; stateT = 0; }
           break;
         }
-        case 2: {   // Sweep R → L
+        case 2: {
           const p = Math.min(stateT / SWEEP_DUR, 1);
           head.rotation.y = THREE.MathUtils.lerp(MAX_ANGLE, -MAX_ANGLE, easeInOutCubic(p));
           if (p >= 1) { state = 3; stateT = 0; }
           break;
         }
-        case 3: {   // Hold at L
+        case 3: {
           head.rotation.y = -MAX_ANGLE;
           if (stateT >= HOLD_DUR) { state = 0; stateT = 0; }
           break;
         }
       }
 
-      // LED pulse (simulates "recording" activity)
-      led.material.opacity = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(t * 4.2));
+      // LED pulse — simulates "recording" indicator
+      led.material.opacity = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * 4.0));
 
       renderer.render(scene, cam);
     };
