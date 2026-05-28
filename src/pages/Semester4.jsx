@@ -453,9 +453,9 @@ function Semester4Content() {
               <p  className="text-muted-foreground leading-relaxed">{s.uiux.tests_intro}</p>
 
               {/* img 1 — v1 interface */}
-              <figure className="space-y-2">
+              <figure className="space-y-2 max-w-xs">
                 <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/1.png", s.uiux.img1_caption)}>
-                  <img src="/1.png" alt={s.uiux.img1_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full h-44 object-cover hover:scale-105 transition-transform duration-500" />
+                  <img src="/1.png" alt={s.uiux.img1_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full hover:scale-105 transition-transform duration-500" />
                 </div>
                 <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img1_caption}</figcaption>
               </figure>
