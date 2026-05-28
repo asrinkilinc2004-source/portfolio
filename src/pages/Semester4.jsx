@@ -569,6 +569,127 @@ function Semester4Content() {
         </div>
       </section>
 
+      {/* ═══════════════════════════════════════════════════════════════
+           AI VISITOR TRACKING SYSTEM SECTION
+      ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto space-y-8">
+
+          {/* Section header */}
+          <motion.div {...fadeUp(0)} className="mb-4">
+            <span className="font-mono text-sm text-primary tracking-wider">{s.ai.label}</span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-2 tracking-tight">{s.ai.title}</h2>
+            <p className="text-xs text-muted-foreground font-mono mt-2 tracking-wider">{s.ai.authors}</p>
+          </motion.div>
+
+          {/* 1 — Inleiding */}
+          <motion.div {...fadeUp(0.05)}>
+            <TiltCard className="p-8 space-y-3">
+              <h3 className="text-xl font-bold text-foreground">{s.ai.intro_title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{s.ai.intro}</p>
+            </TiltCard>
+          </motion.div>
+
+          {/* 2 — Back-end */}
+          <motion.div {...fadeUp(0.07)}>
+            <TiltCard className="p-8 space-y-5">
+              <h3 className="text-xl font-bold text-foreground">{s.ai.backend_title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{s.ai.backend_text}</p>
+              <div className="grid sm:grid-cols-3 gap-3">
+                {s.ai.backend_libs.map((lib, i) => (
+                  <div key={i} className="p-4 rounded-lg bg-muted/30 border border-border space-y-1">
+                    <p className="font-semibold text-primary font-mono text-sm">{lib.name}</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{lib.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </TiltCard>
+          </motion.div>
+
+          {/* 3 — Visitor Counter */}
+          <motion.div {...fadeUp(0.08)}>
+            <TiltCard className="p-8 space-y-5">
+              <h3 className="text-xl font-bold text-foreground">{s.ai.counter_title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{s.ai.counter_text}</p>
+
+              {/* Code block */}
+              <div className="rounded-lg overflow-hidden border border-border">
+                <div className="flex items-center gap-2 px-4 py-2 bg-muted/50 border-b border-border">
+                  <span className="w-3 h-3 rounded-full bg-red-500/70" />
+                  <span className="w-3 h-3 rounded-full bg-yellow-500/70" />
+                  <span className="w-3 h-3 rounded-full bg-green-500/70" />
+                  <span className="font-mono text-xs text-muted-foreground ml-2">visitor_tracker.py</span>
+                </div>
+                <pre className="p-5 bg-black/80 text-green-400 font-mono text-sm leading-relaxed overflow-x-auto">
+                  <code>{s.ai.code_snippet}</code>
+                </pre>
+              </div>
+
+              {/* Storage table */}
+              <div>
+                <h4 className="font-semibold text-foreground mb-3">{s.ai.storage_title}</h4>
+                <div className="rounded-lg border border-border overflow-hidden">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-muted/40 border-b border-border">
+                        <th className="text-left px-4 py-3 font-mono text-xs text-primary font-semibold">Path</th>
+                        <th className="text-left px-4 py-3 font-mono text-xs text-primary font-semibold">Inhoud</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {s.ai.storage_rows.map((row, i) => (
+                        <tr key={i} className={i % 2 === 0 ? "bg-muted/10" : ""}>
+                          <td className="px-4 py-3 font-mono text-xs text-foreground">{row.path}</td>
+                          <td className="px-4 py-3 text-muted-foreground text-xs">{row.desc}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </TiltCard>
+          </motion.div>
+
+          {/* 4 — Threading */}
+          <motion.div {...fadeUp(0.08)}>
+            <TiltCard className="p-8 space-y-3">
+              <h3 className="text-xl font-bold text-foreground">{s.ai.threading_title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{s.ai.threading_text}</p>
+            </TiltCard>
+          </motion.div>
+
+          {/* 5 — Front-end */}
+          <motion.div {...fadeUp(0.08)}>
+            <TiltCard className="p-8 space-y-3">
+              <h3 className="text-xl font-bold text-foreground">{s.ai.frontend_title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{s.ai.frontend_text}</p>
+              <div className="flex flex-wrap gap-2 pt-1">
+                {["HTML/CSS", "JavaScript", "MJPEG Stream", "fetchData()", "fetchVisitors()"].map((tag) => (
+                  <span key={tag} className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-mono text-primary">{tag}</span>
+                ))}
+              </div>
+            </TiltCard>
+          </motion.div>
+
+          {/* 6 — Technische verdieping */}
+          <motion.div {...fadeUp(0.08)}>
+            <TiltCard className="p-8 space-y-3">
+              <h3 className="text-xl font-bold text-foreground">{s.ai.tech_title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{s.ai.tech_text}</p>
+            </TiltCard>
+          </motion.div>
+
+          {/* 7 — Conclusie */}
+          <motion.div {...fadeUp(0.08)}>
+            <TiltCard className="p-8 space-y-3">
+              <h3 className="text-xl font-bold text-foreground">{s.ai.conclusion_title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{s.ai.conclusion}</p>
+            </TiltCard>
+          </motion.div>
+
+        </div>
+      </section>
+
       <BackToTop />
     </div>
   );
