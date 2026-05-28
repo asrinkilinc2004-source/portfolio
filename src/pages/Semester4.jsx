@@ -165,15 +165,15 @@ function Semester4Content() {
           <div
             className="absolute pointer-events-none select-none hidden md:block"
             style={{
-              right: "-2%",
+              left: "50%",
               top: "50%",
-              transform: "translateY(-52%)",
-              width: "min(52%, 580px)",
-              height: "min(85vh, 480px)",
-              opacity: 0.82,
+              transform: "translate(-5%, -50%)",
+              width: "min(50%, 540px)",
+              height: "min(80vh, 440px)",
+              opacity: 0.88,
               zIndex: 1,
-              maskImage: "radial-gradient(ellipse 80% 80% at 60% 50%, black 40%, transparent 100%)",
-              WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 60% 50%, black 40%, transparent 100%)",
+              maskImage: "radial-gradient(ellipse 75% 80% at 50% 50%, black 35%, transparent 100%)",
+              WebkitMaskImage: "radial-gradient(ellipse 75% 80% at 50% 50%, black 35%, transparent 100%)",
             }}
           >
             <WebcamScene3D />
