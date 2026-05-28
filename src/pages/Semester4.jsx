@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowLeft, Users, Calendar, Cpu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
@@ -546,328 +546,72 @@ function Semester4Content() {
         </div>
       </section>
 
-      {/* ── UI/UX Rapport ────────────────────────────────── */}
+      {/* ── Navigatiekaarten ─────────────────────────────── */}
       <section className="relative px-6 pb-32" style={{ zIndex: 12 }}>
-        <div className="max-w-6xl mx-auto space-y-14">
+        <div className="max-w-6xl mx-auto">
+          <motion.div {...fadeUp(0.05)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          {/* Header */}
-          <motion.div {...fadeUp(0)}>
-            <span className="font-mono text-sm text-primary tracking-wider">{s.uiux.label}</span>
-            <h2 className="text-3xl md:text-4xl font-bold mt-2 tracking-tight">{s.uiux.title}</h2>
-            <p className="text-muted-foreground mt-3 max-w-2xl leading-relaxed">{s.uiux.intro}</p>
-          </motion.div>
-
-          {/* ── 1. Gebruikerstesten ── */}
-          <motion.div {...fadeUp(0.05)}>
-            <TiltCard className="p-8 space-y-6">
-              <h3 className="text-xl font-bold text-foreground">{s.uiux.tests_title}</h3>
-              <p  className="text-muted-foreground leading-relaxed">{s.uiux.tests_intro}</p>
-
-              {/* img 1 — v1 interface */}
-              <figure className="space-y-2 max-w-sm mx-auto">
-                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/1.png", s.uiux.img1_caption)}>
-                  <img src="/1.png" alt={s.uiux.img1_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full hover:scale-105 transition-transform duration-500" />
-                </div>
-                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img1_caption}</figcaption>
-              </figure>
-
-              {/* img 2 — testresultaten tabel */}
-              <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/2.jpg", s.uiux.img2_caption)}>
-                  <img src="/2.jpg" alt={s.uiux.img2_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover hover:scale-105 transition-transform duration-500" />
-                </div>
-                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img2_caption}</figcaption>
-              </figure>
-
-              {/* Findings */}
-              <div>
-                <h4 className="font-semibold text-foreground mb-3">{s.uiux.findings_title}</h4>
-                <ul className="space-y-2">
-                  {s.uiux.findings.map((f, i) => (
-                    <li key={i} className="flex gap-3 text-muted-foreground text-sm leading-relaxed">
-                      <span className="text-primary font-mono mt-0.5 flex-shrink-0">—</span>
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Rename */}
-              <div className="pt-2 border-t border-border">
-                <h4 className="font-semibold text-foreground mb-2">{s.uiux.rename_title}</h4>
-                <p className="text-muted-foreground text-sm leading-relaxed">{s.uiux.rename_text}</p>
-              </div>
-            </TiltCard>
-          </motion.div>
-
-          {/* ── 2. UI Design ── */}
-          <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-6">
-              <h3 className="text-xl font-bold text-foreground">{s.uiux.design_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.uiux.design_intro}</p>
-
-              {/* img 3 + 4 — Figma v2 & live UI v2 */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <figure className="space-y-2">
-                  <div className="rounded-lg overflow-hidden border border-border h-56 md:h-64 cursor-zoom-in" onClick={() => openImg("/3.jpg", s.uiux.img3_caption)}>
-                    <img src="/3.jpg" alt={s.uiux.img3_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+            {/* AI Systeem */}
+            <button
+              onClick={() => navigate("/semester4/ai")}
+              className="group relative rounded-2xl border border-border bg-card hover:border-primary/40 transition-all duration-300 overflow-hidden text-left"
+              style={{ willChange: "transform" }}
+            >
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, hsl(var(--primary)/0.10) 0%, transparent 70%)" }} />
+              <div className="relative p-10 flex flex-col gap-5 h-full min-h-[220px]">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1 1 .03 2.698-1.338 2.698H4.136c-1.368 0-2.338-1.698-1.338-2.698L4 15.301" />
+                    </svg>
                   </div>
-                  <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img3_caption}</figcaption>
-                </figure>
-                <figure className="space-y-2">
-                  <div className="rounded-lg overflow-hidden border border-border h-56 md:h-64 cursor-zoom-in" onClick={() => openImg("/4.png", s.uiux.img4_caption)}>
-                    <img src="/4.png" alt={s.uiux.img4_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                  <span className="font-mono text-xs text-primary tracking-wider">{s.ai.label}</span>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors">{s.ai.title}</h3>
+                  <p className="text-muted-foreground text-sm mt-2 leading-relaxed line-clamp-2">{s.ai.intro}</p>
+                </div>
+                <div className="mt-auto flex items-center gap-2 text-primary text-sm font-medium">
+                  <span>Bekijk rapport</span>
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                  </svg>
+                </div>
+              </div>
+            </button>
+
+            {/* UI/UX Progressie */}
+            <button
+              onClick={() => navigate("/semester4/uiux")}
+              className="group relative rounded-2xl border border-border bg-card hover:border-primary/40 transition-all duration-300 overflow-hidden text-left"
+              style={{ willChange: "transform" }}
+            >
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, hsl(var(--primary)/0.10) 0%, transparent 70%)" }} />
+              <div className="relative p-10 flex flex-col gap-5 h-full min-h-[220px]">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                    </svg>
                   </div>
-                  <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img4_caption}</figcaption>
-                </figure>
-              </div>
-
-              {/* Design choices */}
-              <div>
-                <h4 className="font-semibold text-foreground mb-4">{s.uiux.choices_title}</h4>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {s.uiux.choices.map((c, i) => (
-                    <div key={i} className="flex gap-3 p-3 rounded-lg bg-muted/30 border border-border">
-                      <span className="text-primary font-mono text-xs mt-0.5 flex-shrink-0">◆</span>
-                      <div>
-                        <span className="text-sm font-semibold text-foreground">{c.label}</span>
-                        <span className="text-muted-foreground text-sm"> — {c.desc}</span>
-                      </div>
-                    </div>
-                  ))}
+                  <span className="font-mono text-xs text-primary tracking-wider">{s.uiux.label}</span>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors">{s.uiux.title}</h3>
+                  <p className="text-muted-foreground text-sm mt-2 leading-relaxed line-clamp-2">{s.uiux.intro}</p>
+                </div>
+                <div className="mt-auto flex items-center gap-2 text-primary text-sm font-medium">
+                  <span>Bekijk progressie</span>
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                  </svg>
                 </div>
               </div>
+            </button>
 
-              {/* v1 → v2 changes */}
-              <div className="pt-2 border-t border-border">
-                <h4 className="font-semibold text-foreground mb-3">{s.uiux.changes_title}</h4>
-                <ul className="space-y-1.5">
-                  {s.uiux.changes.map((c, i) => (
-                    <li key={i} className="flex gap-3 text-muted-foreground text-sm">
-                      <span className="text-primary font-mono flex-shrink-0">–</span>
-                      <span>{c}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </TiltCard>
           </motion.div>
-
-          {/* ── Versie 3 ── */}
-          <motion.div {...fadeUp(0.1)}>
-            <TiltCard className="p-8 space-y-6">
-              <div>
-                <h3 className="text-xl font-bold text-foreground">{s.uiux.v3_title}</h3>
-                <p className="text-sm text-muted-foreground mt-1 font-mono">{s.uiux.v3_subtitle}</p>
-              </div>
-
-              {/* img 5 — Figma v3 */}
-              <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/5.png", s.uiux.img5_caption)}>
-                  <img src="/5.png" alt={s.uiux.img5_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover hover:scale-105 transition-transform duration-500" />
-                </div>
-                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img5_caption}</figcaption>
-              </figure>
-
-              {/* img 6 — Tracker v3 live */}
-              <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/6.png", s.uiux.img6_caption)}>
-                  <img src="/6.png" alt={s.uiux.img6_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover hover:scale-105 transition-transform duration-500" />
-                </div>
-                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img6_caption}</figcaption>
-              </figure>
-              <p className="text-xs text-muted-foreground italic text-center px-4">{s.uiux.img6_note}</p>
-            </TiltCard>
-          </motion.div>
-
-          {/* ── Gebruikerstesten ronde 2 ── */}
-          <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-6">
-              <h3 className="text-xl font-bold text-foreground">{s.uiux.tests2_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.uiux.tests2_text}</p>
-
-              {/* img 7 — testresultaten ronde 2 */}
-              <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/7.png", s.uiux.img7_caption)}>
-                  <img src="/7.png" alt={s.uiux.img7_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover hover:scale-105 transition-transform duration-500" />
-                </div>
-                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img7_caption}</figcaption>
-              </figure>
-            </TiltCard>
-          </motion.div>
-
-          {/* ── Final versie ── */}
-          <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-6">
-              <h3 className="text-xl font-bold text-foreground">{s.uiux.final_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.uiux.final_text}</p>
-
-              {/* img 8 — final version */}
-              <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/8.png", s.uiux.img8_caption)}>
-                  <img src="/8.png" alt={s.uiux.img8_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover hover:scale-105 transition-transform duration-500" />
-                </div>
-                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img8_caption}</figcaption>
-              </figure>
-
-              {/* img 9 — snapshots */}
-              <p className="text-muted-foreground text-sm leading-relaxed">{s.uiux.snapshot_text}</p>
-              <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/9.png", s.uiux.img9_caption)}>
-                  <img src="/9.png" alt={s.uiux.img9_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover hover:scale-105 transition-transform duration-500" />
-                </div>
-                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img9_caption}</figcaption>
-              </figure>
-            </TiltCard>
-          </motion.div>
-
-          {/* ── Verbeterpunten ── */}
-          <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-5">
-              <h3 className="text-xl font-bold text-foreground">{s.uiux.improvements_title}</h3>
-              <div className="space-y-3">
-                {s.uiux.improvements.map((item, i) => (
-                  <div key={i} className="flex gap-4 p-4 rounded-lg bg-muted/20 border border-border">
-                    <span className="font-mono text-primary font-bold flex-shrink-0 text-sm">{String(i + 1).padStart(2, '0')}</span>
-                    <div>
-                      <p className="font-semibold text-foreground text-sm">{item.title}</p>
-                      <p className="text-muted-foreground text-sm mt-0.5 leading-relaxed">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </TiltCard>
-          </motion.div>
-
-          {/* ── Afsluiting ── */}
-          <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-3">
-              <h3 className="text-xl font-bold text-foreground">{s.uiux.conclusion_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.uiux.conclusion}</p>
-            </TiltCard>
-          </motion.div>
-
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-           AI VISITOR TRACKING SYSTEM SECTION
-      ════════════════════════════════════════════════════════════════ */}
-      <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto space-y-8">
-
-          {/* Section header */}
-          <motion.div {...fadeUp(0)} className="mb-4">
-            <span className="font-mono text-sm text-primary tracking-wider">{s.ai.label}</span>
-            <h2 className="text-3xl md:text-4xl font-bold mt-2 tracking-tight">{s.ai.title}</h2>
-            <p className="text-xs text-muted-foreground font-mono mt-2 tracking-wider">{s.ai.authors}</p>
-          </motion.div>
-
-          {/* 1 — Inleiding */}
-          <motion.div {...fadeUp(0.05)}>
-            <TiltCard className="p-8 space-y-3">
-              <h3 className="text-xl font-bold text-foreground">{s.ai.intro_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.ai.intro}</p>
-            </TiltCard>
-          </motion.div>
-
-          {/* 2 — Back-end */}
-          <motion.div {...fadeUp(0.07)}>
-            <TiltCard className="p-8 space-y-5">
-              <h3 className="text-xl font-bold text-foreground">{s.ai.backend_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.ai.backend_text}</p>
-              <div className="grid sm:grid-cols-3 gap-3">
-                {s.ai.backend_libs.map((lib, i) => (
-                  <div key={i} className="p-4 rounded-lg bg-muted/30 border border-border space-y-1">
-                    <p className="font-semibold text-primary font-mono text-sm">{lib.name}</p>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{lib.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </TiltCard>
-          </motion.div>
-
-          {/* 3 — Visitor Counter */}
-          <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-5">
-              <h3 className="text-xl font-bold text-foreground">{s.ai.counter_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.ai.counter_text}</p>
-
-              {/* Code block */}
-              <div className="rounded-lg overflow-hidden border border-border">
-                <div className="flex items-center gap-2 px-4 py-2 bg-muted/50 border-b border-border">
-                  <span className="w-3 h-3 rounded-full bg-red-500/70" />
-                  <span className="w-3 h-3 rounded-full bg-yellow-500/70" />
-                  <span className="w-3 h-3 rounded-full bg-green-500/70" />
-                  <span className="font-mono text-xs text-muted-foreground ml-2">visitor_tracker.py</span>
-                </div>
-                <pre className="p-5 bg-black/80 text-green-400 font-mono text-sm leading-relaxed overflow-x-auto">
-                  <code>{s.ai.code_snippet}</code>
-                </pre>
-              </div>
-
-              {/* Storage table */}
-              <div>
-                <h4 className="font-semibold text-foreground mb-3">{s.ai.storage_title}</h4>
-                <div className="rounded-lg border border-border overflow-hidden">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="bg-muted/40 border-b border-border">
-                        <th className="text-left px-4 py-3 font-mono text-xs text-primary font-semibold">Path</th>
-                        <th className="text-left px-4 py-3 font-mono text-xs text-primary font-semibold">Inhoud</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {s.ai.storage_rows.map((row, i) => (
-                        <tr key={i} className={i % 2 === 0 ? "bg-muted/10" : ""}>
-                          <td className="px-4 py-3 font-mono text-xs text-foreground">{row.path}</td>
-                          <td className="px-4 py-3 text-muted-foreground text-xs">{row.desc}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </TiltCard>
-          </motion.div>
-
-          {/* 4 — Threading */}
-          <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-3">
-              <h3 className="text-xl font-bold text-foreground">{s.ai.threading_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.ai.threading_text}</p>
-            </TiltCard>
-          </motion.div>
-
-          {/* 5 — Front-end */}
-          <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-3">
-              <h3 className="text-xl font-bold text-foreground">{s.ai.frontend_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.ai.frontend_text}</p>
-              <div className="flex flex-wrap gap-2 pt-1">
-                {["HTML/CSS", "JavaScript", "MJPEG Stream", "fetchData()", "fetchVisitors()"].map((tag) => (
-                  <span key={tag} className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-mono text-primary">{tag}</span>
-                ))}
-              </div>
-            </TiltCard>
-          </motion.div>
-
-          {/* 6 — Technische verdieping */}
-          <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-3">
-              <h3 className="text-xl font-bold text-foreground">{s.ai.tech_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.ai.tech_text}</p>
-            </TiltCard>
-          </motion.div>
-
-          {/* 7 — Conclusie */}
-          <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-3">
-              <h3 className="text-xl font-bold text-foreground">{s.ai.conclusion_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.ai.conclusion}</p>
-            </TiltCard>
-          </motion.div>
-
         </div>
       </section>
 

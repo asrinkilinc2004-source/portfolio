@@ -8,6 +8,8 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegistered';
 import Home from './pages/Home';
 import Semester4Page from './pages/Semester4';
+import Semester4AIPage from './pages/Semester4AI';
+import Semester4UiuxPage from './pages/Semester4UIUX';
 import { ThemeProvider } from 'next-themes';
 // Add page imports here
 
@@ -39,6 +41,8 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/semester4" element={<Semester4Page />} />
+      <Route path="/semester4/ai" element={<Semester4AIPage />} />
+      <Route path="/semester4/uiux" element={<Semester4UiuxPage />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
