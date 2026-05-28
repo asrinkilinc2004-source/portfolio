@@ -203,35 +203,39 @@ export default function WebcamScene3D({ className = "" }) {
     applyTheme();
 
     // =================================================================
-    //  MOUSE TRACKING — raycast through screen → literal gaze direction
+    //  MOUSE TRACKING — pixel-perfect gaze using projected eye position
     // =================================================================
-    const LERP    = 0.12;
-    const Z_PLANE = 3.0;   // virtual plane the eye "looks at" (between eye and cam)
+    const LERP = 0.88;  // near-instant, extremely responsive
 
-    const target  = { x: 0, y: 0 };
-    const _mouse  = new THREE.Vector3();
-    const _dir    = new THREE.Vector3();
+    const target   = { x: 0, y: 0 };
+    const _eyeNDC  = new THREE.Vector3();
+
+    // Pre-compute once: world-height at eye depth (z=0)
+    const halfFovY        = (cam.fov * Math.PI / 180) / 2;
+    const worldHeightAtEye = 2 * cam.position.z * Math.tan(halfFovY);
 
     const onMouseMove = (e) => {
-      // NDC [-1, 1]
-      const nx =  (e.clientX / window.innerWidth)  * 2 - 1;
-      const ny = -(e.clientY / window.innerHeight)  * 2 + 1;
+      // 1. Project eye world-origin (0,0,0) → screen pixels
+      _eyeNDC.set(0, 0, 0).project(cam);
+      const rect       = renderer.domElement.getBoundingClientRect();
+      const eyeScreenX = (_eyeNDC.x  + 1) / 2 * rect.width  + rect.left;
+      const eyeScreenY = (-_eyeNDC.y + 1) / 2 * rect.height + rect.top;
 
-      // Unproject to get a world-space point on the camera ray
-      _mouse.set(nx, ny, 0.5).unproject(cam);
-      _dir.copy(_mouse).sub(cam.position).normalize();
+      // 2. Screen-pixel offset from eye centre to mouse
+      const dx =  e.clientX - eyeScreenX;
+      const dy =  e.clientY - eyeScreenY;
 
-      // Intersect the ray with the z = Z_PLANE plane
-      const t  = (Z_PLANE - cam.position.z) / _dir.z;
-      const tx = cam.position.x + _dir.x * t;
-      const ty = cam.position.y + _dir.y * t;
+      // 3. Convert pixels → world units at eye depth
+      const ppu = rect.height / worldHeightAtEye; // pixels per world-unit
+      const wx  =  dx / ppu;
+      const wy  = -dy / ppu; // screen Y is flipped vs world Y
 
-      // Convert world-space target to rotation angles from eye origin (0,0,0)
-      target.y =  Math.atan2(tx, Z_PLANE);                              // left / right
-      target.x = -Math.atan2(ty, Math.sqrt(tx * tx + Z_PLANE * Z_PLANE)); // up / down
+      // 4. Compute exact gaze angles (eye at origin looks at (wx, wy, cam.z))
+      const tz  = cam.position.z;
+      target.y  =  Math.atan2(wx, tz);
+      target.x  = -Math.atan2(wy, tz);
     };
 
-    // Drift back to centre when mouse leaves window
     const onMouseLeave = () => { target.x = 0; target.y = 0; };
 
     window.addEventListener("mousemove",  onMouseMove,  { passive: true });
