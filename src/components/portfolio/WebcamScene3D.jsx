@@ -5,14 +5,6 @@ function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-/**
- * Logitech C270-style wireframe webcam.
- * - Rounded pill body (CapsuleGeometry, horizontal)
- * - Large lens on the LEFT side of front face
- * - Speaker/mic dot-grid on the RIGHT
- * - Servo pan-tilt bracket as stand (static)
- * - Only the HEAD pans (CCTV surveillance motion)
- */
 export default function WebcamScene3D({ className = "" }) {
   const mountRef = useRef(null);
 
@@ -22,19 +14,24 @@ export default function WebcamScene3D({ className = "" }) {
 
     // ── CSS primary colour ────────────────────────────────────────────
     const raw = getComputedStyle(document.documentElement)
-      .getPropertyValue("--primary").trim();           // "174 100% 50%"
+      .getPropertyValue("--primary").trim();
     const [hRaw, sRaw, lRaw] = raw.split(/\s+/);
-    const hh = parseFloat(hRaw) / 360;
-    const ss = parseFloat(sRaw) / 100;
-    const ll = parseFloat(lRaw) / 100;
-    const primaryColor = new THREE.Color().setHSL(hh, ss, ll);
-    const dimColor     = new THREE.Color().setHSL(hh, ss * 0.5, ll * 0.5);
+    const primaryColor = new THREE.Color().setHSL(
+      parseFloat(hRaw) / 360,
+      parseFloat(sRaw) / 100,
+      parseFloat(lRaw) / 100
+    );
+    const dimColor = new THREE.Color().setHSL(
+      parseFloat(hRaw) / 360,
+      parseFloat(sRaw) / 100 * 0.45,
+      parseFloat(lRaw) / 100 * 0.50
+    );
 
-    const mat  = (op) => new THREE.LineBasicMaterial({ color: primaryColor, transparent: true, opacity: op });
-    const dmat = (op) => new THREE.LineBasicMaterial({ color: dimColor,     transparent: true, opacity: op });
+    const mat    = (op) => new THREE.LineBasicMaterial({ color: primaryColor, transparent: true, opacity: op });
+    const dmat   = (op) => new THREE.LineBasicMaterial({ color: dimColor,     transparent: true, opacity: op });
     const edgesOf = (geo, m) => new THREE.LineSegments(new THREE.EdgesGeometry(geo), m);
 
-    // ── Renderer & scene ──────────────────────────────────────────────
+    // ── Renderer ──────────────────────────────────────────────────────
     const w0 = el.clientWidth, h0 = el.clientHeight;
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(w0, h0);
@@ -43,154 +40,138 @@ export default function WebcamScene3D({ className = "" }) {
     el.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    const cam   = new THREE.PerspectiveCamera(36, w0 / h0, 0.1, 100);
-    cam.position.set(0, 0.55, 5.2);
-    cam.lookAt(0, 0.2, 0);
+    const cam   = new THREE.PerspectiveCamera(34, w0 / h0, 0.1, 100);
+    cam.position.set(0, 0.50, 5.5);
+    cam.lookAt(0, 0.15, 0);
 
     const root = new THREE.Group();
     scene.add(root);
 
     // =================================================================
-    //  STAND — servo pan-tilt bracket style (never rotates)
+    //  STAND  —  servo U-bracket + pan-servo base  (never rotates)
     // =================================================================
     const stand = new THREE.Group();
     root.add(stand);
 
-    // Thin vertical bracket arm
-    const armGeo = new THREE.BoxGeometry(0.12, 0.60, 0.09);
-    const arm = edgesOf(armGeo, mat(0.72));
-    arm.position.y = -0.52;
-    stand.add(arm);
+    // Left arm of U-bracket
+    const leftArm = edgesOf(new THREE.BoxGeometry(0.065, 0.52, 0.11), mat(0.72));
+    leftArm.position.set(-0.24, -0.42, 0);
+    stand.add(leftArm);
 
-    // Top horizontal crossbar (connects bracket to camera base)
-    const topBarGeo = new THREE.BoxGeometry(0.42, 0.065, 0.09);
-    const topBar = edgesOf(topBarGeo, mat(0.68));
-    topBar.position.y = -0.225;
-    stand.add(topBar);
+    // Right arm of U-bracket
+    const rightArm = edgesOf(new THREE.BoxGeometry(0.065, 0.52, 0.11), mat(0.72));
+    rightArm.position.set( 0.24, -0.42, 0);
+    stand.add(rightArm);
 
-    // Bottom horizontal crossbar
-    const botBarGeo = new THREE.BoxGeometry(0.42, 0.065, 0.09);
-    const botBar = edgesOf(botBarGeo, mat(0.65));
-    botBar.position.y = -0.82;
-    stand.add(botBar);
+    // Bottom bar of U (connects both arms)
+    const uBar = edgesOf(new THREE.BoxGeometry(0.57, 0.065, 0.11), mat(0.68));
+    uBar.position.set(0, -0.685, 0);
+    stand.add(uBar);
 
-    // Bracket screw holes (tiny circles on sides of arm)
-    for (const [x, y] of [[-0.22, -0.38], [0.22, -0.38], [-0.22, -0.66], [0.22, -0.66]]) {
-      const sh = edgesOf(new THREE.CircleGeometry(0.028, 8), dmat(0.32));
-      sh.position.set(x, y, 0.05);
-      stand.add(sh);
+    // Pan servo body (flat box below the U-bracket)
+    const servo = edgesOf(new THREE.BoxGeometry(0.68, 0.13, 0.36), mat(0.62));
+    servo.position.set(0, -0.82, 0);
+    stand.add(servo);
+
+    // Servo horn (circle on top of servo)
+    const hornRing = edgesOf(new THREE.TorusGeometry(0.072, 0.018, 6, 20), dmat(0.40));
+    hornRing.position.set(0, -0.755, 0);
+    hornRing.rotation.x = Math.PI / 2;
+    stand.add(hornRing);
+
+    // Screw holes in U-bracket arms (where camera tilt-axle goes)
+    for (const x of [-0.24, 0.24]) {
+      const hole = edgesOf(new THREE.CircleGeometry(0.028, 10), dmat(0.38));
+      hole.position.set(x, -0.40, 0.058);
+      stand.add(hole);
+    }
+
+    // Servo mounting screws (corners of servo body)
+    for (const [sx, sz] of [[-0.26, 0.14], [0.26, 0.14], [-0.26, -0.14], [0.26, -0.14]]) {
+      const sc = edgesOf(new THREE.CircleGeometry(0.018, 8), dmat(0.28));
+      sc.position.set(sx, -0.755, sz);
+      sc.rotation.x = Math.PI / 2;
+      stand.add(sc);
     }
 
     // =================================================================
-    //  HEAD — Logitech pill body (rotates Y on surveillance pan)
+    //  HEAD  —  Logitech C270 body  (pans on Y)
     // =================================================================
     const head = new THREE.Group();
-    head.position.y = 0.30;
+    head.position.y = 0.28;
     root.add(head);
 
-    // ── 1. Pill / capsule body ────────────────────────────────────────
-    // CapsuleGeometry(radius, length, capSegments, radialSegments)
-    // Low segment counts keep the wireframe clean / sketch-like
-    const bodyGeo = new THREE.CapsuleGeometry(0.265, 0.90, 5, 14);
-    const bodyMesh = edgesOf(bodyGeo, mat(0.48));
-    bodyMesh.rotation.z = Math.PI / 2;  // lay it horizontal
+    // ── 1. Pill body (CapsuleGeometry horizontal) ─────────────────────
+    //  Real C270: ~95 mm wide × 40 mm tall  →  ratio ≈ 2.4 : 1
+    //  CapsuleGeometry(radius, length, capSegs, radialSegs)
+    //  radius=0.25, length=0.94  →  total width=1.44, height=0.50
+    const bodyGeo  = new THREE.CapsuleGeometry(0.25, 0.94, 5, 14);
+    const bodyMesh = edgesOf(bodyGeo, mat(0.46));
+    bodyMesh.rotation.z = Math.PI / 2;
     head.add(bodyMesh);
 
-    // Front face of pill (the Z-forward face of the body)
-    // Approximated as a stadium-shaped line (ellipse is close enough)
-    const FACE_Z = 0.266;   // front face of body
-    const facePoints = [];
-    const W = 0.71, H = 0.265;   // half-width, half-height of front face
-    for (let i = 0; i <= 64; i++) {
-      const a = (i / 64) * Math.PI * 2;
-      // Stadium shape: box + semicircles
-      const cosA = Math.cos(a), sinA = Math.sin(a);
-      const x = W * cosA;
-      const y = H * sinA;
-      facePoints.push(new THREE.Vector3(x, y, 0));
-    }
-    const faceLine = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints(facePoints),
-      mat(0.30)
-    );
-    faceLine.position.z = FACE_Z;
-    head.add(faceLine);
+    // ── 2. Lens (left-of-centre, front face at z ≈ 0.25) ─────────────
+    const LX = -0.20;
+    const LZ =  0.250;
 
-    // ── 2. Lens assembly — LEFT of centre ────────────────────────────
-    const LX = -0.25;   // horizontal offset (left)
-    const LZ = FACE_Z;
+    // Outer lens ring / bezel
+    const outerRing = edgesOf(new THREE.TorusGeometry(0.175, 0.038, 10, 40), mat(0.92));
+    outerRing.position.set(LX, 0, LZ);
+    head.add(outerRing);
 
-    // Outer bezel ring (thick ring around lens housing)
-    const bezelGeo = new THREE.TorusGeometry(0.190, 0.040, 10, 44);
-    const bezel = edgesOf(bezelGeo, mat(0.90));
-    bezel.position.set(LX, 0, LZ);
-    head.add(bezel);
+    // Inner focus ring
+    const innerRing = edgesOf(new THREE.TorusGeometry(0.108, 0.024, 8, 30), mat(0.88));
+    innerRing.position.set(LX, 0, LZ + 0.012);
+    head.add(innerRing);
 
-    // Second ring (inner focusing groove)
-    const groove = edgesOf(new THREE.TorusGeometry(0.122, 0.026, 8, 32), mat(0.85));
-    groove.position.set(LX, 0, LZ + 0.015);
-    head.add(groove);
-
-    // Glass dome (convex lens element)
-    const dome = edgesOf(new THREE.SphereGeometry(0.098, 16, 12), dmat(0.45));
-    dome.position.set(LX, 0, LZ + 0.068);
+    // Glass dome (convex element)
+    const dome = edgesOf(new THREE.SphereGeometry(0.093, 16, 12), dmat(0.44));
+    dome.position.set(LX, 0, LZ + 0.062);
     head.add(dome);
 
-    // Iris (dark circle in centre of lens)
-    const iris = edgesOf(new THREE.CircleGeometry(0.042, 20), mat(1.0));
-    iris.position.set(LX, 0, LZ + 0.145);
+    // Iris / pupil
+    const iris = edgesOf(new THREE.CircleGeometry(0.040, 18), mat(1.0));
+    iris.position.set(LX, 0, LZ + 0.140);
     head.add(iris);
 
-    // ── 3. Mic / speaker grille — RIGHT side ─────────────────────────
-    // 3 × 4 dot grid (like the Logitech grille holes)
-    const GX = 0.275, GZ = FACE_Z + 0.005;
-    const COLS = 4, ROWS = 3, SPACING = 0.044;
-    for (let r = 0; r < ROWS; r++) {
-      for (let c = 0; c < COLS; c++) {
-        const dot = edgesOf(new THREE.CircleGeometry(0.013, 7), dmat(0.42));
-        dot.position.set(
-          GX + (c - (COLS - 1) / 2) * SPACING,
-          (r - (ROWS - 1) / 2) * SPACING,
-          GZ
-        );
+    // ── 3. Mic / speaker grille (right of centre) ─────────────────────
+    //  C270 has a rectangular grid of holes on the right side
+    const GX = 0.285, GZ = LZ + 0.003;
+    for (let r = 0; r < 3; r++) {
+      for (let c = 0; c < 4; c++) {
+        const dot = edgesOf(new THREE.CircleGeometry(0.013, 7), dmat(0.44));
+        dot.position.set(GX + (c - 1.5) * 0.046, (r - 1) * 0.046, GZ);
         head.add(dot);
       }
     }
-    // Grille outline rectangle
-    const gOutline = edgesOf(
-      new THREE.PlaneGeometry(COLS * SPACING + 0.03, ROWS * SPACING + 0.03),
-      dmat(0.30)
-    );
-    gOutline.position.set(GX, 0, GZ - 0.001);
-    head.add(gOutline);
+    // Grille border rect
+    const gBorder = edgesOf(new THREE.PlaneGeometry(0.22, 0.14), dmat(0.28));
+    gBorder.position.set(GX, 0, GZ - 0.001);
+    head.add(gBorder);
 
     // ── 4. LED indicator (between lens and grille) ────────────────────
-    const led = edgesOf(new THREE.SphereGeometry(0.022, 6, 4), mat(0.95));
-    led.position.set(0.04, 0.005, LZ + 0.005);
+    const led = edgesOf(new THREE.SphereGeometry(0.020, 6, 4), mat(0.95));
+    led.position.set(0.055, 0, LZ + 0.002);
     head.add(led);
 
-    // ── 5. Top ridge / grip bump ──────────────────────────────────────
-    const ridge = edgesOf(
-      new THREE.BoxGeometry(0.80, 0.055, 0.05),
-      dmat(0.22)
-    );
-    ridge.position.set(0, 0.268, 0.12);
-    head.add(ridge);
-
-    // ── 6. Bottom pin (connects head to bracket) ──────────────────────
-    const pin = edgesOf(new THREE.CylinderGeometry(0.055, 0.055, 0.11, 10), mat(0.65));
-    pin.position.y = -0.275;
-    head.add(pin);
+    // ── 5. Tilt-axle pins on left + right sides of body ───────────────
+    //  (the small cylindrical axle that connects into the U-bracket)
+    for (const x of [-0.73, 0.73]) {
+      const axle = edgesOf(new THREE.CylinderGeometry(0.032, 0.032, 0.08, 8), mat(0.65));
+      axle.rotation.z = Math.PI / 2;
+      axle.position.set(x, 0, 0);
+      head.add(axle);
+    }
 
     // =================================================================
-    //  SURVEILLANCE PAN ANIMATION
+    //  SURVEILLANCE PAN — faster sweep, shorter pause
     //  0=sweep L→R  1=hold R  2=sweep R→L  3=hold L
     // =================================================================
-    const MAX_ANGLE = 0.75;
-    const SWEEP_DUR = 3.2;
-    const HOLD_DUR  = 2.0;
+    const MAX_ANGLE = 0.82;   // ~47°
+    const SWEEP_DUR = 1.8;    // seconds per sweep  (was 3.2)
+    const HOLD_DUR  = 0.7;    // seconds to hold    (was 2.0)
 
-    let state  = 1;           // start holding right
+    let state  = 1;
     let stateT = 0;
     let prevT  = 0;
     head.rotation.y = MAX_ANGLE;
@@ -202,8 +183,8 @@ export default function WebcamScene3D({ className = "" }) {
       animId = requestAnimationFrame(animate);
       const t  = clock.getElapsedTime();
       const dt = t - prevT;
-      prevT = t;
-      stateT += dt;
+      prevT    = t;
+      stateT  += dt;
 
       switch (state) {
         case 0: {
@@ -230,8 +211,8 @@ export default function WebcamScene3D({ className = "" }) {
         }
       }
 
-      // LED pulse — simulates "recording" indicator
-      led.material.opacity = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * 4.0));
+      // LED recording blink
+      led.material.opacity = 0.30 + 0.70 * (0.5 + 0.5 * Math.sin(t * 3.8));
 
       renderer.render(scene, cam);
     };
