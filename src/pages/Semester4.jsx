@@ -365,6 +365,210 @@ function Semester4Content() {
         </div>
       </section>
 
+      {/* ── UI/UX Rapport ────────────────────────────────── */}
+      <section className="relative px-6 pb-32" style={{ zIndex: 12 }}>
+        <div className="max-w-6xl mx-auto space-y-14">
+
+          {/* Header */}
+          <motion.div {...fadeUp(0)}>
+            <span className="font-mono text-sm text-primary tracking-wider">{s.uiux.label}</span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-2 tracking-tight">{s.uiux.title}</h2>
+            <p className="text-muted-foreground mt-3 max-w-2xl leading-relaxed">{s.uiux.intro}</p>
+          </motion.div>
+
+          {/* ── 1. Gebruikerstesten ── */}
+          <motion.div {...fadeUp(0.05)}>
+            <TiltCard className="p-8 space-y-6">
+              <h3 className="text-xl font-bold text-foreground">{s.uiux.tests_title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{s.uiux.tests_intro}</p>
+
+              {/* img 1 — v1 interface */}
+              <figure className="space-y-2">
+                <div className="rounded-lg overflow-hidden border border-border">
+                  <img src="/1.png" alt={s.uiux.img1_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                </div>
+                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img1_caption}</figcaption>
+              </figure>
+
+              {/* img 2 — testresultaten tabel */}
+              <figure className="space-y-2">
+                <div className="rounded-lg overflow-hidden border border-border">
+                  <img src="/2.jpg" alt={s.uiux.img2_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                </div>
+                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img2_caption}</figcaption>
+              </figure>
+
+              {/* Findings */}
+              <div>
+                <h4 className="font-semibold text-foreground mb-3">{s.uiux.findings_title}</h4>
+                <ul className="space-y-2">
+                  {s.uiux.findings.map((f, i) => (
+                    <li key={i} className="flex gap-3 text-muted-foreground text-sm leading-relaxed">
+                      <span className="text-primary font-mono mt-0.5 flex-shrink-0">—</span>
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Rename */}
+              <div className="pt-2 border-t border-border">
+                <h4 className="font-semibold text-foreground mb-2">{s.uiux.rename_title}</h4>
+                <p className="text-muted-foreground text-sm leading-relaxed">{s.uiux.rename_text}</p>
+              </div>
+            </TiltCard>
+          </motion.div>
+
+          {/* ── 2. UI Design ── */}
+          <motion.div {...fadeUp(0.08)}>
+            <TiltCard className="p-8 space-y-6">
+              <h3 className="text-xl font-bold text-foreground">{s.uiux.design_title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{s.uiux.design_intro}</p>
+
+              {/* img 3 + 4 — Figma v2 & live UI v2 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <figure className="space-y-2">
+                  <div className="rounded-lg overflow-hidden border border-border h-56 md:h-64">
+                    <img src="/3.jpg" alt={s.uiux.img3_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full h-full object-cover" />
+                  </div>
+                  <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img3_caption}</figcaption>
+                </figure>
+                <figure className="space-y-2">
+                  <div className="rounded-lg overflow-hidden border border-border h-56 md:h-64">
+                    <img src="/4.png" alt={s.uiux.img4_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full h-full object-cover" />
+                  </div>
+                  <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img4_caption}</figcaption>
+                </figure>
+              </div>
+
+              {/* Design choices */}
+              <div>
+                <h4 className="font-semibold text-foreground mb-4">{s.uiux.choices_title}</h4>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {s.uiux.choices.map((c, i) => (
+                    <div key={i} className="flex gap-3 p-3 rounded-lg bg-muted/30 border border-border">
+                      <span className="text-primary font-mono text-xs mt-0.5 flex-shrink-0">◆</span>
+                      <div>
+                        <span className="text-sm font-semibold text-foreground">{c.label}</span>
+                        <span className="text-muted-foreground text-sm"> — {c.desc}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* v1 → v2 changes */}
+              <div className="pt-2 border-t border-border">
+                <h4 className="font-semibold text-foreground mb-3">{s.uiux.changes_title}</h4>
+                <ul className="space-y-1.5">
+                  {s.uiux.changes.map((c, i) => (
+                    <li key={i} className="flex gap-3 text-muted-foreground text-sm">
+                      <span className="text-primary font-mono flex-shrink-0">–</span>
+                      <span>{c}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </TiltCard>
+          </motion.div>
+
+          {/* ── Versie 3 ── */}
+          <motion.div {...fadeUp(0.1)}>
+            <TiltCard className="p-8 space-y-6">
+              <div>
+                <h3 className="text-xl font-bold text-foreground">{s.uiux.v3_title}</h3>
+                <p className="text-sm text-muted-foreground mt-1 font-mono">{s.uiux.v3_subtitle}</p>
+              </div>
+
+              {/* img 5 — Figma v3 */}
+              <figure className="space-y-2">
+                <div className="rounded-lg overflow-hidden border border-border">
+                  <img src="/5.png" alt={s.uiux.img5_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                </div>
+                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img5_caption}</figcaption>
+              </figure>
+
+              {/* img 6 — Tracker v3 live */}
+              <figure className="space-y-2">
+                <div className="rounded-lg overflow-hidden border border-border">
+                  <img src="/6.png" alt={s.uiux.img6_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                </div>
+                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img6_caption}</figcaption>
+              </figure>
+              <p className="text-xs text-muted-foreground italic text-center px-4">{s.uiux.img6_note}</p>
+            </TiltCard>
+          </motion.div>
+
+          {/* ── Gebruikerstesten ronde 2 ── */}
+          <motion.div {...fadeUp(0.08)}>
+            <TiltCard className="p-8 space-y-6">
+              <h3 className="text-xl font-bold text-foreground">{s.uiux.tests2_title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{s.uiux.tests2_text}</p>
+
+              {/* img 7 — testresultaten ronde 2 */}
+              <figure className="space-y-2">
+                <div className="rounded-lg overflow-hidden border border-border">
+                  <img src="/7.png" alt={s.uiux.img7_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                </div>
+                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img7_caption}</figcaption>
+              </figure>
+            </TiltCard>
+          </motion.div>
+
+          {/* ── Final versie ── */}
+          <motion.div {...fadeUp(0.08)}>
+            <TiltCard className="p-8 space-y-6">
+              <h3 className="text-xl font-bold text-foreground">{s.uiux.final_title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{s.uiux.final_text}</p>
+
+              {/* img 8 — final version */}
+              <figure className="space-y-2">
+                <div className="rounded-lg overflow-hidden border border-border">
+                  <img src="/8.png" alt={s.uiux.img8_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                </div>
+                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img8_caption}</figcaption>
+              </figure>
+
+              {/* img 9 — snapshots */}
+              <p className="text-muted-foreground text-sm leading-relaxed">{s.uiux.snapshot_text}</p>
+              <figure className="space-y-2">
+                <div className="rounded-lg overflow-hidden border border-border">
+                  <img src="/9.png" alt={s.uiux.img9_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                </div>
+                <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img9_caption}</figcaption>
+              </figure>
+            </TiltCard>
+          </motion.div>
+
+          {/* ── Verbeterpunten ── */}
+          <motion.div {...fadeUp(0.08)}>
+            <TiltCard className="p-8 space-y-5">
+              <h3 className="text-xl font-bold text-foreground">{s.uiux.improvements_title}</h3>
+              <div className="space-y-3">
+                {s.uiux.improvements.map((item, i) => (
+                  <div key={i} className="flex gap-4 p-4 rounded-lg bg-muted/20 border border-border">
+                    <span className="font-mono text-primary font-bold flex-shrink-0 text-sm">{String(i + 1).padStart(2, '0')}</span>
+                    <div>
+                      <p className="font-semibold text-foreground text-sm">{item.title}</p>
+                      <p className="text-muted-foreground text-sm mt-0.5 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TiltCard>
+          </motion.div>
+
+          {/* ── Afsluiting ── */}
+          <motion.div {...fadeUp(0.08)}>
+            <TiltCard className="p-8 space-y-3">
+              <h3 className="text-xl font-bold text-foreground">{s.uiux.conclusion_title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{s.uiux.conclusion}</p>
+            </TiltCard>
+          </motion.div>
+
+        </div>
+      </section>
+
       <BackToTop />
     </div>
   );
