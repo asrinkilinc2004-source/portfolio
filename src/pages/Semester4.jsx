@@ -380,7 +380,7 @@ function Semester4Content() {
           <motion.div {...fadeUp(0.05)}>
             <TiltCard className="p-8 space-y-6">
               <h3 className="text-xl font-bold text-foreground">{s.uiux.tests_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.uiux.tests_intro}</p>
+              <p  className="text-muted-foreground leading-relaxed">{s.uiux.tests_intro}</p>
 
               {/* img 1 — v1 interface */}
               <figure className="space-y-2">
