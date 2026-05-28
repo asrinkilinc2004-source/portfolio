@@ -392,7 +392,7 @@ function Semester4Content() {
             <div className="grid grid-cols-2 gap-4">
               {["/webcam1.jpeg", "/webcam2.jpeg"].map((src, i) => (
                 <motion.div key={i} {...fadeUp(0.05 + i * 0.07)}>
-                  <TiltCard className="overflow-hidden">
+                  <TiltCard className="overflow-hidden cursor-zoom-in" onClick={() => openImg(src, `AI Face Tracking Camera ${i + 1}`)}>
                     <img
                       src={src}
                       alt={`AI Face Tracking Camera ${i + 1}`}
