@@ -38,7 +38,7 @@ const TEAM = [
 const MILESTONE_DONE = [true, true, true, true, false, false];
 
 // Tilt card wrapper — same as ProjectsSection
-function TiltCard({ children, className = "" }) {
+function TiltCard({ children, className = "", onClick }) {
   const ref = useRef(null);
 
   const onMove = (e) => {
@@ -63,6 +63,7 @@ function TiltCard({ children, className = "" }) {
       ref={ref}
       onMouseMove={isMobile ? undefined : onMove}
       onMouseLeave={isMobile ? undefined : onLeave}
+      onClick={onClick}
       className={`rounded-xl border border-border bg-card hover:border-primary/30 transition-colors duration-300 ${className}`}
       style={{ willChange: "transform" }}
     >
