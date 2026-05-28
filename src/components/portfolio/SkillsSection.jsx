@@ -1,5 +1,6 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { animate, stagger } from "animejs";
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
 import SplitText from "./SplitText";
@@ -32,6 +33,57 @@ function TiltCard({ children, className }) {
   );
 }
 
+function StaggeredSkills({ skills }) {
+  const containerRef = useRef(null);
+  const animated = useRef(false);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    animated.current = false;
+
+    const tags = Array.from(container.querySelectorAll(".skill-tag"));
+    tags.forEach((tag) => {
+      tag.style.opacity = "0";
+      tag.style.transform = "translateY(10px) scale(0.88)";
+    });
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !animated.current) {
+          animated.current = true;
+          animate(tags, {
+            opacity: [0, 1],
+            translateY: [10, 0],
+            scale: [0.88, 1],
+            duration: 420,
+            delay: stagger(50),
+            ease: "spring(1, 90, 12, 0)",
+          });
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [skills]);
+
+  return (
+    <div ref={containerRef} className="flex flex-wrap gap-2">
+      {skills.map((skill) => (
+        <span
+          key={skill}
+          className="skill-tag px-3 py-1.5 text-sm rounded-md bg-secondary text-secondary-foreground border border-border hover:border-primary/30 hover:bg-primary/5 transition-colors cursor-default"
+        >
+          {skill}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export default function SkillsSection() {
   const { t } = useLanguage();
   const { label, title, categories } = t.skills;
@@ -56,13 +108,7 @@ export default function SkillsSection() {
             <motion.div key={cat.title} {...fadeUp(i * 0.08)}>
               <TiltCard className="p-6 rounded-xl bg-card border border-border h-full">
                 <h3 className="font-mono text-sm text-primary mb-5 tracking-wider">{cat.title}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {cat.skills.map((skill) => (
-                    <span key={skill} className="px-3 py-1.5 text-sm rounded-md bg-secondary text-secondary-foreground border border-border hover:border-primary/30 hover:bg-primary/5 transition-colors cursor-default">
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+                <StaggeredSkills skills={cat.skills} />
               </TiltCard>
             </motion.div>
           ))}

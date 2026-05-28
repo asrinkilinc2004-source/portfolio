@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { createTimeline } from "animejs";
 
 const POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&!?";
 const rnd      = () => POOL[Math.floor(Math.random() * POOL.length)];
@@ -57,12 +58,17 @@ export default function SplashIntro({ onDone }) {
   useEffect(() => {
     setShow(true);
 
-    let lockedCount = 0;
-    let lockId, scrambleId;
-    const timeouts = [];
+    const BOOT        = 350;
+    const LOCK_MS     = 75;
 
-    const boot = setTimeout(() => {
-      // Scramble unlocked chars every 40ms
+    let lockedCount = 0;
+    let scrambleId;
+    let randId;
+
+    const tl = createTimeline({ autoplay: true });
+
+    // ── Boot: start scramble + random glitch interval ──────────────────
+    tl.call(() => {
       scrambleId = setInterval(() => {
         setChars({
           first: FIRST.split("").map((c, i) => i < Math.min(lockedCount, FIRST.length) ? c : rnd()),
@@ -73,37 +79,36 @@ export default function SplashIntro({ onDone }) {
         });
       }, 40);
 
-      // Guaranteed glitch schedule — always fires
-      GLITCH_SCHEDULE.forEach((delay, idx) => {
-        const t = setTimeout(() => triggerGlitch(idx < 3 ? 1.2 : 0.8), delay);
-        timeouts.push(t);
-      });
-
-      // Extra random glitches on top
-      const randId = setInterval(() => {
+      randId = setInterval(() => {
         if (Math.random() > 0.35) triggerGlitch(0.7);
       }, 220);
-      timeouts.push(randId);
+    }, BOOT);
 
-      // Lock one char every 75ms
-      lockId = setInterval(() => {
+    // ── Scheduled glitch bursts ─────────────────────────────────────────
+    GLITCH_SCHEDULE.forEach((delay, idx) => {
+      tl.call(() => triggerGlitch(idx < 3 ? 1.2 : 0.8), BOOT + delay);
+    });
+
+    // ── Lock one char every LOCK_MS ─────────────────────────────────────
+    for (let i = 0; i < TOTAL; i++) {
+      tl.call(() => {
         lockedCount++;
         setLocked(lockedCount);
         if (lockedCount >= TOTAL) {
-          clearInterval(lockId);
           clearInterval(scrambleId);
-          timeouts.forEach(clearTimeout);
-          setTimeout(() => setWipeOut(true), 550);
-          setTimeout(() => { setShow(false); onDone?.(); }, 1320);
+          clearInterval(randId);
         }
-      }, 75);
-    }, 350);
+      }, BOOT + i * LOCK_MS);
+    }
+
+    // ── Wipe out → done ─────────────────────────────────────────────────
+    tl.call(() => setWipeOut(true),                        BOOT + TOTAL * LOCK_MS + 550);
+    tl.call(() => { setShow(false); onDone?.(); },         BOOT + TOTAL * LOCK_MS + 1320);
 
     return () => {
-      clearTimeout(boot);
-      clearInterval(lockId);
+      tl.pause();
       clearInterval(scrambleId);
-      timeouts.forEach(clearTimeout);
+      clearInterval(randId);
     };
   }, [triggerGlitch]);
 

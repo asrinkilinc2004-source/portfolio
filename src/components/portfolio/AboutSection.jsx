@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { animate } from "animejs";
 import { Code2, GraduationCap, Lightbulb, Rocket } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
@@ -35,25 +36,39 @@ function TiltCard({ children, className }) {
 
 function CountUp({ value, suffix = "" }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-20px" });
-  const [count, setCount] = useState(0);
+  const animated = useRef(false);
 
   useEffect(() => {
-    if (!isInView) return;
-    const duration = 1400;
-    const start = performance.now();
-    let raf;
-    const tick = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.round(eased * value));
-      if (progress < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [isInView, value]);
+    const el = ref.current;
+    if (!el) return;
+    animated.current = false;
+    el.textContent = "0" + suffix;
 
-  return <span ref={ref}>{count}{suffix}</span>;
+    const obj = { count: 0 };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !animated.current) {
+          animated.current = true;
+          animate(obj, {
+            count: value,
+            duration: 1600,
+            ease: "out(3)",
+            round: 1,
+            onUpdate: () => {
+              if (el) el.textContent = Math.round(obj.count) + suffix;
+            },
+          });
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [value, suffix]);
+
+  return <span ref={ref}>0{suffix}</span>;
 }
 
 export default function AboutSection() {
