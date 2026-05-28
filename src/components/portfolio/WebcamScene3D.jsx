@@ -3,9 +3,10 @@ import * as THREE from "three";
 
 /**
  * 3D wireframe eye — blueprint/sketch style.
- * Eyelids are static; the EYEBALL smoothly follows the mouse cursor.
+ * isStatic=true → eye stays centered (for card thumbnails).
+ * isStatic=false (default) → eyeball follows mouse cursor.
  */
-export default function WebcamScene3D({ className = "" }) {
+export default function WebcamScene3D({ className = "", isStatic = false }) {
   const mountRef = useRef(null);
 
   useEffect(() => {
@@ -211,35 +212,40 @@ export default function WebcamScene3D({ className = "" }) {
     const _eyeNDC  = new THREE.Vector3();
 
     // Pre-compute once: world-height at eye depth (z=0)
-    const halfFovY        = (cam.fov * Math.PI / 180) / 2;
+    const halfFovY         = (cam.fov * Math.PI / 180) / 2;
     const worldHeightAtEye = 2 * cam.position.z * Math.tan(halfFovY);
 
-    const onMouseMove = (e) => {
-      // 1. Project eye world-origin (0,0,0) → screen pixels
-      _eyeNDC.set(0, 0, 0).project(cam);
-      const rect       = renderer.domElement.getBoundingClientRect();
-      const eyeScreenX = (_eyeNDC.x  + 1) / 2 * rect.width  + rect.left;
-      const eyeScreenY = (-_eyeNDC.y + 1) / 2 * rect.height + rect.top;
+    let onMouseMove  = null;
+    let onMouseLeave = null;
 
-      // 2. Screen-pixel offset from eye centre to mouse
-      const dx =  e.clientX - eyeScreenX;
-      const dy =  e.clientY - eyeScreenY;
+    if (!isStatic) {
+      onMouseMove = (e) => {
+        // 1. Project eye world-origin (0,0,0) → screen pixels
+        _eyeNDC.set(0, 0, 0).project(cam);
+        const rect       = renderer.domElement.getBoundingClientRect();
+        const eyeScreenX = (_eyeNDC.x  + 1) / 2 * rect.width  + rect.left;
+        const eyeScreenY = (-_eyeNDC.y + 1) / 2 * rect.height + rect.top;
 
-      // 3. Convert pixels → world units at eye depth
-      const ppu = rect.height / worldHeightAtEye; // pixels per world-unit
-      const wx  =  dx / ppu;
-      const wy  = -dy / ppu; // screen Y is flipped vs world Y
+        // 2. Screen-pixel offset from eye centre to mouse
+        const dx =  e.clientX - eyeScreenX;
+        const dy =  e.clientY - eyeScreenY;
 
-      // 4. Compute exact gaze angles (eye at origin looks at (wx, wy, cam.z))
-      const tz  = cam.position.z;
-      target.y  =  Math.atan2(wx, tz);
-      target.x  = -Math.atan2(wy, tz);
-    };
+        // 3. Convert pixels → world units at eye depth
+        const ppu = rect.height / worldHeightAtEye;
+        const wx  =  dx / ppu;
+        const wy  = -dy / ppu;
 
-    const onMouseLeave = () => { target.x = 0; target.y = 0; };
+        // 4. Exact gaze angles
+        const tz  = cam.position.z;
+        target.y  =  Math.atan2(wx, tz);
+        target.x  = -Math.atan2(wy, tz);
+      };
 
-    window.addEventListener("mousemove",  onMouseMove,  { passive: true });
-    window.addEventListener("mouseleave", onMouseLeave, { passive: true });
+      onMouseLeave = () => { target.x = 0; target.y = 0; };
+
+      window.addEventListener("mousemove",  onMouseMove,  { passive: true });
+      window.addEventListener("mouseleave", onMouseLeave, { passive: true });
+    }
 
     eyeball.rotation.y = 0;
     eyeball.rotation.x = 0;
@@ -248,8 +254,10 @@ export default function WebcamScene3D({ className = "" }) {
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      eyeball.rotation.y += (target.y - eyeball.rotation.y) * LERP;
-      eyeball.rotation.x += (target.x - eyeball.rotation.x) * LERP;
+      if (!isStatic) {
+        eyeball.rotation.y += (target.y - eyeball.rotation.y) * LERP;
+        eyeball.rotation.x += (target.x - eyeball.rotation.x) * LERP;
+      }
       renderer.render(scene, cam);
     };
     animate();
@@ -267,8 +275,8 @@ export default function WebcamScene3D({ className = "" }) {
       cancelAnimationFrame(animId);
       ro.disconnect();
       themeObserver.disconnect();
-      window.removeEventListener("mousemove",  onMouseMove);
-      window.removeEventListener("mouseleave", onMouseLeave);
+      if (onMouseMove)  window.removeEventListener("mousemove",  onMouseMove);
+      if (onMouseLeave) window.removeEventListener("mouseleave", onMouseLeave);
       renderer.dispose();
       if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
     };

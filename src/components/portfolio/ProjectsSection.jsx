@@ -7,6 +7,8 @@ import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
 import SplitText from "./SplitText";
 
+const WebcamScene3D = React.lazy(() => import("./WebcamScene3D"));
+
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
 // Per-project image overrides (index-based, language-independent)
@@ -60,8 +62,28 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
                 onContextMenu={(e) => e.preventDefault()}
                 className={`w-full h-56 lg:h-full object-cover transition-transform duration-500 ${IMAGE_CLASS[index] ?? "group-hover:scale-105"}`}
               />
+            ) : project.current ? (
+              /* Semester 4 — 3D eye thumbnail */
+              <div className="w-full h-56 lg:h-full min-h-[14rem] relative overflow-hidden"
+                style={{
+                  background: "linear-gradient(135deg, hsl(var(--primary)/0.06) 0%, hsl(var(--primary)/0.14) 50%, hsl(var(--primary)/0.04) 100%)",
+                }}>
+                {/* Grid lines */}
+                <div className="absolute inset-0 opacity-[0.06] pointer-events-none"
+                  style={{
+                    backgroundImage: "linear-gradient(hsl(var(--primary)) 1px,transparent 1px),linear-gradient(90deg,hsl(var(--primary)) 1px,transparent 1px)",
+                    backgroundSize: "32px 32px",
+                  }}
+                />
+                <React.Suspense fallback={null}>
+                  <WebcamScene3D
+                    isStatic
+                    className="absolute inset-0 w-full h-full"
+                  />
+                </React.Suspense>
+              </div>
             ) : (
-              /* Animated gradient placeholder for projects without a screenshot yet */
+              /* Animated gradient placeholder for other projects without a screenshot yet */
               <div className="w-full h-56 lg:h-full min-h-[14rem] flex items-center justify-center relative overflow-hidden"
                 style={{
                   background: "linear-gradient(135deg, hsl(var(--primary)/0.08) 0%, hsl(var(--primary)/0.18) 50%, hsl(var(--primary)/0.06) 100%)",
