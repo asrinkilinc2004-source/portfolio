@@ -19,7 +19,8 @@ export default function WebcamScene3D({ className = "", isStatic = false }) {
     const allMaterials = []; // { m: LineBasicMaterial, baseOp, isPrimary }
 
     const readThemeColors = () => {
-      const isDark = document.documentElement.classList.contains("dark");
+      // isStatic (card thumbnail) always uses dark-mode boost so eye pops on black bg
+      const isDark = isStatic ? true : document.documentElement.classList.contains("dark");
       const boost  = isDark ? 1.0 : 1.55;
       const raw    = getComputedStyle(document.documentElement)
         .getPropertyValue("--primary").trim();
@@ -67,10 +68,10 @@ export default function WebcamScene3D({ className = "", isStatic = false }) {
 
     // ── Renderer ──────────────────────────────────────────────────────
     const w0 = el.clientWidth, h0 = el.clientHeight;
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    const renderer = new THREE.WebGLRenderer({ alpha: !isStatic, antialias: true });
     renderer.setSize(w0, h0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setClearColor(0x000000, 0);
+    renderer.setClearColor(0x000000, isStatic ? 1 : 0);
     el.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();

@@ -65,16 +65,7 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
             ) : project.current ? (
               /* Semester 4 — 3D eye thumbnail */
               <div className="w-full h-56 lg:h-full min-h-[14rem] relative overflow-hidden"
-                style={{
-                  background: "linear-gradient(135deg, hsl(var(--primary)/0.06) 0%, hsl(var(--primary)/0.14) 50%, hsl(var(--primary)/0.04) 100%)",
-                }}>
-                {/* Grid lines */}
-                <div className="absolute inset-0 opacity-[0.06] pointer-events-none"
-                  style={{
-                    backgroundImage: "linear-gradient(hsl(var(--primary)) 1px,transparent 1px),linear-gradient(90deg,hsl(var(--primary)) 1px,transparent 1px)",
-                    backgroundSize: "32px 32px",
-                  }}
-                />
+                style={{ background: "#000" }}>
                 <React.Suspense fallback={null}>
                   <WebcamScene3D
                     isStatic
