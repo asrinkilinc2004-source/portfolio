@@ -59,9 +59,6 @@ export default function WebcamScene3D({ className = "" }) {
       return m;
     };
 
-    // Apply initial colours
-    applyTheme();
-
     // Watch <html class="..."> for dark/light switches
     const themeObserver = new MutationObserver(applyTheme);
     themeObserver.observe(document.documentElement, {
@@ -206,6 +203,9 @@ export default function WebcamScene3D({ className = "" }) {
       new THREE.Vector3( 0.50,  0.46, 0.22),
     ]);
     eyelids.add(line(browCurve.getPoints(36), dmat(0.30)));
+
+    // Apply initial colours — must run AFTER all mat()/dmat() calls above
+    applyTheme();
 
     // =================================================================
     //  SURVEILLANCE EYE — state machine (eyeball only rotates)
