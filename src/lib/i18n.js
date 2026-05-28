@@ -127,7 +127,7 @@ export const translations = {
       btn: "Bekijk semester 4",
       uiux: {
         label: "— UI/UX",
-        title: "UI/UX Rapport",
+        title: "UI/UX Progressie",
         intro: "Dit verslag beschrijft het ontwerp en de gebruikerstesten van de Body Tracker installatie — een AI-project dat bewust een ongemakkelijk gevoel rondom surveillance en tracking oproept.",
         tests_title: "1. Gebruikerstesten",
         tests_intro: "We hebben in totaal 20 gebruikerstesten uitgevoerd tussen 11 april en 6 mei 2025. De deelnemers waren jongeren van 19 tot 23 jaar. Elke deelnemer gebruikte de AI tracker en beantwoordde daarna zeven vragen — één open vraag en zes vragen met een score van 1 tot 5.",
@@ -342,7 +342,7 @@ export const translations = {
       btn: "View semester 4",
       uiux: {
         label: "— UI/UX",
-        title: "UI/UX Report",
+        title: "UI/UX Progress",
         intro: "This report describes the design process and user testing of the Body Tracker installation — an AI project that intentionally creates discomfort around the themes of surveillance and tracking.",
         tests_title: "1. User Testing",
         tests_intro: "We conducted 20 user tests between April 11 and May 6, 2025. Participants were aged 19–23. Each participant used the AI tracker and answered seven questions — one open question and six scored 1 to 5.",
@@ -557,7 +557,7 @@ export const translations = {
       btn: "عرض الفصل الرابع",
       uiux: {
         label: "— واجهة/تجربة",
-        title: "تقرير UI/UX",
+        title: "تقدم UI/UX",
         intro: "يصف هذا التقرير عملية التصميم واختبارات المستخدم لتثبيت Body Tracker — مشروع ذكاء اصطناعي يخلق عمدًا شعورًا بالانزعاج من المراقبة.",
         tests_title: "١. اختبارات المستخدم",
         tests_intro: "أجرينا 20 اختبار مستخدم بين 11 أبريل و 6 مايو 2025. كان المشاركون شبابًا بين 19 و 23 عامًا. أجاب كل مشارك على سبعة أسئلة — سؤال مفتوح وستة بتقييم من 1 إلى 5.",
@@ -772,7 +772,7 @@ export const translations = {
       btn: "Ver semestre 4",
       uiux: {
         label: "— UI/UX",
-        title: "Informe UI/UX",
+        title: "Progreso UI/UX",
         intro: "Este informe describe el proceso de diseño y las pruebas de usuario de la instalación Body Tracker — un proyecto de IA que crea intencionalmente incomodidad en torno a la vigilancia.",
         tests_title: "1. Pruebas de usuario",
         tests_intro: "Realizamos 20 pruebas de usuario entre el 11 de abril y el 6 de mayo de 2025. Los participantes tenían entre 19 y 23 años. Cada participante usó el tracker y respondió siete preguntas.",
@@ -987,7 +987,7 @@ export const translations = {
       btn: "查看第4学期",
       uiux: {
         label: "— 界面/体验",
-        title: "UI/UX报告",
+        title: "UI/UX进展",
         intro: "本报告描述了Body Tracker装置的设计过程和用户测试——这是一个有意围绕监控主题制造不适感的AI项目。",
         tests_title: "一、用户测试",
         tests_intro: "我们在2025年4月11日至5月6日期间共进行了20次用户测试。参与者年龄在19至23岁之间。每位参与者使用AI追踪器后回答了七个问题。",
