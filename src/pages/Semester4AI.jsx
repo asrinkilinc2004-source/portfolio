@@ -189,14 +189,6 @@ function Semester4AIContent() {
             </TiltCard>
           </motion.div>
 
-          {/* 4 — Threading */}
-          <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-3">
-              <h3 className="text-xl font-bold text-foreground">{s.ai.threading_title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{s.ai.threading_text}</p>
-            </TiltCard>
-          </motion.div>
-
           {/* 5 — Front-end */}
           <motion.div {...fadeUp(0.08)}>
             <TiltCard className="p-8 space-y-3">
