@@ -205,9 +205,9 @@ export default function WebcamScene3D({ className = "" }) {
     // =================================================================
     //  MOUSE TRACKING — eyeball smoothly follows the cursor
     // =================================================================
-    const MAX_Y = 0.58;   // max left/right rotation
-    const MAX_X = 0.22;   // max up/down rotation
-    const LERP  = 0.07;   // smoothing factor (lower = smoother/slower)
+    const MAX_Y = 0.68;   // max left/right rotation
+    const MAX_X = 0.32;   // max up/down rotation
+    const LERP  = 0.11;   // smoothing factor (lower = smoother/slower)
 
     // Target angles, updated on mousemove
     const target = { x: 0, y: 0 };
@@ -215,9 +215,9 @@ export default function WebcamScene3D({ className = "" }) {
     const onMouseMove = (e) => {
       // Normalise to -1..+1
       const nx =  (e.clientX / window.innerWidth)  * 2 - 1;
-      const ny = -(e.clientY / window.innerHeight)  * 2 + 1;
+      const ny =  (e.clientY / window.innerHeight)  * 2 - 1; // +1 = bottom, -1 = top
       target.y =  nx * MAX_Y;
-      target.x =  ny * MAX_X;
+      target.x =  ny * MAX_X; // muis omhoog (ny negatief) → oog omhoog (negatieve X rotatie)
     };
 
     // When mouse leaves the page, drift back to centre
