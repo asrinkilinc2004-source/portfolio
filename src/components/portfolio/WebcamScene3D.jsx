@@ -1,14 +1,9 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-function easeInOutCubic(t) {
-  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-}
-
 /**
  * 3D wireframe eye — blueprint/sketch style.
- * Eyelids are static; the EYEBALL rotates on Y (pupil tracks left/right).
- * CCTV surveillance timing: 1.8s sweep, 0.7s hold.
+ * Eyelids are static; the EYEBALL smoothly follows the mouse cursor.
  */
 export default function WebcamScene3D({ className = "" }) {
   const mountRef = useRef(null);
@@ -208,52 +203,41 @@ export default function WebcamScene3D({ className = "" }) {
     applyTheme();
 
     // =================================================================
-    //  SURVEILLANCE EYE — state machine (eyeball only rotates)
-    //  0=sweep L→R  1=hold R  2=sweep R→L  3=hold L
+    //  MOUSE TRACKING — eyeball smoothly follows the cursor
     // =================================================================
-    const MAX_ANGLE = 0.62;   // max Y rotation — keeps iris within visible area
-    const SWEEP_DUR = 1.8;
-    const HOLD_DUR  = 0.7;
+    const MAX_Y = 0.58;   // max left/right rotation
+    const MAX_X = 0.22;   // max up/down rotation
+    const LERP  = 0.07;   // smoothing factor (lower = smoother/slower)
 
-    let state  = 1;
-    let stateT = 0;
-    let prevT  = 0;
-    eyeball.rotation.y = MAX_ANGLE;
+    // Target angles, updated on mousemove
+    const target = { x: 0, y: 0 };
+
+    const onMouseMove = (e) => {
+      // Normalise to -1..+1
+      const nx =  (e.clientX / window.innerWidth)  * 2 - 1;
+      const ny = -(e.clientY / window.innerHeight)  * 2 + 1;
+      target.y =  nx * MAX_Y;
+      target.x =  ny * MAX_X;
+    };
+
+    // When mouse leaves the page, drift back to centre
+    const onMouseLeave = () => { target.x = 0; target.y = 0; };
+
+    window.addEventListener("mousemove",  onMouseMove,  { passive: true });
+    window.addEventListener("mouseleave", onMouseLeave, { passive: true });
+
+    // Start looking slightly right (natural resting pose)
+    eyeball.rotation.y = 0;
+    eyeball.rotation.x = 0;
 
     let animId;
-    const clock = new THREE.Clock();
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      const t  = clock.getElapsedTime();
-      const dt = t - prevT;
-      prevT    = t;
-      stateT  += dt;
 
-      switch (state) {
-        case 0: {
-          const p = Math.min(stateT / SWEEP_DUR, 1);
-          eyeball.rotation.y = THREE.MathUtils.lerp(-MAX_ANGLE, MAX_ANGLE, easeInOutCubic(p));
-          if (p >= 1) { state = 1; stateT = 0; }
-          break;
-        }
-        case 1: {
-          eyeball.rotation.y = MAX_ANGLE;
-          if (stateT >= HOLD_DUR) { state = 2; stateT = 0; }
-          break;
-        }
-        case 2: {
-          const p = Math.min(stateT / SWEEP_DUR, 1);
-          eyeball.rotation.y = THREE.MathUtils.lerp(MAX_ANGLE, -MAX_ANGLE, easeInOutCubic(p));
-          if (p >= 1) { state = 3; stateT = 0; }
-          break;
-        }
-        case 3: {
-          eyeball.rotation.y = -MAX_ANGLE;
-          if (stateT >= HOLD_DUR) { state = 0; stateT = 0; }
-          break;
-        }
-      }
+      // Smooth lerp toward target
+      eyeball.rotation.y += (target.y - eyeball.rotation.y) * LERP;
+      eyeball.rotation.x += (target.x - eyeball.rotation.x) * LERP;
 
       renderer.render(scene, cam);
     };
@@ -272,6 +256,8 @@ export default function WebcamScene3D({ className = "" }) {
       cancelAnimationFrame(animId);
       ro.disconnect();
       themeObserver.disconnect();
+      window.removeEventListener("mousemove",  onMouseMove);
+      window.removeEventListener("mouseleave", onMouseLeave);
       renderer.dispose();
       if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
     };
