@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useLocation } from "react-router-dom";
 import { useLanguage } from "@/lib/LanguageContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 
@@ -12,6 +13,8 @@ export default function Navbar() {
   const [hovered,        setHovered]        = useState(null);
   const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
   // Each link gets a unique hand-drawn underline path
   const UNDERLINES = [
@@ -27,12 +30,13 @@ export default function Navbar() {
     "M1,2 C20,2 40,5 58,4 C72,3 84,1.5 92,3 C95,3.8 97,5 99,4.5",
   ];
 
+  const p = isHome ? "" : "/";
   const links = [
-    { label: t.nav.about,     href: "#about"     },
-    { label: t.nav.skills,    href: "#skills"    },
-    { label: t.nav.projects,  href: "#projects"  },
-    { label: t.nav.education, href: "#education" },
-    { label: t.nav.contact,   href: "#contact"   },
+    { label: t.nav.about,     href: `${p}#about`     },
+    { label: t.nav.skills,    href: `${p}#skills`    },
+    { label: t.nav.projects,  href: `${p}#projects`  },
+    { label: t.nav.education, href: `${p}#education` },
+    { label: t.nav.contact,   href: `${p}#contact`   },
   ];
 
   useEffect(() => {
