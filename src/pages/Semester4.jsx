@@ -71,12 +71,60 @@ function TiltCard({ children, className = "" }) {
   );
 }
 
+function Lightbox({ src, alt, onClose }) {
+  useEffect(() => {
+    if (!src) return;
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [src, onClose]);
+
+  return (
+    <AnimatePresence>
+      {src && (
+        <motion.div
+          className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-12 cursor-zoom-out"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.22 }}
+          onClick={onClose}
+          style={{ background: "rgba(0,0,0,0.88)", backdropFilter: "blur(10px)" }}
+        >
+          <motion.div
+            className="relative max-w-5xl w-full"
+            initial={{ scale: 0.86, opacity: 0, y: 20 }}
+            animate={{ scale: 1,    opacity: 1, y: 0  }}
+            exit={{    scale: 0.90, opacity: 0, y: 10 }}
+            transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={src}
+              alt={alt}
+              draggable={false}
+              onContextMenu={(e) => e.preventDefault()}
+              className="w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
+            />
+            {alt && (
+              <p className="text-center text-xs text-white/60 font-mono italic mt-3">{alt}</p>
+            )}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 function Semester4Content() {
   useLenis();
   const navigate = useNavigate();
 
   const { t } = useLanguage();
   const s = t.semester4;
+
+  const [lightbox, setLightbox] = useState(null); // { src, alt }
+  const openImg = useCallback((src, alt) => setLightbox({ src, alt }), []);
 
   const patternRef  = useRef(null);
   const pattern2Ref = useRef(null);
@@ -124,6 +172,7 @@ function Semester4Content() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <Lightbox src={lightbox?.src} alt={lightbox?.alt} onClose={() => setLightbox(null)} />
 
       {/* ── Parallax pattern layers (identical to Home) ── */}
       <div ref={patternRef} aria-hidden="true" className="fixed pointer-events-none"
@@ -405,16 +454,16 @@ function Semester4Content() {
 
               {/* img 1 — v1 interface */}
               <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border">
-                  <img src="/1.png" alt={s.uiux.img1_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/1.png", s.uiux.img1_caption)}>
+                  <img src="/1.png" alt={s.uiux.img1_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full h-44 object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img1_caption}</figcaption>
               </figure>
 
               {/* img 2 — testresultaten tabel */}
               <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border">
-                  <img src="/2.jpg" alt={s.uiux.img2_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/2.jpg", s.uiux.img2_caption)}>
+                  <img src="/2.jpg" alt={s.uiux.img2_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img2_caption}</figcaption>
               </figure>
@@ -449,14 +498,14 @@ function Semester4Content() {
               {/* img 3 + 4 — Figma v2 & live UI v2 */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <figure className="space-y-2">
-                  <div className="rounded-lg overflow-hidden border border-border h-56 md:h-64">
-                    <img src="/3.jpg" alt={s.uiux.img3_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full h-full object-cover" />
+                  <div className="rounded-lg overflow-hidden border border-border h-56 md:h-64 cursor-zoom-in" onClick={() => openImg("/3.jpg", s.uiux.img3_caption)}>
+                    <img src="/3.jpg" alt={s.uiux.img3_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                   </div>
                   <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img3_caption}</figcaption>
                 </figure>
                 <figure className="space-y-2">
-                  <div className="rounded-lg overflow-hidden border border-border h-56 md:h-64">
-                    <img src="/4.png" alt={s.uiux.img4_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full h-full object-cover" />
+                  <div className="rounded-lg overflow-hidden border border-border h-56 md:h-64 cursor-zoom-in" onClick={() => openImg("/4.png", s.uiux.img4_caption)}>
+                    <img src="/4.png" alt={s.uiux.img4_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                   </div>
                   <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img4_caption}</figcaption>
                 </figure>
@@ -503,16 +552,16 @@ function Semester4Content() {
 
               {/* img 5 — Figma v3 */}
               <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border">
-                  <img src="/5.png" alt={s.uiux.img5_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/5.png", s.uiux.img5_caption)}>
+                  <img src="/5.png" alt={s.uiux.img5_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img5_caption}</figcaption>
               </figure>
 
               {/* img 6 — Tracker v3 live */}
               <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border">
-                  <img src="/6.png" alt={s.uiux.img6_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/6.png", s.uiux.img6_caption)}>
+                  <img src="/6.png" alt={s.uiux.img6_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img6_caption}</figcaption>
               </figure>
@@ -528,8 +577,8 @@ function Semester4Content() {
 
               {/* img 7 — testresultaten ronde 2 */}
               <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border">
-                  <img src="/7.png" alt={s.uiux.img7_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/7.png", s.uiux.img7_caption)}>
+                  <img src="/7.png" alt={s.uiux.img7_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img7_caption}</figcaption>
               </figure>
@@ -544,8 +593,8 @@ function Semester4Content() {
 
               {/* img 8 — final version */}
               <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border">
-                  <img src="/8.png" alt={s.uiux.img8_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/8.png", s.uiux.img8_caption)}>
+                  <img src="/8.png" alt={s.uiux.img8_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img8_caption}</figcaption>
               </figure>
@@ -553,8 +602,8 @@ function Semester4Content() {
               {/* img 9 — snapshots */}
               <p className="text-muted-foreground text-sm leading-relaxed">{s.uiux.snapshot_text}</p>
               <figure className="space-y-2">
-                <div className="rounded-lg overflow-hidden border border-border">
-                  <img src="/9.png" alt={s.uiux.img9_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover" />
+                <div className="rounded-lg overflow-hidden border border-border cursor-zoom-in" onClick={() => openImg("/9.png", s.uiux.img9_caption)}>
+                  <img src="/9.png" alt={s.uiux.img9_caption} draggable={false} onContextMenu={e => e.preventDefault()} className="w-full object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
                 <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img9_caption}</figcaption>
               </figure>
