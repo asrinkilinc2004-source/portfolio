@@ -205,9 +205,9 @@ export default function WebcamScene3D({ className = "" }) {
     // =================================================================
     //  MOUSE TRACKING — eyeball smoothly follows the cursor
     // =================================================================
-    const MAX_Y = 0.68;   // max left/right rotation
-    const MAX_X = 0.32;   // max up/down rotation
-    const LERP  = 0.11;   // smoothing factor (lower = smoother/slower)
+    const MAX_Y = 1.10;   // max left/right rotation
+    const MAX_X = 0.70;   // max up/down rotation
+    const LERP  = 0.18;   // smoothing factor (lower = smoother/slower)
 
     // Target angles, updated on mousemove
     const target = { x: 0, y: 0 };
