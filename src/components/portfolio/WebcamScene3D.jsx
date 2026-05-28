@@ -17,30 +17,55 @@ export default function WebcamScene3D({ className = "" }) {
     const el = mountRef.current;
     if (!el) return;
 
-    // ── Detect theme for opacity boost in light mode ──────────────────
-    const isDark = document.documentElement.classList.contains("dark");
-    const boost  = isDark ? 1.0 : 1.55;   // multiply opacity in light mode
+    // ── Theme-aware colour system ─────────────────────────────────────
+    // All created materials are tracked so they can be updated live
+    // when the user switches between dark and light mode.
+    const allMaterials = []; // { m: LineBasicMaterial, baseOp, isPrimary }
 
-    // ── CSS primary colour ────────────────────────────────────────────
-    const raw = getComputedStyle(document.documentElement)
-      .getPropertyValue("--primary").trim();
-    const [hRaw, sRaw, lRaw] = raw.split(/\s+/);
-    const primaryColor = new THREE.Color().setHSL(
-      parseFloat(hRaw) / 360,
-      parseFloat(sRaw) / 100,
-      parseFloat(lRaw) / 100
-    );
-    const dimColor = new THREE.Color().setHSL(
-      parseFloat(hRaw) / 360,
-      parseFloat(sRaw) / 100 * 0.50,
-      parseFloat(lRaw) / 100 * 0.52
-    );
+    const readThemeColors = () => {
+      const isDark = document.documentElement.classList.contains("dark");
+      const boost  = isDark ? 1.0 : 1.55;
+      const raw    = getComputedStyle(document.documentElement)
+        .getPropertyValue("--primary").trim();
+      const [hRaw, sRaw, lRaw] = raw.split(/\s+/);
+      const h = parseFloat(hRaw) / 360;
+      const s = parseFloat(sRaw) / 100;
+      const l = parseFloat(lRaw) / 100;
+      return {
+        primary: new THREE.Color().setHSL(h, s, l),
+        dim:     new THREE.Color().setHSL(h, s * 0.50, l * 0.52),
+        boost,
+      };
+    };
 
-    const mat  = (op) => new THREE.LineBasicMaterial({
-      color: primaryColor, transparent: true, opacity: Math.min(op * boost, 1.0),
-    });
-    const dmat = (op) => new THREE.LineBasicMaterial({
-      color: dimColor,     transparent: true, opacity: Math.min(op * boost, 1.0),
+    const applyTheme = () => {
+      const { primary, dim, boost } = readThemeColors();
+      for (const { m, baseOp, isPrimary } of allMaterials) {
+        m.color.copy(isPrimary ? primary : dim);
+        m.opacity    = Math.min(baseOp * boost, 1.0);
+        m.needsUpdate = true;
+      }
+    };
+
+    // Factory functions — register every material for live updates
+    const mat = (op) => {
+      const m = new THREE.LineBasicMaterial({ transparent: true, opacity: op });
+      allMaterials.push({ m, baseOp: op, isPrimary: true });
+      return m;
+    };
+    const dmat = (op) => {
+      const m = new THREE.LineBasicMaterial({ transparent: true, opacity: op });
+      allMaterials.push({ m, baseOp: op, isPrimary: false });
+      return m;
+    };
+
+    // Apply initial colours
+    applyTheme();
+
+    // Watch <html class="..."> for dark/light switches
+    const themeObserver = new MutationObserver(applyTheme);
+    themeObserver.observe(document.documentElement, {
+      attributes: true, attributeFilter: ["class"],
     });
     const edgesOf = (geo, m) => new THREE.LineSegments(new THREE.EdgesGeometry(geo), m);
     const line = (pts, m) => new THREE.Line(
@@ -246,6 +271,7 @@ export default function WebcamScene3D({ className = "" }) {
     return () => {
       cancelAnimationFrame(animId);
       ro.disconnect();
+      themeObserver.disconnect();
       renderer.dispose();
       if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
     };
