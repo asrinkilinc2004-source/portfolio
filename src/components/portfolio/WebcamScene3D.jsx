@@ -5,12 +5,21 @@ function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
+/**
+ * 3D wireframe eye — blueprint/sketch style.
+ * Eyelids are static; the EYEBALL rotates on Y (pupil tracks left/right).
+ * CCTV surveillance timing: 1.8s sweep, 0.7s hold.
+ */
 export default function WebcamScene3D({ className = "" }) {
   const mountRef = useRef(null);
 
   useEffect(() => {
     const el = mountRef.current;
     if (!el) return;
+
+    // ── Detect theme for opacity boost in light mode ──────────────────
+    const isDark = document.documentElement.classList.contains("dark");
+    const boost  = isDark ? 1.0 : 1.55;   // multiply opacity in light mode
 
     // ── CSS primary colour ────────────────────────────────────────────
     const raw = getComputedStyle(document.documentElement)
@@ -23,13 +32,20 @@ export default function WebcamScene3D({ className = "" }) {
     );
     const dimColor = new THREE.Color().setHSL(
       parseFloat(hRaw) / 360,
-      parseFloat(sRaw) / 100 * 0.45,
-      parseFloat(lRaw) / 100 * 0.50
+      parseFloat(sRaw) / 100 * 0.50,
+      parseFloat(lRaw) / 100 * 0.52
     );
 
-    const mat    = (op) => new THREE.LineBasicMaterial({ color: primaryColor, transparent: true, opacity: op });
-    const dmat   = (op) => new THREE.LineBasicMaterial({ color: dimColor,     transparent: true, opacity: op });
+    const mat  = (op) => new THREE.LineBasicMaterial({
+      color: primaryColor, transparent: true, opacity: Math.min(op * boost, 1.0),
+    });
+    const dmat = (op) => new THREE.LineBasicMaterial({
+      color: dimColor,     transparent: true, opacity: Math.min(op * boost, 1.0),
+    });
     const edgesOf = (geo, m) => new THREE.LineSegments(new THREE.EdgesGeometry(geo), m);
+    const line = (pts, m) => new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(pts), m
+    );
 
     // ── Renderer ──────────────────────────────────────────────────────
     const w0 = el.clientWidth, h0 = el.clientHeight;
@@ -41,140 +57,143 @@ export default function WebcamScene3D({ className = "" }) {
 
     const scene = new THREE.Scene();
     const cam   = new THREE.PerspectiveCamera(34, w0 / h0, 0.1, 100);
-    cam.position.set(0, 0.50, 5.5);
-    cam.lookAt(0, 0.15, 0);
+    cam.position.set(0, 0.08, 4.8);
+    cam.lookAt(0, 0, 0);
 
     const root = new THREE.Group();
     scene.add(root);
 
     // =================================================================
-    //  STAND  —  servo U-bracket + pan-servo base  (never rotates)
+    //  EYEBALL  (rotates on Y — iris/pupil track left & right)
     // =================================================================
-    const stand = new THREE.Group();
-    root.add(stand);
+    const eyeball = new THREE.Group();
+    root.add(eyeball);
 
-    // Left arm of U-bracket
-    const leftArm = edgesOf(new THREE.BoxGeometry(0.065, 0.52, 0.11), mat(0.72));
-    leftArm.position.set(-0.24, -0.42, 0);
-    stand.add(leftArm);
+    // ── Sclera (the full white sphere) ────────────────────────────────
+    eyeball.add(edgesOf(
+      new THREE.SphereGeometry(0.52, 22, 16),
+      mat(0.28)
+    ));
 
-    // Right arm of U-bracket
-    const rightArm = edgesOf(new THREE.BoxGeometry(0.065, 0.52, 0.11), mat(0.72));
-    rightArm.position.set( 0.24, -0.42, 0);
-    stand.add(rightArm);
+    // ── Iris outer ring ───────────────────────────────────────────────
+    const irisOuter = edgesOf(
+      new THREE.TorusGeometry(0.230, 0.048, 10, 44),
+      mat(0.95)
+    );
+    irisOuter.position.z = 0.42;
+    eyeball.add(irisOuter);
 
-    // Bottom bar of U (connects both arms)
-    const uBar = edgesOf(new THREE.BoxGeometry(0.57, 0.065, 0.11), mat(0.68));
-    uBar.position.set(0, -0.685, 0);
-    stand.add(uBar);
+    // ── Iris middle ring ──────────────────────────────────────────────
+    const irisMid = edgesOf(
+      new THREE.TorusGeometry(0.148, 0.030, 8, 32),
+      mat(0.88)
+    );
+    irisMid.position.z = 0.43;
+    eyeball.add(irisMid);
 
-    // Pan servo body (flat box below the U-bracket)
-    const servo = edgesOf(new THREE.BoxGeometry(0.68, 0.13, 0.36), mat(0.62));
-    servo.position.set(0, -0.82, 0);
-    stand.add(servo);
-
-    // Servo horn (circle on top of servo)
-    const hornRing = edgesOf(new THREE.TorusGeometry(0.072, 0.018, 6, 20), dmat(0.40));
-    hornRing.position.set(0, -0.755, 0);
-    hornRing.rotation.x = Math.PI / 2;
-    stand.add(hornRing);
-
-    // Screw holes in U-bracket arms (where camera tilt-axle goes)
-    for (const x of [-0.24, 0.24]) {
-      const hole = edgesOf(new THREE.CircleGeometry(0.028, 10), dmat(0.38));
-      hole.position.set(x, -0.40, 0.058);
-      stand.add(hole);
+    // ── Iris radial texture lines (10 spokes) ─────────────────────────
+    for (let i = 0; i < 10; i++) {
+      const a = (i / 10) * Math.PI * 2;
+      eyeball.add(line([
+        new THREE.Vector3(Math.cos(a) * 0.10, Math.sin(a) * 0.10, 0.44),
+        new THREE.Vector3(Math.cos(a) * 0.21, Math.sin(a) * 0.21, 0.43),
+      ], dmat(0.28)));
     }
 
-    // Servo mounting screws (corners of servo body)
-    for (const [sx, sz] of [[-0.26, 0.14], [0.26, 0.14], [-0.26, -0.14], [0.26, -0.14]]) {
-      const sc = edgesOf(new THREE.CircleGeometry(0.018, 8), dmat(0.28));
-      sc.position.set(sx, -0.755, sz);
-      sc.rotation.x = Math.PI / 2;
-      stand.add(sc);
-    }
+    // ── Pupil ─────────────────────────────────────────────────────────
+    const pupil = edgesOf(new THREE.CircleGeometry(0.092, 22), mat(1.0));
+    pupil.position.z = 0.455;
+    eyeball.add(pupil);
+
+    // ── Specular highlight (tiny circle offset from centre) ───────────
+    const spec = edgesOf(new THREE.CircleGeometry(0.026, 10), mat(0.55));
+    spec.position.set(0.055, 0.058, 0.46);
+    eyeball.add(spec);
+
+    // ── Cornea dome (subtle convex bulge over iris) ───────────────────
+    const cornea = edgesOf(
+      new THREE.SphereGeometry(0.185, 14, 10),
+      dmat(0.20)
+    );
+    cornea.position.z = 0.38;
+    eyeball.add(cornea);
 
     // =================================================================
-    //  HEAD  —  Logitech C270 body  (pans on Y)
+    //  EYELIDS  (completely static — never move)
     // =================================================================
-    const head = new THREE.Group();
-    head.position.y = 0.28;
-    root.add(head);
+    const eyelids = new THREE.Group();
+    root.add(eyelids);
 
-    // ── 1. Pill body (CapsuleGeometry horizontal) ─────────────────────
-    //  Real C270: ~95 mm wide × 40 mm tall  →  ratio ≈ 2.4 : 1
-    //  CapsuleGeometry(radius, length, capSegs, radialSegs)
-    //  radius=0.25, length=0.94  →  total width=1.44, height=0.50
-    const bodyGeo  = new THREE.CapsuleGeometry(0.25, 0.94, 5, 14);
-    const bodyMesh = edgesOf(bodyGeo, mat(0.46));
-    bodyMesh.rotation.z = Math.PI / 2;
-    head.add(bodyMesh);
+    // Upper eyelid — primary bold curve
+    const upperCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.58,  0.00, 0.28),
+      new THREE.Vector3(-0.30,  0.26, 0.34),
+      new THREE.Vector3( 0.00,  0.36, 0.35),
+      new THREE.Vector3( 0.28,  0.28, 0.34),
+      new THREE.Vector3( 0.58,  0.00, 0.28),
+    ]);
+    eyelids.add(line(upperCurve.getPoints(54), mat(0.94)));
 
-    // ── 2. Lens (left-of-centre, front face at z ≈ 0.25) ─────────────
-    const LX = -0.20;
-    const LZ =  0.250;
+    // Upper eyelid — inner shadow line (slightly inside)
+    const upperCurve2 = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.54,  0.00, 0.28),
+      new THREE.Vector3(-0.27,  0.21, 0.33),
+      new THREE.Vector3( 0.00,  0.30, 0.34),
+      new THREE.Vector3( 0.27,  0.22, 0.33),
+      new THREE.Vector3( 0.54,  0.00, 0.28),
+    ]);
+    eyelids.add(line(upperCurve2.getPoints(48), mat(0.50)));
 
-    // Outer lens ring / bezel
-    const outerRing = edgesOf(new THREE.TorusGeometry(0.175, 0.038, 10, 40), mat(0.92));
-    outerRing.position.set(LX, 0, LZ);
-    head.add(outerRing);
+    // Lower eyelid curve (less arched than upper — asymmetric like real eye)
+    const lowerCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.58,  0.00, 0.28),
+      new THREE.Vector3(-0.22, -0.17, 0.32),
+      new THREE.Vector3( 0.08, -0.24, 0.33),
+      new THREE.Vector3( 0.34, -0.15, 0.32),
+      new THREE.Vector3( 0.58,  0.00, 0.28),
+    ]);
+    eyelids.add(line(lowerCurve.getPoints(48), mat(0.82)));
 
-    // Inner focus ring
-    const innerRing = edgesOf(new THREE.TorusGeometry(0.108, 0.024, 8, 30), mat(0.88));
-    innerRing.position.set(LX, 0, LZ + 0.012);
-    head.add(innerRing);
-
-    // Glass dome (convex element)
-    const dome = edgesOf(new THREE.SphereGeometry(0.093, 16, 12), dmat(0.44));
-    dome.position.set(LX, 0, LZ + 0.062);
-    head.add(dome);
-
-    // Iris / pupil
-    const iris = edgesOf(new THREE.CircleGeometry(0.040, 18), mat(1.0));
-    iris.position.set(LX, 0, LZ + 0.140);
-    head.add(iris);
-
-    // ── 3. Mic / speaker grille (right of centre) ─────────────────────
-    //  C270 has a rectangular grid of holes on the right side
-    const GX = 0.285, GZ = LZ + 0.003;
-    for (let r = 0; r < 3; r++) {
-      for (let c = 0; c < 4; c++) {
-        const dot = edgesOf(new THREE.CircleGeometry(0.013, 7), dmat(0.44));
-        dot.position.set(GX + (c - 1.5) * 0.046, (r - 1) * 0.046, GZ);
-        head.add(dot);
-      }
-    }
-    // Grille border rect
-    const gBorder = edgesOf(new THREE.PlaneGeometry(0.22, 0.14), dmat(0.28));
-    gBorder.position.set(GX, 0, GZ - 0.001);
-    head.add(gBorder);
-
-    // ── 4. LED indicator (between lens and grille) ────────────────────
-    const led = edgesOf(new THREE.SphereGeometry(0.020, 6, 4), mat(0.95));
-    led.position.set(0.055, 0, LZ + 0.002);
-    head.add(led);
-
-    // ── 5. Tilt-axle pins on left + right sides of body ───────────────
-    //  (the small cylindrical axle that connects into the U-bracket)
-    for (const x of [-0.73, 0.73]) {
-      const axle = edgesOf(new THREE.CylinderGeometry(0.032, 0.032, 0.08, 8), mat(0.65));
-      axle.rotation.z = Math.PI / 2;
-      axle.position.set(x, 0, 0);
-      head.add(axle);
+    // ── Eyelashes (8 short lines radiating from upper lid) ────────────
+    const lashT    = [0.10, 0.20, 0.30, 0.42, 0.53, 0.65, 0.75, 0.85];
+    const lashLen  = [0.075, 0.095, 0.10, 0.105, 0.10, 0.095, 0.085, 0.070];
+    for (let i = 0; i < lashT.length; i++) {
+      const pt   = upperCurve.getPointAt(lashT[i]);
+      const tang = upperCurve.getTangentAt(lashT[i]);
+      // outward normal (perpendicular to tangent, pointing upward)
+      const normal = new THREE.Vector3(-tang.y, tang.x, 0).normalize();
+      const end = pt.clone().addScaledVector(normal, lashLen[i]);
+      eyelids.add(line([pt, end], dmat(0.38)));
     }
 
+    // ── Eye corners (tiny dots where lids meet) ───────────────────────
+    for (const cx of [-0.58, 0.58]) {
+      const dot = edgesOf(new THREE.SphereGeometry(0.018, 5, 4), mat(0.65));
+      dot.position.set(cx, 0, 0.28);
+      eyelids.add(dot);
+    }
+
+    // ── Brow (subtle arc above the eye) ──────────────────────────────
+    const browCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.52,  0.50, 0.22),
+      new THREE.Vector3(-0.15,  0.60, 0.24),
+      new THREE.Vector3( 0.18,  0.58, 0.24),
+      new THREE.Vector3( 0.50,  0.46, 0.22),
+    ]);
+    eyelids.add(line(browCurve.getPoints(36), dmat(0.30)));
+
     // =================================================================
-    //  SURVEILLANCE PAN — faster sweep, shorter pause
+    //  SURVEILLANCE EYE — state machine (eyeball only rotates)
     //  0=sweep L→R  1=hold R  2=sweep R→L  3=hold L
     // =================================================================
-    const MAX_ANGLE = 0.82;   // ~47°
-    const SWEEP_DUR = 1.8;    // seconds per sweep  (was 3.2)
-    const HOLD_DUR  = 0.7;    // seconds to hold    (was 2.0)
+    const MAX_ANGLE = 0.62;   // max Y rotation — keeps iris within visible area
+    const SWEEP_DUR = 1.8;
+    const HOLD_DUR  = 0.7;
 
     let state  = 1;
     let stateT = 0;
     let prevT  = 0;
-    head.rotation.y = MAX_ANGLE;
+    eyeball.rotation.y = MAX_ANGLE;
 
     let animId;
     const clock = new THREE.Clock();
@@ -189,30 +208,27 @@ export default function WebcamScene3D({ className = "" }) {
       switch (state) {
         case 0: {
           const p = Math.min(stateT / SWEEP_DUR, 1);
-          head.rotation.y = THREE.MathUtils.lerp(-MAX_ANGLE, MAX_ANGLE, easeInOutCubic(p));
+          eyeball.rotation.y = THREE.MathUtils.lerp(-MAX_ANGLE, MAX_ANGLE, easeInOutCubic(p));
           if (p >= 1) { state = 1; stateT = 0; }
           break;
         }
         case 1: {
-          head.rotation.y = MAX_ANGLE;
+          eyeball.rotation.y = MAX_ANGLE;
           if (stateT >= HOLD_DUR) { state = 2; stateT = 0; }
           break;
         }
         case 2: {
           const p = Math.min(stateT / SWEEP_DUR, 1);
-          head.rotation.y = THREE.MathUtils.lerp(MAX_ANGLE, -MAX_ANGLE, easeInOutCubic(p));
+          eyeball.rotation.y = THREE.MathUtils.lerp(MAX_ANGLE, -MAX_ANGLE, easeInOutCubic(p));
           if (p >= 1) { state = 3; stateT = 0; }
           break;
         }
         case 3: {
-          head.rotation.y = -MAX_ANGLE;
+          eyeball.rotation.y = -MAX_ANGLE;
           if (stateT >= HOLD_DUR) { state = 0; stateT = 0; }
           break;
         }
       }
-
-      // LED recording blink
-      led.material.opacity = 0.30 + 0.70 * (0.5 + 0.5 * Math.sin(t * 3.8));
 
       renderer.render(scene, cam);
     };
