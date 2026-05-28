@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/lib/LanguageContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 
@@ -14,6 +14,7 @@ export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
   const location = useLocation();
+  const navigate = useNavigate();
   const isHome = location.pathname === "/";
 
   // Each link gets a unique hand-drawn underline path
@@ -30,14 +31,20 @@ export default function Navbar() {
     "M1,2 C20,2 40,5 58,4 C72,3 84,1.5 92,3 C95,3.8 97,5 99,4.5",
   ];
 
-  const p = isHome ? "" : "/";
   const links = [
-    { label: t.nav.about,     href: `${p}#about`     },
-    { label: t.nav.skills,    href: `${p}#skills`    },
-    { label: t.nav.projects,  href: `${p}#projects`  },
-    { label: t.nav.education, href: `${p}#education` },
-    { label: t.nav.contact,   href: `${p}#contact`   },
+    { label: t.nav.about,     href: "#about",     id: "about"     },
+    { label: t.nav.skills,    href: "#skills",    id: "skills"    },
+    { label: t.nav.projects,  href: "#projects",  id: "projects"  },
+    { label: t.nav.education, href: "#education", id: "education" },
+    { label: t.nav.contact,   href: "#contact",   id: "contact"   },
   ];
+
+  const handleNavClick = (e, link) => {
+    if (!isHome) {
+      e.preventDefault();
+      navigate("/", { state: { scrollTo: link.id } });
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => {
@@ -91,6 +98,7 @@ export default function Navbar() {
             const drawn = isActive || hovered === i;
             return (
               <a key={link.href} href={link.href}
+                onClick={(e) => handleNavClick(e, link)}
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
                 className={`relative text-sm transition-colors duration-200 pb-1 ${
@@ -139,7 +147,7 @@ export default function Navbar() {
             className="md:hidden bg-background/95 backdrop-blur-xl border-b border-border overflow-hidden">
             <div className="px-6 py-4 flex flex-col gap-4">
               {links.map((link) => (
-                <a key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
+                <a key={link.href} href={link.href} onClick={(e) => { handleNavClick(e, link); setMobileOpen(false); }}
                   className={`text-sm transition-colors ${
                     activeSection === link.href ? "text-primary" : "text-muted-foreground hover:text-primary"
                   }`}>
