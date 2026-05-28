@@ -203,30 +203,40 @@ export default function WebcamScene3D({ className = "" }) {
     applyTheme();
 
     // =================================================================
-    //  MOUSE TRACKING — eyeball smoothly follows the cursor
+    //  MOUSE TRACKING — raycast through screen → literal gaze direction
     // =================================================================
-    const MAX_Y = 1.10;   // max left/right rotation
-    const MAX_X = 0.70;   // max up/down rotation
-    const LERP  = 0.18;   // smoothing factor (lower = smoother/slower)
+    const LERP    = 0.12;
+    const Z_PLANE = 3.0;   // virtual plane the eye "looks at" (between eye and cam)
 
-    // Target angles, updated on mousemove
-    const target = { x: 0, y: 0 };
+    const target  = { x: 0, y: 0 };
+    const _mouse  = new THREE.Vector3();
+    const _dir    = new THREE.Vector3();
 
     const onMouseMove = (e) => {
-      // Normalise to -1..+1
+      // NDC [-1, 1]
       const nx =  (e.clientX / window.innerWidth)  * 2 - 1;
-      const ny =  (e.clientY / window.innerHeight)  * 2 - 1; // +1 = bottom, -1 = top
-      target.y =  nx * MAX_Y;
-      target.x =  ny * MAX_X; // muis omhoog (ny negatief) → oog omhoog (negatieve X rotatie)
+      const ny = -(e.clientY / window.innerHeight)  * 2 + 1;
+
+      // Unproject to get a world-space point on the camera ray
+      _mouse.set(nx, ny, 0.5).unproject(cam);
+      _dir.copy(_mouse).sub(cam.position).normalize();
+
+      // Intersect the ray with the z = Z_PLANE plane
+      const t  = (Z_PLANE - cam.position.z) / _dir.z;
+      const tx = cam.position.x + _dir.x * t;
+      const ty = cam.position.y + _dir.y * t;
+
+      // Convert world-space target to rotation angles from eye origin (0,0,0)
+      target.y =  Math.atan2(tx, Z_PLANE);                              // left / right
+      target.x = -Math.atan2(ty, Math.sqrt(tx * tx + Z_PLANE * Z_PLANE)); // up / down
     };
 
-    // When mouse leaves the page, drift back to centre
+    // Drift back to centre when mouse leaves window
     const onMouseLeave = () => { target.x = 0; target.y = 0; };
 
     window.addEventListener("mousemove",  onMouseMove,  { passive: true });
     window.addEventListener("mouseleave", onMouseLeave, { passive: true });
 
-    // Start looking slightly right (natural resting pose)
     eyeball.rotation.y = 0;
     eyeball.rotation.x = 0;
 
@@ -234,11 +244,8 @@ export default function WebcamScene3D({ className = "" }) {
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-
-      // Smooth lerp toward target
       eyeball.rotation.y += (target.y - eyeball.rotation.y) * LERP;
       eyeball.rotation.x += (target.x - eyeball.rotation.x) * LERP;
-
       renderer.render(scene, cam);
     };
     animate();
