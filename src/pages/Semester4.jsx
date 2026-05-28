@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from "react";
-import { motion } from "framer-motion";
-import { ArrowLeft, Users, Calendar, Cpu } from "lucide-react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, Users, Calendar, Cpu, Lock, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import Navbar from "../components/portfolio/Navbar";
@@ -695,12 +695,136 @@ function Semester4Content() {
   );
 }
 
+const CORRECT = "1212";
+const SESSION_KEY = "s4_auth";
+
+function PasswordGate({ onUnlock }) {
+  const [value,   setValue]   = useState("");
+  const [error,   setError]   = useState(false);
+  const [shake,   setShake]   = useState(false);
+  const [visible, setVisible] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => { inputRef.current?.focus(); }, []);
+
+  const attempt = useCallback(() => {
+    if (value === CORRECT) {
+      sessionStorage.setItem(SESSION_KEY, "1");
+      onUnlock();
+    } else {
+      setError(true);
+      setShake(true);
+      setValue("");
+      setTimeout(() => { setShake(false); setError(false); }, 700);
+    }
+  }, [value, onUnlock]);
+
+  const onKey = (e) => { if (e.key === "Enter") attempt(); };
+
+  return (
+    <div className="fixed inset-0 z-[100] bg-background flex flex-col items-center justify-center overflow-hidden">
+      {/* Grid overlay */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={GRID_STYLE} />
+      {/* Scanlines */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.45) 2px,rgba(0,0,0,0.45) 4px)",
+          opacity: 0.07,
+        }}
+      />
+      {/* Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 70% 60% at 50% 0%,hsl(var(--primary)/0.15) 0%,transparent 70%)" }}
+      />
+
+      <motion.div
+        className="relative w-full max-w-sm mx-6 space-y-6"
+        animate={shake ? { x: [0, -10, 10, -8, 8, -4, 4, 0] } : { x: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Icon */}
+        <div className="flex flex-col items-center gap-3 mb-2">
+          <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <Lock className="w-6 h-6 text-primary" />
+          </div>
+          <div className="text-center">
+            <h1 className="text-xl font-bold tracking-tight">Toegang vereist</h1>
+            <p className="text-sm text-muted-foreground mt-1 font-mono">Voer de toegangscode in om verder te gaan</p>
+          </div>
+        </div>
+
+        {/* Input card */}
+        <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+          <div className="space-y-2">
+            <label className="font-mono text-xs text-primary tracking-widest">TOEGANGSCODE</label>
+            <div className="relative">
+              <input
+                ref={inputRef}
+                type={visible ? "text" : "password"}
+                value={value}
+                onChange={(e) => { setValue(e.target.value); setError(false); }}
+                onKeyDown={onKey}
+                maxLength={20}
+                className={`w-full bg-background border rounded-lg px-4 py-3 pr-11 font-mono text-lg tracking-[0.25em] outline-none transition-colors
+                  ${error
+                    ? "border-red-500/70 focus:border-red-500"
+                    : "border-border focus:border-primary/60"
+                  }`}
+                placeholder="••••"
+                autoComplete="off"
+              />
+              <button
+                type="button"
+                onClick={() => setVisible((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                tabIndex={-1}
+              >
+                {visible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+
+            <AnimatePresence>
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                  className="text-red-500 text-xs font-mono"
+                >
+                  Onjuiste code — probeer opnieuw
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <button
+            onClick={attempt}
+            className="w-full py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 active:scale-[0.98] transition-all"
+          >
+            Toegang verkrijgen
+          </button>
+        </div>
+
+        <p className="text-center text-xs text-muted-foreground font-mono opacity-50">
+          — SEMESTER 4 · DARK TECH —
+        </p>
+      </motion.div>
+    </div>
+  );
+}
+
 export default function Semester4Page() {
+  const [unlocked, setUnlocked] = useState(
+    () => sessionStorage.getItem(SESSION_KEY) === "1"
+  );
+
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <LanguageProvider>
-        <Semester4Content />
-      </LanguageProvider>
+      {!unlocked ? (
+        <PasswordGate onUnlock={() => setUnlocked(true)} />
+      ) : (
+        <LanguageProvider>
+          <Semester4Content />
+        </LanguageProvider>
+      )}
     </ThemeProvider>
   );
 }
