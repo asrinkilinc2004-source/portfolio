@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Users, Calendar, Cpu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
