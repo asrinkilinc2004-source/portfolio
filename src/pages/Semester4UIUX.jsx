@@ -144,10 +144,44 @@ function Semester4UiuxContent() {
   const [lightbox, setLightbox] = useState(null);
   const openImg = useCallback((src, alt) => setLightbox({ src, alt }), []);
 
+  const patternRef  = useRef(null);
+  const pattern2Ref = useRef(null);
+
   useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const heroH   = window.innerHeight;
+        const progress = Math.min(Math.max((scrollY - heroH * 0.4) / (heroH * 0.4), 0), 1);
+        const isDark  = document.documentElement.classList.contains("dark");
+        if (patternRef.current) {
+          patternRef.current.style.opacity   = (progress * (isDark ? 0.08 : 0.20)).toString();
+          patternRef.current.style.transform = `translate3d(0,${-scrollY * 0.35}px,0)`;
+        }
+        if (pattern2Ref.current) {
+          pattern2Ref.current.style.opacity   = (progress * (isDark ? 0.18 : 0.35)).toString();
+          pattern2Ref.current.style.transform = `translate3d(0,${-scrollY * 0.6}px,0)`;
+        }
+        ticking = false;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <div ref={patternRef} aria-hidden="true" className="fixed pointer-events-none"
+        style={{ zIndex: 10, opacity: 0, top: "-200vh", left: "-10%", width: "120%", height: "900vh", willChange: "transform",
+          backgroundImage: "radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+      <div ref={pattern2Ref} aria-hidden="true" className="fixed pointer-events-none"
+        style={{ zIndex: 11, opacity: 0, top: "-200vh", left: "-10%", width: "120%", height: "900vh", willChange: "transform",
+          backgroundImage: "radial-gradient(circle, hsl(var(--muted-foreground)) 1.5px, transparent 1.5px)", backgroundSize: "95px 95px" }} />
       <Lightbox src={lightbox?.src} alt={lightbox?.alt} onClose={() => setLightbox(null)} />
       <CustomCursor />
       <Navbar />
