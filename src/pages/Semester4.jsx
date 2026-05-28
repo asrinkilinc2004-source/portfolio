@@ -818,6 +818,7 @@ export default function Semester4Page() {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+      <CustomCursor />
       {!unlocked ? (
         <PasswordGate onUnlock={() => setUnlocked(true)} />
       ) : (
