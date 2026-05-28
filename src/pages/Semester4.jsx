@@ -9,6 +9,7 @@ import ScrollProgressBar from "../components/portfolio/ScrollProgressBar";
 import BackToTop from "../components/portfolio/BackToTop";
 import { LanguageProvider, useLanguage } from "../lib/LanguageContext";
 import { useLenis } from "../lib/useLenis";
+const WebcamScene3D = React.lazy(() => import("../components/portfolio/WebcamScene3D"));
 
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
@@ -158,6 +159,26 @@ function Semester4Content() {
               "radial-gradient(ellipse 70% 60% at 50% 0%, hsl(var(--primary)/0.18) 0%, transparent 70%)",
           }}
         />
+
+        {/* ── 3D Wireframe Webcam ── */}
+        <React.Suspense fallback={null}>
+          <div
+            className="absolute pointer-events-none select-none hidden md:block"
+            style={{
+              right: "-2%",
+              top: "50%",
+              transform: "translateY(-52%)",
+              width: "min(52%, 580px)",
+              height: "min(85vh, 480px)",
+              opacity: 0.82,
+              zIndex: 1,
+              maskImage: "radial-gradient(ellipse 80% 80% at 60% 50%, black 40%, transparent 100%)",
+              WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 60% 50%, black 40%, transparent 100%)",
+            }}
+          >
+            <WebcamScene3D />
+          </div>
+        </React.Suspense>
 
         <div className="relative max-w-6xl mx-auto w-full">
           <motion.div {...fadeUp(0)}>
