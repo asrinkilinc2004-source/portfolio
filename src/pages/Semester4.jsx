@@ -25,7 +25,7 @@ const GRID_STYLE = {
   backgroundSize: "60px 60px",
 };
 
-const TAGS = ["AI", "Python", "Computer Vision", "Dark Tech", "Raspberry Pi", "OpenCV"];
+const TAGS = ["AI", "Python", "HTML", "CSS", "OpenCV", "DeepFace", "Figma", "UI-design"];
 
 const TEAM = [
   { name: "Asrin Kilinc",       role: "AI Engineer",              highlight: true },
