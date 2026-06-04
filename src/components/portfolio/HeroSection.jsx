@@ -24,58 +24,67 @@ const START_DELAY = isMobile ? 350 : 850;
 
 const ORB_STYLE = `
   @keyframes orb1 {
-    0%,100% { transform: translate(0px,0px) rotate(0deg); }
-    33%      { transform: translate(55px,-42px) rotate(4deg); }
-    66%      { transform: translate(-32px,28px) rotate(-2deg); }
+    0%   { transform: translate(0px,0px)      scale(0.65); }
+    20%  { transform: translate(110px,-85px)  scale(1.4);  }
+    45%  { transform: translate(-70px,55px)   scale(0.75); }
+    70%  { transform: translate(60px,100px)   scale(1.3);  }
+    100% { transform: translate(0px,0px)      scale(0.65); }
   }
   @keyframes orb2 {
-    0%,100% { transform: translate(0px,0px) rotate(0deg); }
-    40%      { transform: translate(-48px,34px) rotate(-5deg); }
-    75%      { transform: translate(28px,-22px) rotate(3deg); }
+    0%   { transform: translate(0px,0px)      scale(1.25); }
+    25%  { transform: translate(-120px,70px)  scale(0.55); }
+    55%  { transform: translate(80px,-95px)   scale(1.45); }
+    80%  { transform: translate(-40px,40px)   scale(0.8);  }
+    100% { transform: translate(0px,0px)      scale(1.25); }
   }
   @keyframes orb3 {
-    0%,100% { transform: translate(0px,0px); }
-    50%      { transform: translate(38px,50px); }
-    80%      { transform: translate(-42px,-28px); }
+    0%   { transform: translate(0px,0px)       scale(0.85); }
+    30%  { transform: translate(90px,80px)     scale(1.5);  }
+    60%  { transform: translate(-80px,-70px)   scale(0.6);  }
+    100% { transform: translate(0px,0px)       scale(0.85); }
   }
   @keyframes orb4 {
-    0%,100% { transform: translate(0px,0px) rotate(0deg); }
-    45%      { transform: translate(-28px,-38px) rotate(4deg); }
-    70%      { transform: translate(44px,22px) rotate(-2deg); }
+    0%   { transform: translate(0px,0px)       scale(1.1);  }
+    35%  { transform: translate(-95px,-105px)  scale(0.5);  }
+    65%  { transform: translate(115px,60px)    scale(1.45); }
+    100% { transform: translate(0px,0px)       scale(1.1);  }
   }
   @keyframes orb5 {
-    0%,100% { transform: translate(0px,0px); }
-    35%      { transform: translate(32px,28px); }
-    65%      { transform: translate(-22px,-34px); }
+    0%   { transform: translate(0px,0px)      scale(0.7);  }
+    40%  { transform: translate(85px,75px)    scale(1.38); }
+    75%  { transform: translate(-60px,-85px)  scale(0.8);  }
+    100% { transform: translate(0px,0px)      scale(0.7);  }
   }
   @keyframes orb6 {
-    0%,100% { transform: translate(0px,0px) rotate(0deg); }
-    55%      { transform: translate(-36px,20px) rotate(-3deg); }
-    80%      { transform: translate(18px,-30px) rotate(2deg); }
+    0%   { transform: translate(0px,0px)      scale(1.2);  }
+    50%  { transform: translate(-75px,55px)   scale(0.55); }
+    80%  { transform: translate(55px,-75px)   scale(1.4);  }
+    100% { transform: translate(0px,0px)      scale(1.2);  }
   }
+  .orb-line { border: 1.5px solid hsl(var(--primary)/0.22); }
+  .dark .orb-line { border-color: hsl(var(--primary)/0.17); }
 `;
 
 function AnimatedOrbs() {
   const orbs = [
-    { top: "-28%", left: "-18%",   w: "78vmax", anim: "orb1 22s ease-in-out infinite",         opacity: "0.08" },
-    { top: "-38%", right: "-22%",  w: "92vmax", anim: "orb2 28s ease-in-out infinite",         opacity: "0.055" },
-    { top: "15%",  left: "28%",    w: "52vmax", anim: "orb3 17s ease-in-out infinite",         opacity: "0.05" },
-    { bottom:"-32%", left: "8%",   w: "72vmax", anim: "orb4 24s ease-in-out infinite -6s",     opacity: "0.07" },
-    { top: "28%",  right: "-12%",  w: "58vmax", anim: "orb5 19s ease-in-out infinite -10s",    opacity: "0.05" },
-    { bottom:"-10%", right: "20%", w: "44vmax", anim: "orb6 15s ease-in-out infinite -4s",     opacity: "0.04" },
+    { top: "-25%",   left: "-15%",  w: "78vmax", anim: "orb1 9s  ease-in-out infinite",      delay: "0s"   },
+    { top: "-35%",   right:"-20%",  w: "90vmax", anim: "orb2 12s ease-in-out infinite",      delay: "-4s"  },
+    { top: "10%",    left: "25%",   w: "54vmax", anim: "orb3 8s  ease-in-out infinite",      delay: "-6s"  },
+    { bottom:"-30%", left: "5%",    w: "72vmax", anim: "orb4 11s ease-in-out infinite",      delay: "-2s"  },
+    { top: "25%",    right:"-10%",  w: "60vmax", anim: "orb5 10s ease-in-out infinite",      delay: "-8s"  },
+    { bottom:"-8%",  right:"18%",   w: "46vmax", anim: "orb6 7s  ease-in-out infinite",      delay: "-5s"  },
   ];
   return (
     <>
       <style>{ORB_STYLE}</style>
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         {orbs.map((o, i) => (
-          <div key={i} style={{
+          <div key={i} className="orb-line" style={{
             position: "absolute",
             top: o.top, bottom: o.bottom, left: o.left, right: o.right,
             width: o.w, height: o.w,
             borderRadius: "50%",
-            border: `1px solid hsl(var(--primary)/${o.opacity})`,
-            animation: o.anim,
+            animation: `${o.anim} ${o.delay}`,
             willChange: "transform",
           }} />
         ))}
