@@ -22,6 +22,68 @@ const SCRIBBLE_PATHS = [
 
 const START_DELAY = isMobile ? 350 : 850;
 
+const ORB_STYLE = `
+  @keyframes orb1 {
+    0%,100% { transform: translate(0px,0px) rotate(0deg); }
+    33%      { transform: translate(55px,-42px) rotate(4deg); }
+    66%      { transform: translate(-32px,28px) rotate(-2deg); }
+  }
+  @keyframes orb2 {
+    0%,100% { transform: translate(0px,0px) rotate(0deg); }
+    40%      { transform: translate(-48px,34px) rotate(-5deg); }
+    75%      { transform: translate(28px,-22px) rotate(3deg); }
+  }
+  @keyframes orb3 {
+    0%,100% { transform: translate(0px,0px); }
+    50%      { transform: translate(38px,50px); }
+    80%      { transform: translate(-42px,-28px); }
+  }
+  @keyframes orb4 {
+    0%,100% { transform: translate(0px,0px) rotate(0deg); }
+    45%      { transform: translate(-28px,-38px) rotate(4deg); }
+    70%      { transform: translate(44px,22px) rotate(-2deg); }
+  }
+  @keyframes orb5 {
+    0%,100% { transform: translate(0px,0px); }
+    35%      { transform: translate(32px,28px); }
+    65%      { transform: translate(-22px,-34px); }
+  }
+  @keyframes orb6 {
+    0%,100% { transform: translate(0px,0px) rotate(0deg); }
+    55%      { transform: translate(-36px,20px) rotate(-3deg); }
+    80%      { transform: translate(18px,-30px) rotate(2deg); }
+  }
+`;
+
+function AnimatedOrbs() {
+  const orbs = [
+    { top: "-28%", left: "-18%",   w: "78vmax", anim: "orb1 22s ease-in-out infinite",         opacity: "0.08" },
+    { top: "-38%", right: "-22%",  w: "92vmax", anim: "orb2 28s ease-in-out infinite",         opacity: "0.055" },
+    { top: "15%",  left: "28%",    w: "52vmax", anim: "orb3 17s ease-in-out infinite",         opacity: "0.05" },
+    { bottom:"-32%", left: "8%",   w: "72vmax", anim: "orb4 24s ease-in-out infinite -6s",     opacity: "0.07" },
+    { top: "28%",  right: "-12%",  w: "58vmax", anim: "orb5 19s ease-in-out infinite -10s",    opacity: "0.05" },
+    { bottom:"-10%", right: "20%", w: "44vmax", anim: "orb6 15s ease-in-out infinite -4s",     opacity: "0.04" },
+  ];
+  return (
+    <>
+      <style>{ORB_STYLE}</style>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        {orbs.map((o, i) => (
+          <div key={i} style={{
+            position: "absolute",
+            top: o.top, bottom: o.bottom, left: o.left, right: o.right,
+            width: o.w, height: o.w,
+            borderRadius: "50%",
+            border: `1px solid hsl(var(--primary)/${o.opacity})`,
+            animation: o.anim,
+            willChange: "transform",
+          }} />
+        ))}
+      </div>
+    </>
+  );
+}
+
 function useTypingLoop(text, ready, typeSpeed = 55, deleteSpeed = 25, pauseMs = 10000) {
   const [displayed, setDisplayed] = useState("");
   const [phase, setPhase] = useState("idle");
@@ -66,13 +128,7 @@ export default function HeroSection({ splashReady = true }) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-x-hidden px-6">
 
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: "linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
+      <AnimatedOrbs />
 
       <div className="relative max-w-6xl mx-auto w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-20 pt-20">
         <div className="flex-1 text-center lg:text-left">
