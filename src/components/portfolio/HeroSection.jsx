@@ -70,12 +70,12 @@ const ORB_STYLE = `
 
 function AnimatedOrbs() {
   const orbs = [
-    { top: "-25%",   left: "-15%",  w: "78vmax", anim: "orb1 9s  ease-in-out infinite",      delay: "0s"   },
-    { top: "-35%",   right:"-20%",  w: "90vmax", anim: "orb2 12s ease-in-out infinite",      delay: "-4s"  },
-    { top: "10%",    left: "25%",   w: "54vmax", anim: "orb3 8s  ease-in-out infinite",      delay: "-6s"  },
-    { bottom:"-30%", left: "5%",    w: "72vmax", anim: "orb4 11s ease-in-out infinite",      delay: "-2s"  },
-    { top: "25%",    right:"-10%",  w: "60vmax", anim: "orb5 10s ease-in-out infinite",      delay: "-8s"  },
-    { bottom:"-8%",  right:"18%",   w: "46vmax", anim: "orb6 7s  ease-in-out infinite",      delay: "-5s"  },
+    { top: "-25%",   left: "-15%",  w: "78vmax", anim: "orb1 38s ease-in-out infinite",      delay: "0s"    },
+    { top: "-35%",   right:"-20%",  w: "90vmax", anim: "orb2 50s ease-in-out infinite",      delay: "-15s"  },
+    { top: "10%",    left: "25%",   w: "54vmax", anim: "orb3 32s ease-in-out infinite",      delay: "-22s"  },
+    { bottom:"-30%", left: "5%",    w: "72vmax", anim: "orb4 44s ease-in-out infinite",      delay: "-8s"   },
+    { top: "25%",    right:"-10%",  w: "60vmax", anim: "orb5 42s ease-in-out infinite",      delay: "-30s"  },
+    { bottom:"-8%",  right:"18%",   w: "46vmax", anim: "orb6 36s ease-in-out infinite",      delay: "-18s"  },
   ];
   return (
     <>
