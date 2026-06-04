@@ -63,6 +63,9 @@ const ORB_STYLE = `
   }
   .orb-line { border: 1.5px solid hsl(var(--primary)/0.22); }
   .dark .orb-line { border-color: hsl(var(--primary)/0.17); }
+  /* Exclude orb container from view-transition so theme switch doesn't pause animations */
+  .orb-bg { view-transition-name: orb-bg; }
+  ::view-transition-old(orb-bg), ::view-transition-new(orb-bg) { animation: none; }
 `;
 
 function AnimatedOrbs() {
@@ -77,7 +80,7 @@ function AnimatedOrbs() {
   return (
     <>
       <style>{ORB_STYLE}</style>
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      <div className="orb-bg absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         {orbs.map((o, i) => (
           <div key={i} className="orb-line" style={{
             position: "absolute",
