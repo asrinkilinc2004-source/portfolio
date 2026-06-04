@@ -135,7 +135,7 @@ export default function HeroSection({ splashReady = true }) {
               </a>
             </MagneticButton>
             <MagneticButton>
-              <a href="/cv.pdf" download className="inline-flex items-center gap-2 bg-[hsl(var(--input))] text-foreground px-6 py-3 text-sm font-medium rounded-lg border border-border hover:border-primary/50 transition-colors">
+              <a href="/cv_def.pdf" download="CV_Asrin_Kilinc.pdf" className="inline-flex items-center gap-2 bg-[hsl(var(--input))] text-foreground px-6 py-3 text-sm font-medium rounded-lg border border-border hover:border-primary/50 transition-colors">
                 <Download className="w-4 h-4" />
                 {t.hero.cta_cv}
               </a>
