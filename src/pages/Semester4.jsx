@@ -35,7 +35,7 @@ const TEAM = [
   { name: "Chahid Aouriaghel",  role: "Digital Business Engineer" },
 ];
 
-const MILESTONE_DONE = [true, true, true, true, false, false];
+const MILESTONE_DONE = [true, true, true, true, true, true];
 
 // Tilt card wrapper — same as ProjectsSection
 function TiltCard({ children, className = "", onClick }) {
