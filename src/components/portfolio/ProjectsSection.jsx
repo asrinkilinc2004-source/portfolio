@@ -114,15 +114,6 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
               <span className="inline-block font-mono text-xs text-primary bg-primary/10 border border-primary/20 rounded-md px-2 py-1 w-fit">
                 {project.semester}
               </span>
-              {project.current && (
-                <span className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-400 bg-emerald-400/10 border border-emerald-400/25 rounded-md px-2 py-1 w-fit">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
-                  </span>
-                  {currentLabel}
-                </span>
-              )}
             </div>
             <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">{project.title}</h3>
             <p className="text-muted-foreground leading-relaxed mb-6">{project.description}</p>
