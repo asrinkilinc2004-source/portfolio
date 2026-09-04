@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeLeft, fadeUp } from "@/lib/motion";
@@ -36,29 +37,32 @@ export default function EducationSection() {
   return (
     <section id="education" className="py-32 px-6">
 
-      <AnimatePresence>
-        {flying && (
-          <motion.img
-            key={planeKey}
-            src="/plane.png"
-            alt=""
-            style={{
-              position: "fixed",
-              top: planeY,
-              left: 0,
-              zIndex: 9999,
-              pointerEvents: "none",
-              width: 120,
-              height: "auto",
-            }}
-            initial={{ x: -160 }}
-            animate={{ x: typeof window !== "undefined" ? window.innerWidth + 160 : 2000 }}
-            exit={{}}
-            transition={{ duration: 3.5, ease: "linear" }}
-            onAnimationComplete={() => setFlying(false)}
-          />
-        )}
-      </AnimatePresence>
+      {typeof document !== "undefined" && createPortal(
+        <AnimatePresence>
+          {flying && (
+            <motion.img
+              key={planeKey}
+              src="/plane.png"
+              alt=""
+              style={{
+                position: "fixed",
+                top: planeY,
+                left: 0,
+                zIndex: 9999,
+                pointerEvents: "none",
+                width: 120,
+                height: "auto",
+              }}
+              initial={{ x: -160 }}
+              animate={{ x: window.innerWidth + 160 }}
+              exit={{}}
+              transition={{ duration: 3.5, ease: "linear" }}
+              onAnimationComplete={() => setFlying(false)}
+            />
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
