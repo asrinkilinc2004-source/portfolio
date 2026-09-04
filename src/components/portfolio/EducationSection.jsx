@@ -33,7 +33,7 @@ export default function EducationSection() {
         <div ref={containerRef} className="relative">
           <motion.div
             className="absolute left-[22px] md:left-[34px] top-0 bottom-0 origin-top"
-            style={{ scaleY, width: "1.5px", background: "hsl(var(--foreground) / 0.25)" }}
+            style={{ scaleY, width: "2px", background: "hsl(var(--primary) / 0.7)" }}
           />
           <div className="space-y-12">
             {timeline.map((item, i) => (

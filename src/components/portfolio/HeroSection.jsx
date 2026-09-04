@@ -175,7 +175,7 @@ export default function HeroSection({ splashReady = true }) {
                 </span>
 
                 {/* Text */}
-                <span className="relative text-foreground" style={{ zIndex: 1 }}>Asrin Kilinc</span>
+                <span className="relative text-foreground" style={{ zIndex: 1 }}>Asrin <span className="text-primary">Kilinc</span></span>
               </motion.span>
               <br />
               <span className="text-primary text-3xl">
