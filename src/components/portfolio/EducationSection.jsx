@@ -53,7 +53,7 @@ export default function EducationSection() {
               transition={{ duration: 3, ease: "linear" }}
               onAnimationComplete={() => setFlying(false)}
             >
-              <img src="/plane.png" alt="" style={{ width: 120, height: "auto", transform: "rotate(-35deg)" }} />
+              <img src="/plane.png" alt="" style={{ width: 120, height: "auto", transform: "rotate(-20deg)" }} />
             </motion.div>
           )}
         </AnimatePresence>,
