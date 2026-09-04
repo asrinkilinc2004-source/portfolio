@@ -61,21 +61,13 @@ export default function EducationSection() {
             left: 0,
             zIndex: 9999,
             pointerEvents: "none",
-            color: "#00A1DE",
-            filter: "drop-shadow(0 2px 12px rgba(0,161,222,0.6))",
           }}
-          initial={{ x: -140 }}
-          animate={{ x: window.innerWidth + 140 }}
+          initial={{ x: -160 }}
+          animate={{ x: window.innerWidth + 160 }}
           transition={{ duration: 3.5, ease: "linear" }}
           onAnimationComplete={handleAnimationComplete}
         >
-          <svg width="120" height="48" viewBox="0 0 200 80" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10,40 Q16,34 185,34 Q197,40 185,46 Q16,46 10,40Z"/>
-            <path d="M92,36 L142,6 L147,11 L102,36 L102,44 L147,69 L142,74 L92,44Z"/>
-            <ellipse cx="118" cy="52" rx="21" ry="5.5"/>
-            <path d="M24,34 L24,16 L40,34Z"/>
-            <path d="M30,36 L12,21 L12,26 L24,36 L24,44 L12,54 L12,59 L30,44Z"/>
-          </svg>
+          <img src="/plane.png" alt="" width={120} height={60} style={{ display: "block" }} />
         </motion.div>
       )}
 
