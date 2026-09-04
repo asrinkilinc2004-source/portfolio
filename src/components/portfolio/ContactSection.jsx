@@ -48,7 +48,7 @@ export default function ContactSection() {
   };
 
   const inputCls =
-    "bg-card border-border hover:border-primary/40 focus:border-primary/70 focus:bg-primary/[0.025] h-12 transition-all duration-300 pl-4";
+    "bg-card border-border hover:bg-primary hover:border-primary hover:text-white hover:placeholder:text-white/60 focus:border-primary/70 focus:bg-primary/[0.025] h-12 transition-all duration-300 pl-4";
 
   return (
     <section id="contact" className="py-32 px-6">
@@ -138,7 +138,7 @@ export default function ContactSection() {
             <GlowField>
               <Textarea
                 placeholder={c.form.message}
-                className="bg-card border-border hover:border-primary/40 focus:border-primary/70 focus:bg-primary/[0.025] min-h-[140px] resize-none transition-all duration-300 pl-4"
+                className="bg-card border-border hover:bg-primary hover:border-primary hover:text-white hover:placeholder:text-white/60 focus:border-primary/70 focus:bg-primary/[0.025] min-h-[140px] resize-none transition-all duration-300 pl-4"
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 required
