@@ -40,13 +40,14 @@ export default function EducationSection() {
           style={{
             position: "fixed",
             top: planeY,
+            left: 0,
             zIndex: 9999,
             pointerEvents: "none",
             color: "hsl(var(--primary))",
-            filter: "drop-shadow(0 2px 6px hsl(197 100% 44% / 0.35))",
+            filter: "drop-shadow(0 2px 8px hsl(197 100% 44% / 0.5))",
           }}
           initial={{ x: -120 }}
-          animate={{ x: "calc(100vw + 120px)" }}
+          animate={{ x: window.innerWidth + 120 }}
           transition={{ duration: 3, ease: "linear" }}
           onAnimationComplete={() => setPlaneFly(false)}
         >
