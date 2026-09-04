@@ -40,25 +40,23 @@ export default function EducationSection() {
       {typeof document !== "undefined" && createPortal(
         <AnimatePresence>
           {flying && (
-            <motion.img
+            <motion.div
               key={planeKey}
-              src="/plane.png"
-              alt=""
               style={{
                 position: "fixed",
                 top: planeY,
                 left: 0,
                 zIndex: 9999,
                 pointerEvents: "none",
-                width: 120,
-                height: "auto",
               }}
               initial={{ x: -160 }}
               animate={{ x: window.innerWidth + 160 }}
               exit={{}}
               transition={{ duration: 3.5, ease: "linear" }}
               onAnimationComplete={() => setFlying(false)}
-            />
+            >
+              <img src="/plane.png" alt="" style={{ width: 120, height: "auto", transform: "rotate(15deg)" }} />
+            </motion.div>
           )}
         </AnimatePresence>,
         document.body
