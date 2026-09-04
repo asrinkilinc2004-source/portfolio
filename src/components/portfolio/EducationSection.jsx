@@ -51,17 +51,17 @@ export default function EducationSection() {
           transition={{ duration: 3, ease: "linear" }}
           onAnimationComplete={() => setPlaneFly(false)}
         >
-          <svg width="72" height="40" viewBox="0 0 120 60" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <svg width="110" height="44" viewBox="0 0 200 80" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             {/* Fuselage */}
-            <ellipse cx="62" cy="30" rx="52" ry="8" />
-            {/* Nose cone */}
-            <path d="M114 30 Q124 30 114 24 L114 36 Z" />
+            <path d="M10,40 Q16,34 185,34 Q197,40 185,46 Q16,46 10,40Z"/>
             {/* Main wings */}
-            <path d="M72 30 L100 8 L100 14 L76 30 L100 46 L100 52 L72 30Z" />
-            {/* Tail fin vertical */}
-            <path d="M12 30 L12 14 L24 30 Z" />
-            {/* Tail wings horizontal */}
-            <path d="M16 30 L34 22 L34 26 L20 30 L34 34 L34 38 L16 30Z" />
+            <path d="M92,36 L142,6 L147,11 L102,36 L102,44 L147,69 L142,74 L92,44Z"/>
+            {/* Engine pod */}
+            <ellipse cx="118" cy="52" rx="21" ry="5.5"/>
+            {/* Tail vertical fin */}
+            <path d="M24,34 L24,16 L40,34Z"/>
+            {/* Tail horizontal stabilizers */}
+            <path d="M30,36 L12,21 L12,26 L24,36 L24,44 L12,54 L12,59 L30,44Z"/>
           </svg>
         </motion.div>
       )}
