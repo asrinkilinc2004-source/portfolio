@@ -26,10 +26,8 @@ export default function EducationSection() {
 
   const scaleY = useTransform(smoothProgress, [0, 1], [0, 1]);
 
-  const handleWismonHover = (e) => {
+  const handleWismonHover = () => {
     if (flying) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    setPlaneY(Math.round(rect.top + rect.height / 2 - 24));
     setFlying(true);
     setPlaneKey((k) => k + 1);
   };
@@ -44,18 +42,18 @@ export default function EducationSection() {
               key={planeKey}
               style={{
                 position: "fixed",
-                top: planeY,
+                top: 0,
                 left: 0,
                 zIndex: 9999,
                 pointerEvents: "none",
               }}
-              initial={{ x: -160 }}
-              animate={{ x: window.innerWidth + 160 }}
+              initial={{ x: -180, y: window.innerHeight + 120 }}
+              animate={{ x: window.innerWidth + 180, y: -120 }}
               exit={{}}
-              transition={{ duration: 3.5, ease: "linear" }}
+              transition={{ duration: 3, ease: "linear" }}
               onAnimationComplete={() => setFlying(false)}
             >
-              <img src="/plane.png" alt="" style={{ width: 120, height: "auto", transform: "rotate(15deg)" }} />
+              <img src="/plane.png" alt="" style={{ width: 120, height: "auto", transform: "rotate(-35deg)" }} />
             </motion.div>
           )}
         </AnimatePresence>,
