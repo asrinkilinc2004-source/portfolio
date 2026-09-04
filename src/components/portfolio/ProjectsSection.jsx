@@ -125,7 +125,7 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
             {project.current && (
               <button
                 onClick={() => navigate("/semester4")}
-                className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:opacity-90 active:scale-95 transition-all duration-150 w-fit"
+                className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg bg-primary text-primary-foreground group-hover:bg-white group-hover:text-primary hover:opacity-90 active:scale-95 transition-all duration-300 w-fit"
               >
                 {viewCurrentLabel}
                 <ArrowRight className="w-4 h-4" />
