@@ -93,7 +93,7 @@ export default function AboutSection() {
             <p className="text-muted-foreground text-lg leading-relaxed mb-10">{p2}</p>
 
             {/* Stat counters */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8 border-t border-border">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8 border-t-2 border-primary/30">
               {stats.map(({ value, suffix, label: statLabel }, i) => (
                 <motion.div key={i} {...fadeUp(0.15 + i * 0.07)} className="text-center lg:text-left">
                   <p className="text-3xl font-bold text-primary font-mono">

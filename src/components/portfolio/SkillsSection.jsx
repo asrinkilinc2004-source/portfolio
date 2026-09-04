@@ -75,7 +75,7 @@ function StaggeredSkills({ skills }) {
       {skills.map((skill) => (
         <span
           key={skill}
-          className="skill-tag px-3 py-1.5 text-sm rounded-md bg-secondary text-secondary-foreground border border-border hover:border-primary/30 hover:bg-primary/5 transition-colors cursor-default"
+          className="skill-tag px-3 py-1.5 text-sm rounded-md bg-primary/5 text-foreground border border-primary/20 hover:border-primary/50 hover:bg-primary/10 transition-colors cursor-default"
         >
           {skill}
         </span>

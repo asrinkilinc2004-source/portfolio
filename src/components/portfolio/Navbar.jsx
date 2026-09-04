@@ -91,6 +91,11 @@ export default function Navbar() {
       }`}>
 
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <a href="/" className="font-mono font-bold text-lg tracking-tight select-none flex-shrink-0">
+          A<span className="text-primary">K</span>
+        </a>
+
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
           {links.map((link, i) => {
