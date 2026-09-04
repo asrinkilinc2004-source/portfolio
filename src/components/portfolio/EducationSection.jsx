@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import React, { useRef, useState } from "react";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeLeft, fadeUp } from "@/lib/motion";
 import SplitText from "./SplitText";
@@ -8,33 +8,9 @@ export default function EducationSection() {
   const { t } = useLanguage();
   const { label, title, timeline } = t.education;
   const containerRef = useRef(null);
-
-  const [planeActive, setPlaneActive] = useState(false);
-  const [planeY, setPlaneY] = useState(200);
-  const flyingRef = useRef(false);
-  const wismonRef = useRef(null);
-
-  // Imperative event listener — bypasses React synthetic events
-  useEffect(() => {
-    const el = wismonRef.current;
-    if (!el) return;
-
-    const handleEnter = () => {
-      if (flyingRef.current) return;
-      flyingRef.current = true;
-      const rect = el.getBoundingClientRect();
-      setPlaneY(rect.top + rect.height / 2 - 22);
-      setPlaneActive(true);
-    };
-
-    el.addEventListener("mouseenter", handleEnter);
-    return () => el.removeEventListener("mouseenter", handleEnter);
-  }, []);
-
-  const handleAnimationComplete = useCallback(() => {
-    setPlaneActive(false);
-    flyingRef.current = false;
-  }, []);
+  const [planeKey, setPlaneKey] = useState(0);
+  const [planeY, setPlaneY] = useState(300);
+  const [flying, setFlying] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -49,27 +25,40 @@ export default function EducationSection() {
 
   const scaleY = useTransform(smoothProgress, [0, 1], [0, 1]);
 
+  const handleWismonHover = (e) => {
+    if (flying) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    setPlaneY(Math.round(rect.top + rect.height / 2 - 24));
+    setFlying(true);
+    setPlaneKey((k) => k + 1);
+  };
+
   return (
     <section id="education" className="py-32 px-6">
 
-      {/* KLM plane flyover */}
-      {planeActive && (
-        <motion.div
-          style={{
-            position: "fixed",
-            top: planeY,
-            left: 0,
-            zIndex: 9999,
-            pointerEvents: "none",
-          }}
-          initial={{ x: -160 }}
-          animate={{ x: window.innerWidth + 160 }}
-          transition={{ duration: 3.5, ease: "linear" }}
-          onAnimationComplete={handleAnimationComplete}
-        >
-          <img src="/plane.png" alt="" width={120} height={60} style={{ display: "block" }} />
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {flying && (
+          <motion.img
+            key={planeKey}
+            src="/plane.png"
+            alt=""
+            style={{
+              position: "fixed",
+              top: planeY,
+              left: 0,
+              zIndex: 9999,
+              pointerEvents: "none",
+              width: 120,
+              height: "auto",
+            }}
+            initial={{ x: -160 }}
+            animate={{ x: typeof window !== "undefined" ? window.innerWidth + 160 : 2000 }}
+            exit={{}}
+            transition={{ duration: 3.5, ease: "linear" }}
+            onAnimationComplete={() => setFlying(false)}
+          />
+        )}
+      </AnimatePresence>
 
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
@@ -90,7 +79,7 @@ export default function EducationSection() {
                   key={i}
                   {...fadeLeft(i * 0.08)}
                   className="relative pl-16 md:pl-20 group"
-                  ref={isWismon ? wismonRef : undefined}
+                  onMouseEnter={isWismon ? handleWismonHover : undefined}
                 >
                   <div className="absolute left-3 md:left-6 top-1 w-5 h-5 rounded-full border-2 border-primary bg-background flex items-center justify-center">
                     <div className="w-2 h-2 rounded-full bg-primary" />
