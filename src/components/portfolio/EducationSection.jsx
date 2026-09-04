@@ -104,7 +104,18 @@ export default function EducationSection() {
                     <div className="w-2 h-2 rounded-full bg-primary" />
                   </div>
                   <span className="font-mono text-xs text-primary tracking-wider">{item.year}</span>
-                  <h3 className="text-xl font-bold mt-1 mb-1"><span className="marker-highlight-group">{item.title}</span></h3>
+                  <h3 className="text-xl font-bold mt-1 mb-1 flex items-center gap-2">
+                    <span className="marker-highlight-group">{item.title}</span>
+                    {isWismon && (
+                      <svg width="32" height="14" viewBox="0 0 200 80" fill="#00A1DE" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
+                        <path d="M10,40 Q16,34 185,34 Q197,40 185,46 Q16,46 10,40Z"/>
+                        <path d="M92,36 L142,6 L147,11 L102,36 L102,44 L147,69 L142,74 L92,44Z"/>
+                        <ellipse cx="118" cy="52" rx="21" ry="5.5"/>
+                        <path d="M24,34 L24,16 L40,34Z"/>
+                        <path d="M30,36 L12,21 L12,26 L24,36 L24,44 L12,54 L12,59 L30,44Z"/>
+                      </svg>
+                    )}
+                  </h3>
                   <p className="text-sm text-muted-foreground mb-2">{item.institution}</p>
                   <p className="text-muted-foreground leading-relaxed">{item.description}</p>
                 </motion.div>
