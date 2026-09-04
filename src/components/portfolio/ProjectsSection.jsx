@@ -47,9 +47,8 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
       <div ref={ref}
         onMouseMove={isMobile ? undefined : onMove}
         onMouseLeave={isMobile ? undefined : onLeave}
-        className="group relative rounded-xl overflow-hidden bg-card border border-border hover:border-primary/40 transition-colors duration-300"
-        style={{ boxShadow: "inset 0 3px 0 0 hsl(var(--primary) / 0.55)" }}
-        style={{ willChange: "transform" }}>
+        className="group relative rounded-xl overflow-hidden bg-card border border-border hover:border-primary transition-colors duration-300"
+        style={{ willChange: "transform", boxShadow: "inset 0 3px 0 0 hsl(var(--primary) / 0.55)" }}>
         <div className="flex flex-col lg:flex-row">
 
           {/* Image / placeholder */}
@@ -109,18 +108,18 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary/50 via-primary/20 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]" />
           </div>
 
-          <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col justify-center">
+          <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col justify-center group-hover:bg-primary transition-colors duration-300">
             {/* Semester tag row */}
             <div className="flex items-center gap-2 mb-3 flex-wrap">
-              <span className="inline-block font-mono text-xs text-primary bg-primary/10 border border-primary/20 rounded-md px-2 py-1 w-fit">
+              <span className="inline-block font-mono text-xs text-primary bg-primary/10 border border-primary/20 rounded-md px-2 py-1 w-fit group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 transition-colors duration-300">
                 {project.semester}
               </span>
             </div>
-            <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">{project.title}</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">{project.description}</p>
+            <h3 className="text-2xl font-bold mb-3 group-hover:text-white transition-colors duration-300">{project.title}</h3>
+            <p className="text-muted-foreground leading-relaxed mb-6 group-hover:text-white/80 transition-colors duration-300">{project.description}</p>
             <div className="flex flex-wrap gap-2">
               {project.tags.map((tag) => (
-                <span key={tag} className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20 group-hover:bg-primary/15 transition-colors">{tag}</span>
+                <span key={tag} className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20 group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 transition-colors duration-300">{tag}</span>
               ))}
             </div>
             {project.current && (
