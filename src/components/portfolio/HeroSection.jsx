@@ -223,7 +223,7 @@ export default function HeroSection({ splashReady = true }) {
                 <a href={href}
                   target={href.startsWith("http") ? "_blank" : undefined}
                   rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary/70 hover:text-primary hover:border-primary/70 hover:bg-primary/5 transition-colors duration-200">
+                  className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary/70 hover:bg-primary hover:text-white hover:border-primary transition-colors duration-200">
                   <Icon className="w-4 h-4" />
                 </a>
               </MagneticButton>

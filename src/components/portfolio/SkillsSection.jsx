@@ -75,7 +75,7 @@ function StaggeredSkills({ skills }) {
       {skills.map((skill) => (
         <span
           key={skill}
-          className="skill-tag px-3 py-1.5 text-sm rounded-md bg-primary/5 text-foreground border border-primary/20 hover:border-primary/50 hover:bg-primary/10 transition-colors cursor-default"
+          className="skill-tag px-3 py-1.5 text-sm rounded-md bg-primary/5 text-foreground border border-primary/20 hover:border-primary/50 hover:bg-primary/10 group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 transition-colors cursor-default"
         >
           {skill}
         </span>
@@ -106,8 +106,8 @@ export default function SkillsSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((cat, i) => (
             <motion.div key={cat.title} {...fadeUp(i * 0.08)}>
-              <TiltCard className="p-6 rounded-xl bg-card border border-border h-full">
-                <h3 className="font-mono text-sm text-primary mb-5 tracking-wider">{cat.title}</h3>
+              <TiltCard className="p-6 rounded-xl bg-card border border-border h-full group hover:bg-primary transition-colors duration-300">
+                <h3 className="font-mono text-sm text-primary mb-5 tracking-wider group-hover:text-white transition-colors duration-300">{cat.title}</h3>
                 <StaggeredSkills skills={cat.skills} />
               </TiltCard>
             </motion.div>

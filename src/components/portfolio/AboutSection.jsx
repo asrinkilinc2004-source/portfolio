@@ -110,12 +110,12 @@ export default function AboutSection() {
               const Icon = ICONS[i];
               return (
                 <motion.div key={hl} {...fadeUp(0.1 * i)}>
-                  <TiltCard className="p-5 rounded-xl bg-card border border-border border-l-2 border-l-primary/60 hover:border-primary/40 transition-colors group h-full">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
-                      <Icon className="w-5 h-5 text-primary" />
+                  <TiltCard className="p-5 rounded-xl bg-card border border-border border-l-2 border-l-primary/60 hover:border-primary hover:bg-primary transition-colors duration-300 group h-full">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-white/20 transition-colors duration-300">
+                      <Icon className="w-5 h-5 text-primary group-hover:text-white transition-colors duration-300" />
                     </div>
-                    <h3 className="font-semibold text-foreground mb-1">{hl}</h3>
-                    <p className="text-sm text-muted-foreground">{desc}</p>
+                    <h3 className="font-semibold text-foreground mb-1 group-hover:text-white transition-colors duration-300">{hl}</h3>
+                    <p className="text-sm text-muted-foreground group-hover:text-white/80 transition-colors duration-300">{desc}</p>
                   </TiltCard>
                 </motion.div>
               );

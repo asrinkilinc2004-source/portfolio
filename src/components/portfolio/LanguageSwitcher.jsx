@@ -20,7 +20,7 @@ export default function LanguageSwitcher() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1 h-9 px-3 rounded-full border border-border text-sm text-muted-foreground hover:text-primary hover:border-primary/50 transition-all duration-200">
+        className="flex items-center gap-1 h-9 px-3 rounded-full border border-border text-sm text-muted-foreground hover:bg-primary hover:text-white hover:border-primary transition-all duration-200">
         <span className="font-mono font-medium">{current?.label}</span>
         <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
