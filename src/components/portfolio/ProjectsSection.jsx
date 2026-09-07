@@ -54,7 +54,18 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
 
           {/* Image / placeholder */}
           <div className="lg:w-1/2 overflow-hidden relative">
-            {hasImage ? (
+            {hasImage && project.link === "/semester5" ? (
+              <div className="w-full h-56 lg:h-full min-h-[14rem] flex items-center justify-center bg-white p-8">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  loading="lazy"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="max-h-28 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+            ) : hasImage ? (
               <img
                 src={project.image}
                 alt={project.title}
