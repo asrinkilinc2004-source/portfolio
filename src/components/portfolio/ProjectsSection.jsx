@@ -12,8 +12,9 @@ const WebcamScene3D = React.lazy(() => import("./WebcamScene3D"));
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
 // Per-project image overrides (index-based, language-independent)
-// Order: AI Camera (0), Defensie (1), Rituals (2), SafeNotes (3), DOKKI€ (4)
+// Order: VistaTelecom (0), AI Camera (1), Defensie (2), Rituals (3), SafeNotes (4), DOKKI€ (5)
 const IMAGE_CLASS = [
+  "group-hover:scale-105",
   "group-hover:scale-105",
   "scale-[1.22] group-hover:scale-[1.28]", // Defensie — zoom to hide black borders
   "group-hover:scale-105",
@@ -43,7 +44,7 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
   const hasImage = !!project.image;
 
   return (
-    <motion.div {...fadeUp(index * 0.08)} id={project.current ? "ai-project" : undefined}>
+    <motion.div {...fadeUp(index * 0.08)} id={project.link === "/semester4" ? "ai-project" : undefined}>
       <div ref={ref}
         onMouseMove={isMobile ? undefined : onMove}
         onMouseLeave={isMobile ? undefined : onLeave}
@@ -62,7 +63,7 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
                 onContextMenu={(e) => e.preventDefault()}
                 className={`w-full h-56 lg:h-full object-cover transition-transform duration-500 ${IMAGE_CLASS[index] ?? "group-hover:scale-105"}`}
               />
-            ) : project.current ? (
+            ) : project.link === "/semester4" ? (
               /* Semester 4 — 3D eye thumbnail */
               <div className="w-full h-56 lg:h-full min-h-[14rem] relative overflow-hidden"
                 style={{ background: "#000" }}>
@@ -122,12 +123,12 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
                 <span key={tag} className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20 group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 transition-colors duration-300">{tag}</span>
               ))}
             </div>
-            {project.current && (
+            {project.link && (
               <button
-                onClick={() => navigate("/semester4")}
+                onClick={() => navigate(project.link)}
                 className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg bg-primary text-primary-foreground group-hover:bg-white group-hover:text-primary hover:opacity-90 active:scale-95 transition-all duration-300 w-fit"
               >
-                {viewCurrentLabel}
+                {project.viewBtn || viewCurrentLabel}
                 <ArrowRight className="w-4 h-4" />
               </button>
             )}

@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import Semester4Page from './pages/Semester4';
 import Semester4AIPage from './pages/Semester4AI';
 import Semester4UiuxPage from './pages/Semester4UIUX';
+import Semester5Page from './pages/Semester5';
 import { ThemeProvider } from 'next-themes';
 import PinGate from './components/PinGate';
 // Add page imports here
@@ -40,6 +41,7 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/semester5" element={<Semester5Page />} />
       <Route path="/semester4" element={<Semester4Page />} />
       <Route path="/semester4/ai" element={<Semester4AIPage />} />
       <Route path="/semester4/uiux" element={<Semester4UiuxPage />} />

@@ -43,15 +43,25 @@ export const translations = {
       ],
     },
     projects: {
-      label: "03 —", title: "Projecten", current_label: "Huidig project", view_current: "Bekijk semester 4",
+      label: "03 —", title: "Projecten", current_label: "Huidig project", view_current: "Bekijk",
       items: [
+        {
+          semester: "Semester 5",
+          title: "Stage — VistaTelecom",
+          description: "Fulltime IT consultant stage bij VistaTelecom, waarbij ik klanten ondersteun bij IT-vraagstukken en bijdraag aan consultancyprojecten.",
+          tags: ["IT Consulting", "Stage", "Consulting"],
+          image: "",
+          link: "/semester5",
+          viewBtn: "Bekijk stage",
+        },
         {
           semester: "Semester 4",
           title: "AI Face Tracking Camera",
           description: "Een AI-gestuurde gezichtsvolgende camera die het ongemakkelijke gevoel creëert altijd bekeken te worden. Gebouwd in een team van 5 onder het thema Dark Tech.",
           tags: ["AI", "Python", "HTML", "CSS", "OpenCV", "DeepFace", "Figma", "UI-design"],
           image: "",
-          current: true,
+          link: "/semester4",
+          viewBtn: "Bekijk semester 4",
         },
         {
           semester: "Semester 3",
@@ -86,6 +96,7 @@ export const translations = {
     education: {
       label: "04 —", title: "Opleiding",
       timeline: [
+        { year: "Semester 5 · 2026/2027", title: "Stage — VistaTelecom", institution: "VistaTelecom", description: "Ik werk als fulltime IT consultant bij VistaTelecom voor mijn stage." },
         { year: "Semester 4 · 2026", title: "Studio Semester — AI Face Tracking Camera", institution: "HvA — Dark Tech · Profiel: AI-Engineer", description: "Momenteel werkend in een team van 5 aan een studiosemesterproject onder het thema Dark Tech. We bouwen een AI-gestuurde gezichtsvolgende camera die het ongemakkelijke gevoel creëert altijd bekeken te worden." },
         { year: "Semester 3 · 2025/2026", title: "Ministerie van Defensie — Epicflow", institution: "HvA — Klant: Ministerie van Defensie", description: "Een inkoopbeheerdashboard gebouwd voor het Ministerie van Defensie, met visualisaties van contractrisico's, leveranciersprestaties en budgetbewaking onder het Epicflow-merk." },
         { year: "Semester 2 · 2025", title: "Rituals — CO₂ Emissions Dashboard", institution: "HvA — Klant: Rituals Cosmetics", description: "Een duurzaamheidsdashboard ontwikkeld voor Rituals, waarmee CO₂-uitstoot per regio en maand wordt bijgehouden, inclusief rapportage en analysetools ter ondersteuning van ESG-doelstellingen." },
@@ -258,15 +269,25 @@ export const translations = {
       ],
     },
     projects: {
-      label: "03 —", title: "Projects", current_label: "Current project", view_current: "View semester 4",
+      label: "03 —", title: "Projects", current_label: "Current project", view_current: "View",
       items: [
+        {
+          semester: "Semester 5",
+          title: "Internship — VistaTelecom",
+          description: "Full-time IT consultant internship at VistaTelecom, supporting clients with IT challenges and contributing to consultancy projects.",
+          tags: ["IT Consulting", "Internship", "Consulting"],
+          image: "",
+          link: "/semester5",
+          viewBtn: "View internship",
+        },
         {
           semester: "Semester 4",
           title: "AI Face Tracking Camera",
           description: "An AI-driven face-tracking camera that creates the unsettling feeling of always being watched. Built in a team of 5 under the Dark Tech theme.",
           tags: ["AI", "Python", "HTML", "CSS", "OpenCV", "DeepFace", "Figma", "UI-design"],
           image: "",
-          current: true,
+          link: "/semester4",
+          viewBtn: "View semester 4",
         },
         {
           semester: "Semester 3",
@@ -301,6 +322,7 @@ export const translations = {
     education: {
       label: "04 —", title: "Education",
       timeline: [
+        { year: "Semester 5 · 2026/2027", title: "Internship — VistaTelecom", institution: "VistaTelecom", description: "Working as a full-time IT consultant at VistaTelecom for my internship." },
         { year: "Semester 4 · 2026", title: "Studio Semester — AI Face Tracking Camera", institution: "HvA — Dark Tech · Profile: AI-Engineer", description: "Currently working in a team of 5 on a studio semester project under the Dark Tech theme. We're building an AI-driven face-tracking camera that creates the unsettling feeling of always being watched." },
         { year: "Semester 3 · 2025/2026", title: "Ministry of Defence — Epicflow", institution: "HvA — Client: Ministry of Defence", description: "A procurement management dashboard built for the Ministry of Defence, with visualisations of contract risks, supplier performance and budget monitoring under the Epicflow brand." },
         { year: "Semester 2 · 2025", title: "Rituals — CO₂ Emissions Dashboard", institution: "HvA — Client: Rituals Cosmetics", description: "A sustainability dashboard developed for Rituals, tracking CO₂ emissions by region and month, including reporting and analysis tools to support ESG objectives." },
@@ -473,15 +495,25 @@ export const translations = {
       ],
     },
     projects: {
-      label: "03 —", title: "المشاريع", current_label: "المشروع الحالي", view_current: "عرض الفصل الرابع",
+      label: "03 —", title: "المشاريع", current_label: "المشروع الحالي", view_current: "عرض",
       items: [
+        {
+          semester: "الفصل 5",
+          title: "تدريب — VistaTelecom",
+          description: "تدريب بدوام كامل كمستشار تكنولوجيا معلومات في VistaTelecom، أدعم العملاء في تحديات تكنولوجيا المعلومات وأساهم في مشاريع الاستشارات.",
+          tags: ["IT Consulting", "Stage", "Consulting"],
+          image: "",
+          link: "/semester5",
+          viewBtn: "عرض التدريب",
+        },
         {
           semester: "الفصل 4",
           title: "كاميرا تتبع الوجه بالذكاء الاصطناعي",
           description: "كاميرا تتبع وجه مدعومة بالذكاء الاصطناعي تخلق شعورًا غير مريح بالمراقبة الدائمة. مبنية في فريق من 5 أفراد تحت موضوع Dark Tech.",
           tags: ["AI", "Python", "HTML", "CSS", "OpenCV", "DeepFace", "Figma", "UI-design"],
           image: "",
-          current: true,
+          link: "/semester4",
+          viewBtn: "عرض الفصل الرابع",
         },
         {
           semester: "الفصل 3",
@@ -516,6 +548,7 @@ export const translations = {
     education: {
       label: "04 —", title: "التعليم",
       timeline: [
+        { year: "الفصل 5 · 2026/2027", title: "تدريب — VistaTelecom", institution: "VistaTelecom", description: "أعمل كمستشار تكنولوجيا معلومات بدوام كامل في VistaTelecom لفترة التدريب." },
         { year: "الفصل 4 · 2026", title: "فصل الاستوديو — كاميرا تتبع الوجه بالذكاء الاصطناعي", institution: "HvA — Dark Tech · تخصص: مهندس ذكاء اصطناعي", description: "أعمل حاليًا في فريق من 5 أفراد على مشروع فصل الاستوديو تحت موضوع Dark Tech. نبني كاميرا تتبع وجه مدعومة بالذكاء الاصطناعي تخلق شعورًا غير مريح بالمراقبة الدائمة." },
         { year: "الفصل 3 · 2025/2026", title: "وزارة الدفاع — Epicflow", institution: "HvA — العميل: وزارة الدفاع", description: "لوحة تحكم لإدارة المشتريات بُنيَت لوزارة الدفاع مع تصورات لمخاطر العقود وأداء الموردين ومراقبة الميزانية تحت علامة Epicflow." },
         { year: "الفصل 2 · 2025", title: "Rituals — لوحة انبعاثات CO₂", institution: "HvA — العميل: Rituals Cosmetics", description: "لوحة تحكم للاستدامة طُوِّرت لصالح Rituals لتتبع انبعاثات CO₂ حسب المنطقة والشهر، تشمل أدوات إبلاغ وتحليل لدعم أهداف ESG." },
@@ -688,15 +721,25 @@ export const translations = {
       ],
     },
     projects: {
-      label: "03 —", title: "Proyectos", current_label: "Proyecto actual", view_current: "Ver semestre 4",
+      label: "03 —", title: "Proyectos", current_label: "Proyecto actual", view_current: "Ver",
       items: [
+        {
+          semester: "Semestre 5",
+          title: "Prácticas — VistaTelecom",
+          description: "Prácticas a tiempo completo como consultor TI en VistaTelecom, apoyando a clientes con retos tecnológicos y contribuyendo a proyectos de consultoría.",
+          tags: ["IT Consulting", "Prácticas", "Consulting"],
+          image: "",
+          link: "/semester5",
+          viewBtn: "Ver prácticas",
+        },
         {
           semester: "Semestre 4",
           title: "Cámara de Seguimiento Facial con IA",
           description: "Una cámara de seguimiento facial impulsada por IA que crea la incómoda sensación de ser siempre observado. Construida en un equipo de 5 bajo el tema Dark Tech.",
           tags: ["AI", "Python", "HTML", "CSS", "OpenCV", "DeepFace", "Figma", "UI-design"],
           image: "",
-          current: true,
+          link: "/semester4",
+          viewBtn: "Ver semestre 4",
         },
         {
           semester: "Semestre 3",
@@ -731,6 +774,7 @@ export const translations = {
     education: {
       label: "04 —", title: "Educación",
       timeline: [
+        { year: "Semestre 5 · 2026/2027", title: "Prácticas — VistaTelecom", institution: "VistaTelecom", description: "Trabajo como consultor TI a tiempo completo en VistaTelecom durante mis prácticas." },
         { year: "Semestre 4 · 2026", title: "Semestre Studio — Cámara de Seguimiento Facial con IA", institution: "HvA — Dark Tech · Perfil: AI-Engineer", description: "Actualmente trabajando en un equipo de 5 en un proyecto de semestre studio bajo el tema Dark Tech. Estamos construyendo una cámara de seguimiento facial impulsada por IA que crea la incómoda sensación de ser siempre observado." },
         { year: "Semestre 3 · 2025/2026", title: "Ministerio de Defensa — Epicflow", institution: "HvA — Cliente: Ministerio de Defensa", description: "Un dashboard de gestión de compras construido para el Ministerio de Defensa, con visualizaciones de riesgos contractuales, rendimiento de proveedores y monitoreo presupuestario bajo la marca Epicflow." },
         { year: "Semestre 2 · 2025", title: "Rituals — Dashboard de CO₂", institution: "HvA — Cliente: Rituals Cosmetics", description: "Un dashboard de sostenibilidad desarrollado para Rituals, rastreando emisiones de CO₂ por región y mes, incluyendo herramientas de análisis e informes para apoyar los objetivos ESG." },
@@ -903,15 +947,25 @@ export const translations = {
       ],
     },
     projects: {
-      label: "03 —", title: "项目", current_label: "当前项目", view_current: "查看第4学期",
+      label: "03 —", title: "项目", current_label: "当前项目", view_current: "查看",
       items: [
+        {
+          semester: "第5学期",
+          title: "实习 — VistaTelecom",
+          description: "在VistaTelecom担任全职IT顾问实习，为客户解决IT问题并参与咨询项目。",
+          tags: ["IT Consulting", "实习", "Consulting"],
+          image: "",
+          link: "/semester5",
+          viewBtn: "查看实习",
+        },
         {
           semester: "第4学期",
           title: "AI人脸追踪摄像头",
           description: "一款AI驱动的人脸追踪摄像头，营造出一种始终被注视的不安感。由5人团队在暗黑科技主题下构建。",
           tags: ["AI", "Python", "HTML", "CSS", "OpenCV", "DeepFace", "Figma", "UI-design"],
           image: "",
-          current: true,
+          link: "/semester4",
+          viewBtn: "查看第4学期",
         },
         {
           semester: "第3学期",
@@ -946,6 +1000,7 @@ export const translations = {
     education: {
       label: "04 —", title: "教育",
       timeline: [
+        { year: "第5学期 · 2026/2027", title: "实习 — VistaTelecom", institution: "VistaTelecom", description: "在VistaTelecom担任全职IT顾问实习。" },
         { year: "第4学期 · 2026", title: "工作室学期 — AI人脸追踪摄像头", institution: "HvA — 暗黑科技 · 方向：AI工程师", description: "目前与5人团队共同参与暗黑科技主题的工作室学期项目。我们正在构建一款AI驱动的人脸追踪摄像头，营造出一种始终被注视的不安感，探索监控技术与人类感知的边界。" },
         { year: "第3学期 · 2025/2026", title: "国防部 — Epicflow", institution: "HvA — 客户：国防部", description: "为国防部构建的采购管理仪表板，在Epicflow品牌下可视化合同风险、供应商绩效和预算监控。" },
         { year: "第2学期 · 2025", title: "Rituals — CO₂排放仪表板", institution: "HvA — 客户：Rituals Cosmetics", description: "为Rituals开发的可持续发展仪表板，按地区和月份追踪CO₂排放，包含报告和分析工具以支持ESG目标。" },
