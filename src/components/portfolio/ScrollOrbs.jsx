@@ -1,14 +1,14 @@
 import { useEffect, useRef } from "react";
 
-// Large blurred KLM-blue orbs that drift at different parallax speeds on scroll.
-// Positioned outside the hero (which has its own orbs) so they appear mid-page.
+// Each orb has a page-position (multiple of viewport height) and a parallax speed.
+// position: fixed per orb, top recalculated every scroll frame.
 const ORBS = [
-  { top: 110,  left: -12, size: 480, speed: 0.22, opacity: 0.13 },
-  { top: 200,  left:  72, size: 380, speed: 0.36, opacity: 0.10 },
-  { top: 320,  left: -8,  size: 520, speed: 0.18, opacity: 0.12 },
-  { top: 450,  left:  68, size: 420, speed: 0.30, opacity: 0.11 },
-  { top: 580,  left: -15, size: 460, speed: 0.24, opacity: 0.13 },
-  { top: 720,  left:  75, size: 340, speed: 0.40, opacity: 0.10 },
+  { pageFactor: 1.4, left: "-10%", size: 500, speed: 0.25, opacity: 0.18 },
+  { pageFactor: 2.2, left:  "65%", size: 420, speed: 0.38, opacity: 0.15 },
+  { pageFactor: 3.2, left: "-8%",  size: 540, speed: 0.20, opacity: 0.16 },
+  { pageFactor: 4.4, left:  "68%", size: 460, speed: 0.32, opacity: 0.14 },
+  { pageFactor: 5.5, left: "-12%", size: 480, speed: 0.22, opacity: 0.17 },
+  { pageFactor: 6.6, left:  "70%", size: 380, speed: 0.42, opacity: 0.14 },
 ];
 
 export default function ScrollOrbs() {
@@ -21,37 +21,46 @@ export default function ScrollOrbs() {
       ticking = true;
       requestAnimationFrame(() => {
         const sy = window.scrollY;
+        const vh = window.innerHeight;
         refs.current.forEach((el, i) => {
           if (!el) return;
-          el.style.transform = `translateY(${sy * ORBS[i].speed}px)`;
+          const pageTop = ORBS[i].pageFactor * vh;
+          // Parallax: orb moves slower than the page so it drifts
+          const top = pageTop - sy * (1 - ORBS[i].speed);
+          el.style.top = `${top}px`;
         });
         ticking = false;
       });
     };
+    // Set initial positions
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <div aria-hidden="true" className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+    <>
       {ORBS.map((o, i) => (
         <div
           key={i}
           ref={el => refs.current[i] = el}
+          aria-hidden="true"
           style={{
-            position: "absolute",
-            top: `${o.top}vh`,
-            left: `${o.left}%`,
+            position: "fixed",
+            left: o.left,
+            top: 0,
             width: o.size,
             height: o.size,
             borderRadius: "50%",
             background: "#00A1DE",
             opacity: o.opacity,
-            filter: "blur(90px)",
-            willChange: "transform",
+            filter: "blur(100px)",
+            pointerEvents: "none",
+            willChange: "top",
+            zIndex: 0,
           }}
         />
       ))}
-    </div>
+    </>
   );
 }
