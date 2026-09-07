@@ -106,7 +106,7 @@ export default function SkillsSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((cat, i) => (
             <motion.div key={cat.title} {...fadeUp(i * 0.08)}>
-              <TiltCard className="p-6 rounded-xl bg-card border border-primary/35 h-full group hover:bg-primary transition-colors duration-300">
+              <TiltCard className="p-6 rounded-xl bg-card border-2 border-primary/50 h-full group hover:bg-primary transition-colors duration-300">
                 <h3 className="font-mono text-sm text-primary mb-5 tracking-wider group-hover:text-white transition-colors duration-300">{cat.title}</h3>
                 <StaggeredSkills skills={cat.skills} />
               </TiltCard>
