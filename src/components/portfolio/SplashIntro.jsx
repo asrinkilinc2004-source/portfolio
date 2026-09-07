@@ -6,8 +6,8 @@ export default function SplashIntro({ onDone }) {
   const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
-    const leaveTimer = setTimeout(() => setLeaving(true), 520);
-    const doneTimer = setTimeout(() => onDone?.(), 760);
+    const leaveTimer = setTimeout(() => setLeaving(true), 750);
+    const doneTimer = setTimeout(() => onDone?.(), 1000);
 
     return () => {
       clearTimeout(leaveTimer);
