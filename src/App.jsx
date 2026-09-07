@@ -11,7 +11,6 @@ import Semester4AIPage from './pages/Semester4AI';
 import Semester4UiuxPage from './pages/Semester4UIUX';
 import Semester5Page from './pages/Semester5';
 import { ThemeProvider } from 'next-themes';
-import PinGate from './components/PinGate';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -55,16 +54,14 @@ function App() {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <PinGate>
-        <AuthProvider>
-          <QueryClientProvider client={queryClientInstance}>
-            <Router>
-              <AuthenticatedApp />
-            </Router>
-            <Toaster />
-          </QueryClientProvider>
-        </AuthProvider>
-      </PinGate>
+      <AuthProvider>
+        <QueryClientProvider client={queryClientInstance}>
+          <Router>
+            <AuthenticatedApp />
+          </Router>
+          <Toaster />
+        </QueryClientProvider>
+      </AuthProvider>
     </ThemeProvider>
   )
 }
