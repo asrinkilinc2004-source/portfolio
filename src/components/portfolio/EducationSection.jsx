@@ -69,7 +69,7 @@ export default function EducationSection() {
         <div ref={containerRef} className="relative">
           <motion.div
             className="absolute left-[22px] md:left-[34px] top-0 bottom-0 origin-top"
-            style={{ scaleY, width: "2px", background: "hsl(var(--primary) / 0.7)" }}
+            style={{ scaleY, width: "3px", background: "hsl(var(--primary) / 0.8)" }}
           />
           <div className="space-y-12">
             {timeline.map((item, i) => {
@@ -81,8 +81,8 @@ export default function EducationSection() {
                   className="relative pl-16 md:pl-20 group"
                   onMouseEnter={isWismon ? handleWismonHover : undefined}
                 >
-                  <div className="absolute left-3 md:left-6 top-1 w-5 h-5 rounded-full border-2 border-primary bg-background flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-primary" />
+                  <div className="absolute left-3 md:left-6 top-1 w-6 h-6 rounded-full border-[3px] border-primary bg-background flex items-center justify-center">
+                    <div className="w-2.5 h-2.5 rounded-full bg-primary" />
                   </div>
                   <span className="font-mono text-xs text-primary tracking-wider">{item.year}</span>
                   <h3 className="text-xl font-bold mt-1 mb-1"><span className="marker-highlight-group">{item.title}</span></h3>

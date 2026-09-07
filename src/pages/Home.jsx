@@ -14,7 +14,6 @@ import CustomCursor from "../components/portfolio/CustomCursor";
 import BackToTop from "../components/portfolio/BackToTop";
 import ScrollProgressBar from "../components/portfolio/ScrollProgressBar";
 import SplashIntro from "../components/portfolio/SplashIntro";
-import ScrollOrbs from "../components/portfolio/ScrollOrbs";
 import { LanguageProvider } from "../lib/LanguageContext";
 
 export default function Home() {
@@ -97,8 +96,7 @@ export default function Home() {
         }}
       />
 
-      <ScrollOrbs />
-      {!skipSplash && <SplashIntro onDone={() => setSplashDone(true)} />}
+{!skipSplash && <SplashIntro onDone={() => setSplashDone(true)} />}
       {/* These stay visible at all times — outside the fading div */}
       <CustomCursor />
       <Navbar />

@@ -49,7 +49,7 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
         onMouseMove={isMobile ? undefined : onMove}
         onMouseLeave={isMobile ? undefined : onLeave}
         className="group relative rounded-xl overflow-hidden bg-card border border-border hover:border-primary transition-colors duration-300"
-        style={{ willChange: "transform", boxShadow: "inset 0 3px 0 0 hsl(var(--primary) / 0.55)" }}>
+        style={{ willChange: "transform", boxShadow: "inset 0 4px 0 0 hsl(var(--primary) / 0.7)" }}>
         <div className="flex flex-col lg:flex-row">
 
           {/* Image / placeholder */}

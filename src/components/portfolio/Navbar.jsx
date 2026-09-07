@@ -141,7 +141,7 @@ export default function Navbar() {
                   <svg height="6" width="100%" preserveAspectRatio="none" viewBox="0 0 100 6">
                     <motion.path
                       d={UNDERLINES[i]}
-                      stroke="currentColor" strokeWidth="2.2" fill="none"
+                      stroke="currentColor" strokeWidth="2.8" fill="none"
                       strokeLinecap="round" strokeLinejoin="round"
                       initial={{ pathLength: 0, opacity: 0 }}
                       animate={{ pathLength: drawn ? 1 : 0, opacity: drawn ? 1 : 0 }}
