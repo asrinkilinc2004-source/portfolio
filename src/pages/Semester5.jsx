@@ -50,11 +50,11 @@ function Semester5Content() {
           </p>
         </motion.div>
 
-        <motion.div {...fadeUp(0.14)} className="mt-8 rounded-xl overflow-hidden border border-border">
+        <motion.div {...fadeUp(0.14)} className="mt-8 rounded-xl overflow-hidden border border-border flex items-center justify-center p-10" style={{ background: "#fff" }}>
           <img
             src="/vista.png"
             alt="VistaTelecom"
-            className="w-full object-cover max-h-64"
+            className="max-h-28 w-auto object-contain"
             draggable={false}
             onContextMenu={(e) => e.preventDefault()}
           />
