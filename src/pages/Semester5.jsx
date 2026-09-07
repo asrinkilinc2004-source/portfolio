@@ -45,9 +45,7 @@ function Semester5Content() {
           <h1 className="text-4xl md:text-5xl font-bold mt-4 mb-4 tracking-tight">
             Stage — VistaTelecom
           </h1>
-          <p className="text-muted-foreground text-lg leading-relaxed">
-            Ik werk als fulltime IT consultant bij VistaTelecom voor mijn stage.
-          </p>
+          <p className="text-muted-foreground text-sm font-mono">Wordt binnenkort aangevuld.</p>
         </motion.div>
 
         <motion.div {...fadeUp(0.14)} className="mt-8 rounded-xl overflow-hidden border border-border flex items-center justify-center p-10" style={{ background: "#fff" }}>
