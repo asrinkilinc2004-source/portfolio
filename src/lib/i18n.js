@@ -51,6 +51,7 @@ export const translations = {
           description: "Fulltime IT consultant stage bij VistaTelecom, waarbij ik klanten ondersteun bij IT-vraagstukken en bijdraag aan consultancyprojecten.",
           tags: ["IT Consulting", "Stage", "Consulting"],
           image: "",
+          image: "/vista.png",
           link: "/semester5",
           viewBtn: "Bekijk stage",
         },

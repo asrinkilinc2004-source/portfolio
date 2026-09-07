@@ -50,6 +50,16 @@ function Semester5Content() {
           </p>
         </motion.div>
 
+        <motion.div {...fadeUp(0.14)} className="mt-8 rounded-xl overflow-hidden border border-border">
+          <img
+            src="/vista.png"
+            alt="VistaTelecom"
+            className="w-full object-cover max-h-64"
+            draggable={false}
+            onContextMenu={(e) => e.preventDefault()}
+          />
+        </motion.div>
+
         <motion.div
           {...fadeUp(0.18)}
           className="mt-16 rounded-xl border border-border bg-card p-10 flex flex-col items-center justify-center gap-4 text-center min-h-[260px]"
