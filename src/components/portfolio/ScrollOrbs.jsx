@@ -3,12 +3,12 @@ import { useEffect, useRef } from "react";
 // Each orb has a page-position (multiple of viewport height) and a parallax speed.
 // position: fixed per orb, top recalculated every scroll frame.
 const ORBS = [
-  { pageFactor: 1.4, left: "-10%", size: 500, speed: 0.25, opacity: 0.18 },
-  { pageFactor: 2.2, left:  "65%", size: 420, speed: 0.38, opacity: 0.15 },
-  { pageFactor: 3.2, left: "-8%",  size: 540, speed: 0.20, opacity: 0.16 },
-  { pageFactor: 4.4, left:  "68%", size: 460, speed: 0.32, opacity: 0.14 },
-  { pageFactor: 5.5, left: "-12%", size: 480, speed: 0.22, opacity: 0.17 },
-  { pageFactor: 6.6, left:  "70%", size: 380, speed: 0.42, opacity: 0.14 },
+  { pageFactor: 1.4, left: "-10%", size: 500, speed: 0.25, opacity: 0.30 },
+  { pageFactor: 2.2, left:  "65%", size: 420, speed: 0.38, opacity: 0.26 },
+  { pageFactor: 3.2, left: "-8%",  size: 540, speed: 0.20, opacity: 0.28 },
+  { pageFactor: 4.4, left:  "68%", size: 460, speed: 0.32, opacity: 0.24 },
+  { pageFactor: 5.5, left: "-12%", size: 480, speed: 0.22, opacity: 0.28 },
+  { pageFactor: 6.6, left:  "70%", size: 380, speed: 0.42, opacity: 0.25 },
 ];
 
 export default function ScrollOrbs() {
@@ -54,10 +54,10 @@ export default function ScrollOrbs() {
             borderRadius: "50%",
             background: "#00A1DE",
             opacity: o.opacity,
-            filter: "blur(100px)",
+            filter: "blur(72px)",
             pointerEvents: "none",
             willChange: "top",
-            zIndex: 0,
+            zIndex: 12,
           }}
         />
       ))}
