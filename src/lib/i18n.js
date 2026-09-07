@@ -48,7 +48,7 @@ export const translations = {
         {
           semester: "Semester 5",
           title: "Stage — VistaTelecom",
-          description: "Fulltime IT consultant stage bij VistaTelecom, waarbij ik klanten ondersteun bij IT-vraagstukken en bijdraag aan consultancyprojecten.",
+          description: "Ik ontwikkel een Excel-rekenmodel en rapportagesjabloon waarmee VistaTelecom zijn duurzaamheidsimpact kan meten en presenteren — inclusief CO₂-besparingen, hergebruikte apparatuur en voorkomen e-waste.",
           tags: ["IT Consulting", "Stage", "Consulting"],
           image: "",
           image: "/vista.png",
@@ -275,7 +275,7 @@ export const translations = {
         {
           semester: "Semester 5",
           title: "Internship — VistaTelecom",
-          description: "Full-time IT consultant internship at VistaTelecom, supporting clients with IT challenges and contributing to consultancy projects.",
+          description: "Developing an Excel calculation model and reporting template that allows VistaTelecom to measure and present its sustainability impact — including CO₂ savings, reused equipment, and prevented e-waste.",
           tags: ["IT Consulting", "Internship", "Consulting"],
           image: "",
           link: "/semester5",
@@ -501,7 +501,7 @@ export const translations = {
         {
           semester: "الفصل 5",
           title: "تدريب — VistaTelecom",
-          description: "تدريب بدوام كامل كمستشار تكنولوجيا معلومات في VistaTelecom، أدعم العملاء في تحديات تكنولوجيا المعلومات وأساهم في مشاريع الاستشارات.",
+          description: "أطوّر نموذج حساب في Excel وقالب تقرير يُمكّن VistaTelecom من قياس وعرض أثره البيئي — بما في ذلك توفير CO₂ والأجهزة المُعاد استخدامها والنفايات الإلكترونية التي تم تجنبها.",
           tags: ["IT Consulting", "Stage", "Consulting"],
           image: "",
           link: "/semester5",
@@ -727,7 +727,7 @@ export const translations = {
         {
           semester: "Semestre 5",
           title: "Prácticas — VistaTelecom",
-          description: "Prácticas a tiempo completo como consultor TI en VistaTelecom, apoyando a clientes con retos tecnológicos y contribuyendo a proyectos de consultoría.",
+          description: "Desarrollo un modelo de cálculo en Excel y una plantilla de informes que permite a VistaTelecom medir y presentar su impacto de sostenibilidad — incluyendo ahorros de CO₂, equipos reutilizados y residuos electrónicos evitados.",
           tags: ["IT Consulting", "Prácticas", "Consulting"],
           image: "",
           link: "/semester5",
@@ -953,7 +953,7 @@ export const translations = {
         {
           semester: "第5学期",
           title: "实习 — VistaTelecom",
-          description: "在VistaTelecom担任全职IT顾问实习，为客户解决IT问题并参与咨询项目。",
+          description: "开发Excel计算模型和报告模板，帮助VistaTelecom衡量和展示其可持续发展影响——包括CO₂减排、设备再利用和避免的电子废物。",
           tags: ["IT Consulting", "实习", "Consulting"],
           image: "",
           link: "/semester5",
