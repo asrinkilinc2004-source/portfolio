@@ -7,9 +7,11 @@ export function useLenis() {
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
     const lenis = new Lenis({
-      lerp: 0.07,        // physics-based: 7% closer to target each frame → buttery deceleration
-      smoothWheel: true, // intercept wheel events
+      lerp: 0.07,
+      smoothWheel: true,
     });
+
+    window.__lenis = lenis;
 
     let raf;
     const loop = (time) => {
@@ -21,6 +23,7 @@ export function useLenis() {
     return () => {
       cancelAnimationFrame(raf);
       lenis.destroy();
+      window.__lenis = null;
     };
   }, []);
 }

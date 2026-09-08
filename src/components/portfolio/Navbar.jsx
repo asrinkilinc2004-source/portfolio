@@ -40,10 +40,22 @@ export default function Navbar() {
     { label: t.nav.contact,   href: "#contact",   id: "contact"   },
   ];
 
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (window.__lenis) {
+      window.__lenis.scrollTo(el, { duration: 0.9, easing: (t) => 1 - Math.pow(1 - t, 3) });
+    } else {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const handleNavClick = (e, link) => {
+    e.preventDefault();
     if (!isHome) {
-      e.preventDefault();
       navigate("/", { state: { scrollTo: link.id } });
+    } else {
+      scrollTo(link.id);
     }
   };
 
