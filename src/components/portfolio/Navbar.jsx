@@ -102,13 +102,8 @@ export default function Navbar() {
     return () => observers.forEach((o) => o?.disconnect());
   }, []);
 
-  const toggleTheme = (e) => {
-    const next = theme === "dark" ? "light" : "dark";
-    const isMobile = window.matchMedia("(pointer: coarse)").matches;
-    if (!document.startViewTransition || isMobile) { setTheme(next); return; }
-    document.documentElement.style.setProperty("--theme-toggle-x", `${e.clientX}px`);
-    document.documentElement.style.setProperty("--theme-toggle-y", `${e.clientY}px`);
-    document.startViewTransition(() => setTheme(next));
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   return (
