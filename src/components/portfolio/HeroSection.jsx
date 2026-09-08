@@ -61,8 +61,7 @@ const ORB_STYLE = `
     80%  { transform: translate(55px,-75px)   scale(1.4);  }
     100% { transform: translate(0px,0px)      scale(1.2);  }
   }
-  .orb-line { border: 1.5px solid hsl(var(--primary)/0.22); }
-  .dark .orb-line { border-color: hsl(var(--primary)/0.17); }
+  .orb-line { border: 1.5px solid rgba(255,255,255,0.18); }
   /* Exclude orb container from view-transition so theme switch doesn't pause animations */
   .orb-bg { view-transition-name: orb-bg; }
   ::view-transition-old(orb-bg), ::view-transition-new(orb-bg) { animation: none; }
@@ -136,9 +135,29 @@ export default function HeroSection({ splashReady = true }) {
   const { displayed, showCursor } = useTypingLoop(t.hero.subtitle, splashReady);
   const [photoHovered,  setPhotoHovered]  = useState(false);
   const [titleHovered,  setTitleHovered]  = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const sy = window.scrollY;
+        const vh = window.innerHeight;
+        if (sectionRef.current) {
+          sectionRef.current.style.transform = `translateY(${-sy * 0.35}px)`;
+          sectionRef.current.style.opacity = Math.max(0, 1 - sy / (vh * 0.8)).toString();
+        }
+        ticking = false;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-x-hidden px-6">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-x-hidden px-6 bg-primary">
 
       <AnimatedOrbs />
 
@@ -162,7 +181,7 @@ export default function HeroSection({ splashReady = true }) {
                   <svg width="100%" height="100%" viewBox="0 0 520 30" preserveAspectRatio="none" style={{ overflow: "visible" }}>
                     <motion.path
                       d={TITLE_SCRIBBLE_PATH}
-                      stroke="hsl(var(--primary))" strokeWidth="3.5" fill="none"
+                      stroke="rgba(255,255,255,0.7)" strokeWidth="3.5" fill="none"
                       strokeLinecap="round" strokeLinejoin="round"
                       initial={{ pathLength: 0, opacity: 0 }}
                       animate={{ pathLength: titleHovered ? 1 : 0, opacity: titleHovered ? 1 : 0 }}
@@ -175,13 +194,13 @@ export default function HeroSection({ splashReady = true }) {
                 </span>
 
                 {/* Text */}
-                <span className="relative text-foreground" style={{ zIndex: 1 }}>Asrin <span className="text-primary">Kilinc</span></span>
+                <span className="relative text-white" style={{ zIndex: 1 }}>Asrin <span className="text-white/90">Kilinc</span></span>
               </motion.span>
               <br />
-              <span className="text-primary text-3xl">
+              <span className="text-white/90 text-3xl">
                 {displayed}
                 {showCursor && (
-                  <span className="inline-block w-0.5 h-7 bg-primary ml-0.5 align-middle animate-pulse" />
+                  <span className="inline-block w-0.5 h-7 bg-white ml-0.5 align-middle animate-pulse" />
                 )}
               </span>
             </h1>
@@ -193,17 +212,17 @@ export default function HeroSection({ splashReady = true }) {
             transition={{ duration: isMobile ? 0.3 : 0.7, delay: isMobile ? 0.1 : 0.3 }}
             className="flex items-center gap-4 mt-8 justify-center lg:justify-start flex-wrap">
             <MagneticButton>
-              <a href="#contact" className="inline-block bg-[hsl(var(--ring))] text-primary-foreground px-6 py-3 text-sm font-medium rounded-lg hover:opacity-90 transition-opacity">
+              <a href="#contact" className="inline-block bg-white text-primary px-6 py-3 text-sm font-medium rounded-lg hover:opacity-90 transition-opacity">
                 {t.hero.cta_contact}
               </a>
             </MagneticButton>
             <MagneticButton>
-              <a href="#projects" className="inline-block bg-[hsl(var(--input))] text-foreground px-6 py-3 text-sm font-medium rounded-lg border border-border hover:border-primary/50 transition-colors">
+              <a href="#projects" className="inline-block bg-white/15 text-white px-6 py-3 text-sm font-medium rounded-lg border border-white/30 hover:bg-white/25 transition-colors">
                 {t.hero.cta_projects}
               </a>
             </MagneticButton>
             <MagneticButton>
-              <a href="/cv_def.pdf" download="CV_Asrin_Kilinc.pdf" className="inline-flex items-center gap-2 bg-[hsl(var(--input))] text-foreground px-6 py-3 text-sm font-medium rounded-lg border border-border hover:border-primary/50 transition-colors">
+              <a href="/cv_def.pdf" download="CV_Asrin_Kilinc.pdf" className="inline-flex items-center gap-2 bg-white/15 text-white px-6 py-3 text-sm font-medium rounded-lg border border-white/30 hover:bg-white/25 transition-colors">
                 <Download className="w-4 h-4" />
                 {t.hero.cta_cv}
               </a>
@@ -223,7 +242,7 @@ export default function HeroSection({ splashReady = true }) {
                 <a href={href}
                   target={href.startsWith("http") ? "_blank" : undefined}
                   rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary/70 hover:bg-primary hover:text-white hover:border-primary transition-colors duration-200">
+                  className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center text-white/70 hover:bg-white hover:text-primary hover:border-white transition-colors duration-200">
                   <Icon className="w-4 h-4" />
                 </a>
               </MagneticButton>
@@ -254,7 +273,7 @@ export default function HeroSection({ splashReady = true }) {
                 <motion.path
                   key={i}
                   d={d}
-                  stroke="hsl(var(--primary))"
+                  stroke="rgba(255,255,255,0.6)"
                   strokeWidth={i === 0 ? 2 : 1.6}
                   fill="none"
                   strokeLinecap="round"
@@ -287,7 +306,7 @@ export default function HeroSection({ splashReady = true }) {
         onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth", block: "start" })}
         initial={{ opacity: 0 }} animate={{ opacity: 1 }}
         transition={{ delay: isMobile ? 0.4 : 1.2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground hover:text-primary transition-colors">
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 hover:text-white transition-colors">
         <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
           <ArrowDown className="w-5 h-5" />
         </motion.div>
