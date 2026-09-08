@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 export default function CustomCursor() {
+  return null;
   const dotRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [clicking, setClicking] = useState(false);
