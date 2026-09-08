@@ -53,16 +53,11 @@ export default function Home() {
       ticking = true;
       requestAnimationFrame(() => {
         const scrollY = window.scrollY;
-        const heroH   = window.innerHeight;
-        const t       = Math.min(Math.max((scrollY - heroH * 0.4) / (heroH * 0.4), 0), 1);
-        const isDark  = document.documentElement.classList.contains("dark");
 
         if (patternRef.current) {
-          patternRef.current.style.opacity   = (t * (isDark ? 0.08 : 0.20)).toString();
           patternRef.current.style.transform = `translate3d(0,${-scrollY * 0.35}px,0)`;
         }
         if (pattern2Ref.current) {
-          pattern2Ref.current.style.opacity   = (t * (isDark ? 0.18 : 0.35)).toString();
           pattern2Ref.current.style.transform = `translate3d(0,${-scrollY * 0.6}px,0)`;
         }
         ticking = false;
@@ -75,9 +70,9 @@ export default function Home() {
   return (
     <LanguageProvider>
       {/* Layer 1 — background, dense dots, 35% scroll speed */}
-      <div ref={patternRef} aria-hidden="true" className="fixed pointer-events-none"
+      <div ref={patternRef} aria-hidden="true" className="fixed pointer-events-none opacity-20 dark:opacity-[0.08]"
         style={{
-          zIndex: 10, opacity: 0,
+          zIndex: 10,
           top: "-200vh", left: "-10%", width: "120%", height: "900vh",
           willChange: "transform",
           backgroundImage: "radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px)",
@@ -86,9 +81,9 @@ export default function Home() {
       />
 
       {/* Layer 2 — middle, sparse dots, muted color, 60% scroll speed */}
-      <div ref={pattern2Ref} aria-hidden="true" className="fixed pointer-events-none"
+      <div ref={pattern2Ref} aria-hidden="true" className="fixed pointer-events-none opacity-[0.35] dark:opacity-[0.18]"
         style={{
-          zIndex: 11, opacity: 0,
+          zIndex: 11,
           top: "-200vh", left: "-10%", width: "120%", height: "900vh",
           willChange: "transform",
           backgroundImage: "radial-gradient(circle, hsl(var(--muted-foreground)) 1.5px, transparent 1.5px)",
