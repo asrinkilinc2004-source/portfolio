@@ -147,7 +147,6 @@ export default function HeroSection({ splashReady = true }) {
         const vh = window.innerHeight;
         if (sectionRef.current) {
           sectionRef.current.style.transform = `translateY(${-sy * 0.35}px)`;
-          sectionRef.current.style.opacity = Math.max(0, 1 - sy / (vh * 0.8)).toString();
         }
         ticking = false;
       });
