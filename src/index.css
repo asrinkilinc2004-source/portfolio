@@ -139,11 +139,6 @@ img {
   }
 }
 
-@media (pointer: fine) {
-  *, *::before, *::after {
-    cursor: none !important;
-  }
-}
 
 ::-webkit-scrollbar {
   width: 6px;
