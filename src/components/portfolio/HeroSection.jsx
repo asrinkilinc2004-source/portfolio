@@ -250,8 +250,8 @@ export default function HeroSection({ splashReady = true }) {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, scale: isMobile ? 0.95 : 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ scale: isMobile ? 0.95 : 0.8 }}
+          animate={{ scale: 1 }}
           transition={{ duration: isMobile ? 0.3 : 0.8, delay: isMobile ? 0.1 : 0.2 }}
           className="flex-shrink-0">
           <motion.div
