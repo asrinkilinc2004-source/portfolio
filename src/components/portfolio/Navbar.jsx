@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -6,34 +6,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/lib/LanguageContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 
-const LANG_TZ = {
-  nl: { tz: "Europe/Amsterdam",  city: "Amsterdam" },
-  en: { tz: "Europe/London",     city: "London"    },
-  ar: { tz: "Asia/Dubai",        city: "Dubai"      },
-  es: { tz: "Europe/Madrid",     city: "Madrid"     },
-  zh: { tz: "Asia/Shanghai",     city: "Shanghai"   },
-};
-
-function LiveClock({ lang }) {
-  const [time, setTime] = useState("");
-  const { tz, city } = LANG_TZ[lang] ?? LANG_TZ.nl;
-
-  useEffect(() => {
-    const tick = () => {
-      setTime(new Date().toLocaleTimeString("en-GB", { timeZone: tz, hour: "2-digit", minute: "2-digit", second: "2-digit" }));
-    };
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, [tz]);
-
-  return (
-    <div className="flex flex-col items-start leading-none select-none">
-      <span className="font-mono text-sm font-semibold text-primary tracking-widest">{time}</span>
-      <span className="font-mono text-[0.6rem] text-muted-foreground tracking-wider uppercase">{city}</span>
-    </div>
-  );
-}
 
 export default function Navbar() {
   const [scrolled,       setScrolled]       = useState(false);
@@ -41,7 +13,7 @@ export default function Navbar() {
   const [activeSection,  setActiveSection]  = useState("");
   const [hovered,        setHovered]        = useState(null);
   const { theme, setTheme } = useTheme();
-  const { t, lang } = useLanguage();
+  const { t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
@@ -115,8 +87,11 @@ export default function Navbar() {
       }`}>
 
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Live clock */}
-        <LiveClock lang={lang} />
+        {/* Home button */}
+        <a href="/" onClick={(e) => { if (isHome) { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
+          className="text-sm font-semibold text-primary hover:text-primary/80 transition-colors duration-200 tracking-wide">
+          AK
+        </a>
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
