@@ -19,18 +19,12 @@ export default function WebcamScene3D({ className = "", isStatic = false }) {
     const allMaterials = []; // { m: LineBasicMaterial, baseOp, isPrimary }
 
     const readThemeColors = () => {
-      // isStatic (card thumbnail) always uses dark-mode boost so eye pops on black bg
       const isDark = isStatic ? true : document.documentElement.classList.contains("dark");
       const boost  = isDark ? 1.0 : 1.55;
-      const raw    = getComputedStyle(document.documentElement)
-        .getPropertyValue("--primary").trim();
-      const [hRaw, sRaw, lRaw] = raw.split(/\s+/);
-      const h = parseFloat(hRaw) / 360;
-      const s = parseFloat(sRaw) / 100;
-      const l = parseFloat(lRaw) / 100;
+      // Always KLM blue — hsl(197,100%,44%) = #00A1DE
       return {
-        primary: new THREE.Color().setHSL(h, s, l),
-        dim:     new THREE.Color().setHSL(h, s * 0.50, l * 0.52),
+        primary: new THREE.Color("#00A1DE"),
+        dim:     new THREE.Color().setHSL(197 / 360, 0.50, 0.23),
         boost,
       };
     };
