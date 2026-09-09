@@ -76,7 +76,7 @@ function NewsCard({ href, title, meta, i }) {
       target="_blank"
       rel="noopener noreferrer"
       {...fadeUp(i * 0.07)}
-      className="group rounded-xl bg-primary border border-primary p-5 flex flex-col gap-3 hover:bg-white hover:border-white/10 transition-colors duration-300 no-underline"
+      className="group relative z-[12] rounded-xl bg-primary border border-primary p-5 flex flex-col gap-3 hover:bg-white hover:border-white/10 transition-colors duration-300 no-underline"
     >
       <p className="text-sm font-medium text-white group-hover:text-primary leading-snug line-clamp-3 transition-colors duration-300">
         {title}

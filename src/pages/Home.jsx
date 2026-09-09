@@ -127,9 +127,8 @@ export default function Home() {
       <Navbar />
       <ScrollProgressBar />
       <div
-        className="min-h-screen bg-background text-foreground relative"
+        className="min-h-screen bg-background text-foreground"
         style={{
-          zIndex:        12,
           opacity:       splashDone ? 1 : 0,
           transition:    "opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
           pointerEvents: splashDone ? "auto" : "none",
