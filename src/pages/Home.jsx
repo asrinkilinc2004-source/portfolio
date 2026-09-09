@@ -8,6 +8,7 @@ import AboutSection from "../components/portfolio/AboutSection";
 import SkillsSection from "../components/portfolio/SkillsSection";
 import ProjectsSection from "../components/portfolio/ProjectsSection";
 import EducationSection from "../components/portfolio/EducationSection";
+import TechNewsSection from "../components/portfolio/TechNewsSection";
 import ContactSection from "../components/portfolio/ContactSection";
 import Footer from "../components/portfolio/Footer";
 import CustomCursor from "../components/portfolio/CustomCursor";
@@ -109,6 +110,7 @@ export default function Home() {
         <SkillsSection />
         <ProjectsSection />
         <EducationSection />
+        <TechNewsSection />
         <ContactSection />
         <Footer />
         <BackToTop />

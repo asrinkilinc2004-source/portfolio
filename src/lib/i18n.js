@@ -107,8 +107,11 @@ export const translations = {
         { year: "Sept 2017 — Juli 2022", title: "HAVO — Natuur & Techniek met Wiskunde B", institution: "Lyceum Sancta Maria", description: "Middelbare school afgerond op HAVO-niveau met profiel Natuur & Techniek en Wiskunde B." },
       ],
     },
+    news: {
+      label: "05 —", title: "Tech Nieuws", subtitle: "Live via Hacker News",
+    },
     contact: {
-      label: "05 —", title: "Contact",
+      label: "06 —", title: "Contact",
       intro: "Ik sta altijd open voor nieuwe kansen, samenwerkingen of een gezellig gesprek over tech. Neem gerust contact op!",
       email_label: "E-mail", location_label: "Locatie", location_value: "Haarlem, Nederland",
       form: {
@@ -334,8 +337,11 @@ export const translations = {
         { year: "Sept 2017 — July 2022", title: "HAVO — Science & Engineering + advanced mathematics", institution: "Lyceum Sancta Maria", description: "Completed secondary school at HAVO level with the Science & Engineering profile and advanced mathematics." },
       ],
     },
+    news: {
+      label: "05 —", title: "Tech News", subtitle: "Live via Hacker News",
+    },
     contact: {
-      label: "05 —", title: "Contact",
+      label: "06 —", title: "Contact",
       intro: "I'm always open to new opportunities, collaborations, or a casual conversation about tech. Feel free to reach out!",
       email_label: "Email", location_label: "Location", location_value: "Haarlem, Netherlands",
       form: {
@@ -561,8 +567,11 @@ export const translations = {
         { year: "سبتمبر 2017 — يوليو 2022", title: "HAVO — العلوم والتكنولوجيا مع الرياضيات B", institution: "Lyceum Sancta Maria", description: "أتممت المدرسة الثانوية بمستوى HAVO مع تخصص العلوم والتكنولوجيا والرياضيات B." },
       ],
     },
+    news: {
+      label: "05 —", title: "أخبار التقنية", subtitle: "مباشر عبر Hacker News",
+    },
     contact: {
-      label: "05 —", title: "اتصل بي",
+      label: "06 —", title: "اتصل بي",
       intro: "أنا دائمًا منفتح على الفرص الجديدة والتعاون أو محادثة عادية حول التقنية. لا تتردد في التواصل!",
       email_label: "البريد الإلكتروني", location_label: "الموقع", location_value: "هارلم، هولندا",
       form: {
@@ -788,8 +797,11 @@ export const translations = {
         { year: "Sept 2017 — Jul 2022", title: "HAVO — Ciencias y Tecnología con Matemáticas B", institution: "Lyceum Sancta Maria", description: "Completé la escuela secundaria a nivel HAVO con el perfil de Ciencias y Tecnología y Matemáticas B." },
       ],
     },
+    news: {
+      label: "05 —", title: "Noticias Tech", subtitle: "En vivo vía Hacker News",
+    },
     contact: {
-      label: "05 —", title: "Contacto",
+      label: "06 —", title: "Contacto",
       intro: "Siempre estoy abierto a nuevas oportunidades, colaboraciones o una conversación casual sobre tecnología. ¡No dudes en contactarme!",
       email_label: "Correo electrónico", location_label: "Ubicación", location_value: "Haarlem, Países Bajos",
       form: {
@@ -1015,8 +1027,11 @@ export const translations = {
         { year: "2017年9月 — 2022年7月", title: "HAVO — 自然与技术（含数学B）", institution: "Lyceum Sancta Maria", description: "以HAVO水平完成中学教育，主修自然与技术方向及数学B课程。" },
       ],
     },
+    news: {
+      label: "05 —", title: "科技新闻", subtitle: "实时来自 Hacker News",
+    },
     contact: {
-      label: "05 —", title: "联系",
+      label: "06 —", title: "联系",
       intro: "我随时欢迎新机会、合作或关于技术的随意交流。随时联系我！",
       email_label: "邮箱", location_label: "位置", location_value: "哈勒姆，荷兰",
       form: {
