@@ -17,13 +17,13 @@ function TiltCard({ children, className }) {
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width  - 0.5;
     const y = (e.clientY - r.top)  / r.height - 0.5;
-    el.style.transition = "transform 0.05s linear";
+    el.style.transition = "transform 0.05s linear, background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease";
     el.style.transform  = `perspective(800px) rotateY(${x * 12}deg) rotateX(${-y * 8}deg) scale3d(1.03,1.03,1.03)`;
   };
   const onLeave = () => {
     const el = ref.current;
     if (!el) return;
-    el.style.transition = "transform 0.5s cubic-bezier(0.23,1,0.32,1)";
+    el.style.transition = "transform 0.5s cubic-bezier(0.23,1,0.32,1), background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease";
     el.style.transform  = "perspective(800px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)";
   };
   return (
