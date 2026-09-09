@@ -36,14 +36,18 @@ export default function Home() {
   // Restore scroll before first paint — no flash at Y=0
   useLayoutEffect(() => {
     if (!isBackNav) return;
-    const savedY = sessionStorage.getItem("portfolioScrollY");
-    if (savedY) window.scrollTo(0, parseInt(savedY));
-    // Short delay so Lenis can init at the correct position, then reveal content
-    const t = setTimeout(() => setSplashDone(true), 60);
+    const savedY = parseInt(sessionStorage.getItem("portfolioScrollY") || "0");
+    if (!savedY) { setSplashDone(true); return; }
+    window.scrollTo(0, savedY);
+    // After Lenis inits, also tell it the correct position, then reveal content
+    const t = setTimeout(() => {
+      if (window.__lenis) window.__lenis.scrollTo(savedY, { immediate: true });
+      setSplashDone(true);
+    }, 80);
     return () => clearTimeout(t);
   }, []);
 
-  // Save scroll position continuously so back navigation can restore it
+  // Save scroll position — debounced during scroll, immediately on unmount
   useEffect(() => {
     let timer;
     const save = () => {
@@ -51,7 +55,12 @@ export default function Home() {
       timer = setTimeout(() => sessionStorage.setItem("portfolioScrollY", window.scrollY), 150);
     };
     window.addEventListener("scroll", save, { passive: true });
-    return () => { window.removeEventListener("scroll", save); clearTimeout(timer); };
+    return () => {
+      window.removeEventListener("scroll", save);
+      clearTimeout(timer);
+      // Always save on unmount (catches navigating away before debounce fires)
+      sessionStorage.setItem("portfolioScrollY", window.scrollY);
+    };
   }, []);
 
   // Scroll to target element when navigating back
