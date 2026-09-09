@@ -76,12 +76,12 @@ function NewsCard({ href, title, meta, i }) {
       target="_blank"
       rel="noopener noreferrer"
       {...fadeUp(i * 0.07)}
-      className="group rounded-xl bg-card border border-primary/20 p-5 flex flex-col gap-3 hover:bg-primary hover:border-primary transition-colors duration-500 no-underline"
+      className="group rounded-xl bg-primary border border-primary p-5 flex flex-col gap-3 hover:bg-white hover:border-white/10 transition-colors duration-300 no-underline"
     >
-      <p className="text-sm font-medium text-foreground group-hover:text-white leading-snug line-clamp-3 transition-colors duration-500">
+      <p className="text-sm font-medium text-white group-hover:text-primary leading-snug line-clamp-3 transition-colors duration-300">
         {title}
       </p>
-      <div className="flex items-center gap-3 mt-auto text-xs text-muted-foreground group-hover:text-white/70 transition-colors duration-500">
+      <div className="flex items-center gap-3 mt-auto text-xs text-white/70 group-hover:text-primary/70 transition-colors duration-300">
         {meta}
       </div>
     </motion.a>
