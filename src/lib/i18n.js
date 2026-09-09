@@ -108,7 +108,7 @@ export const translations = {
       ],
     },
     news: {
-      label: "06 —", title: "Tech Nieuws", subtitle: "Live via Nu.nl",
+      label: "06 —", title: "Tech Nieuws", subtitle: "Live tech nieuws",
     },
     contact: {
       label: "05 —", title: "Contact",
@@ -338,7 +338,7 @@ export const translations = {
       ],
     },
     news: {
-      label: "06 —", title: "Tech News", subtitle: "Live via Hacker News",
+      label: "06 —", title: "Tech News", subtitle: "Live tech news",
     },
     contact: {
       label: "05 —", title: "Contact",
@@ -568,7 +568,7 @@ export const translations = {
       ],
     },
     news: {
-      label: "06 —", title: "أخبار التقنية", subtitle: "مباشر عبر BBC عربي",
+      label: "06 —", title: "أخبار التقنية", subtitle: "أخبار التقنية المباشرة",
     },
     contact: {
       label: "05 —", title: "اتصل بي",
@@ -798,7 +798,7 @@ export const translations = {
       ],
     },
     news: {
-      label: "06 —", title: "Noticias Tech", subtitle: "En vivo vía BBC Mundo",
+      label: "06 —", title: "Noticias Tech", subtitle: "Noticias tech en vivo",
     },
     contact: {
       label: "05 —", title: "Contacto",
@@ -1028,7 +1028,7 @@ export const translations = {
       ],
     },
     news: {
-      label: "06 —", title: "科技新闻", subtitle: "实时来自 BBC 中文",
+      label: "06 —", title: "科技新闻", subtitle: "实时科技新闻",
     },
     contact: {
       label: "05 —", title: "联系",
