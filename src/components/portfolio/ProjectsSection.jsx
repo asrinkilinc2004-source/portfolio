@@ -76,8 +76,7 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
               />
             ) : project.link === "/semester4" ? (
               /* Semester 4 — 3D eye thumbnail */
-              <div className="w-full h-56 lg:h-full min-h-[14rem] relative overflow-hidden"
-                style={{ background: "#000" }}>
+              <div className="w-full h-56 lg:h-full min-h-[14rem] relative overflow-hidden bg-white dark:bg-black">
                 <React.Suspense fallback={null}>
                   <WebcamScene3D
                     isStatic

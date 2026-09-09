@@ -19,7 +19,7 @@ export default function WebcamScene3D({ className = "", isStatic = false }) {
     const allMaterials = []; // { m: LineBasicMaterial, baseOp, isPrimary }
 
     const readThemeColors = () => {
-      const isDark = isStatic ? true : document.documentElement.classList.contains("dark");
+      const isDark = document.documentElement.classList.contains("dark");
       const boost  = isDark ? 1.0 : 1.55;
       // Always KLM blue — hsl(197,100%,44%) = #00A1DE
       return {
@@ -62,10 +62,10 @@ export default function WebcamScene3D({ className = "", isStatic = false }) {
 
     // ── Renderer ──────────────────────────────────────────────────────
     const w0 = el.clientWidth, h0 = el.clientHeight;
-    const renderer = new THREE.WebGLRenderer({ alpha: !isStatic, antialias: true });
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(w0, h0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setClearColor(0x000000, isStatic ? 1 : 0);
+    renderer.setClearColor(0x000000, 0);
     el.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
