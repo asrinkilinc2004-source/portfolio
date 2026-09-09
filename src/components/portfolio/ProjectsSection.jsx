@@ -119,7 +119,7 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary/50 via-primary/20 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]" />
           </div>
 
-          <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col justify-center group-hover:bg-primary transition-colors duration-300">
+          <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col justify-center group-hover:bg-primary dark:group-hover:bg-zinc-800 transition-colors duration-300">
             {/* Semester tag row */}
             <div className="flex items-center gap-2 mb-3 flex-wrap">
               <span className="inline-block font-mono text-xs text-primary bg-primary/10 border border-primary/20 rounded-md px-2 py-1 w-fit group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 transition-colors duration-300">
@@ -136,7 +136,7 @@ function TiltCard({ project, index, currentLabel, viewCurrentLabel }) {
             {project.link && (
               <button
                 onClick={() => navigate(project.link)}
-                className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg bg-primary text-primary-foreground group-hover:bg-white group-hover:text-primary hover:opacity-90 active:scale-95 transition-all duration-300 w-fit"
+                className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg bg-primary dark:bg-zinc-700 text-primary-foreground dark:text-white group-hover:bg-white dark:group-hover:bg-zinc-600 group-hover:text-primary dark:group-hover:text-white hover:opacity-90 active:scale-95 transition-all duration-300 w-fit"
               >
                 {project.viewBtn || viewCurrentLabel}
                 <ArrowRight className="w-4 h-4" />
