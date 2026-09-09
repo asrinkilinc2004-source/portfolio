@@ -28,6 +28,35 @@ export default function Home() {
   // Remember splash was shown so it won't replay this session
   useEffect(() => { sessionStorage.setItem("splashShown", "true"); }, []);
 
+  // Restore scroll position when coming back via browser back button
+  useEffect(() => {
+    if (!splashDone) return;
+    const isBackNav =
+      performance?.navigation?.type === 2 ||
+      performance?.getEntriesByType?.("navigation")?.[0]?.type === "back_forward";
+    if (!isBackNav) return;
+    const savedY = sessionStorage.getItem("portfolioScrollY");
+    if (!savedY) return;
+    setTimeout(() => {
+      if (window.__lenis) {
+        window.__lenis.scrollTo(parseInt(savedY), { immediate: true });
+      } else {
+        window.scrollTo(0, parseInt(savedY));
+      }
+    }, 150);
+  }, [splashDone]);
+
+  // Save scroll position continuously so back navigation can restore it
+  useEffect(() => {
+    let timer;
+    const save = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => sessionStorage.setItem("portfolioScrollY", window.scrollY), 150);
+    };
+    window.addEventListener("scroll", save, { passive: true });
+    return () => { window.removeEventListener("scroll", save); clearTimeout(timer); };
+  }, []);
+
   // Scroll to target element when navigating back
   useEffect(() => {
     if (!location.state?.scrollTo) return;
