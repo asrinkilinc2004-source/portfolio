@@ -35,7 +35,7 @@ const LANG_SOURCES = {
 async function fetchHN() {
   const ids = await fetch("https://hacker-news.firebaseio.com/v0/topstories.json").then(r => r.json());
   const items = await Promise.all(
-    ids.slice(0, 3).map(id =>
+    ids.slice(0, 6).map(id =>
       fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json())
     )
   );
@@ -46,7 +46,7 @@ async function fetchRSS(url) {
   const res = await fetch(
     `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`
   ).then(r => r.json());
-  if (res.status === "ok") return res.items.slice(0, 3);
+  if (res.status === "ok") return res.items.slice(0, 6);
   return [];
 }
 
@@ -90,8 +90,8 @@ function NewsCard({ href, title, meta, i }) {
 
 function SkeletonRow() {
   return (
-    <div className="grid md:grid-cols-3 gap-4">
-      {[...Array(3)].map((_, i) => (
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {[...Array(6)].map((_, i) => (
         <div key={i} className="rounded-xl bg-card border border-border p-5 animate-pulse h-32" />
       ))}
     </div>
@@ -109,7 +109,7 @@ function SourceSection({ source, items, isLoading, isFirst }) {
       {isLoading ? (
         <SkeletonRow />
       ) : items.length === 0 ? null : (
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {source.type === "hn"
             ? items.map((story, i) => (
                 <NewsCard
