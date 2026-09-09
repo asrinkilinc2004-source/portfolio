@@ -30,14 +30,17 @@ export default function Navbar() {
     "M1,4 C12,4 18,1 28,1 C38,1 44,5 55,5 C64,5 72,1 82,1 C90,1 95,3.5 99,3.5",
     // Contact — starts high, ends with a final flick
     "M1,2 C20,2 40,5 58,4 C72,3 84,1.5 92,3 C95,3.8 97,5 99,4.5",
+    // News — gentle double wave
+    "M1,3 C15,1 25,5 40,3 C55,1 65,5 80,3 C88,1.5 94,4 99,3",
   ];
 
   const links = [
-    { label: t.nav.about,     href: "#about",     id: "about"     },
-    { label: t.nav.skills,    href: "#skills",    id: "skills"    },
-    { label: t.nav.projects,  href: "#projects",  id: "projects"  },
-    { label: t.nav.education, href: "#education", id: "education" },
-    { label: t.nav.contact,   href: "#contact",   id: "contact"   },
+    { label: t.nav.about,     href: "#about",      id: "about"      },
+    { label: t.nav.skills,    href: "#skills",     id: "skills"     },
+    { label: t.nav.projects,  href: "#projects",   id: "projects"   },
+    { label: t.nav.education, href: "#education",  id: "education"  },
+    { label: t.nav.contact,   href: "#contact",    id: "contact"    },
+    { label: t.nav.news,      href: "#technews",   id: "technews"   },
   ];
 
   const scrollTo = (id) => {
@@ -72,7 +75,7 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const ids = ["about", "skills", "projects", "education", "contact"];
+    const ids = ["about", "skills", "projects", "education", "contact", "technews"];
     const observers = ids.map((id) => {
       const el = document.getElementById(id);
       if (!el) return null;

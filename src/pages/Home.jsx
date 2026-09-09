@@ -110,8 +110,8 @@ export default function Home() {
         <SkillsSection />
         <ProjectsSection />
         <EducationSection />
-        <TechNewsSection />
         <ContactSection />
+        <TechNewsSection />
         <Footer />
         <BackToTop />
       </div>

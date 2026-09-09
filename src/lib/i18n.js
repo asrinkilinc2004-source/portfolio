@@ -10,7 +10,7 @@ export const translations = {
   nl: {
     nav: {
       about: "Over mij", skills: "Vaardigheden", projects: "Projecten",
-      education: "Opleiding", contact: "Contact",
+      education: "Opleiding", contact: "Contact", news: "Nieuws",
     },
     hero: {
       subtitle: "Business, IT & Management student",
@@ -108,10 +108,10 @@ export const translations = {
       ],
     },
     news: {
-      label: "05 —", title: "Tech Nieuws", subtitle: "Live via Hacker News",
+      label: "06 —", title: "Tech Nieuws", subtitle: "Live via Nu.nl",
     },
     contact: {
-      label: "06 —", title: "Contact",
+      label: "05 —", title: "Contact",
       intro: "Ik sta altijd open voor nieuwe kansen, samenwerkingen of een gezellig gesprek over tech. Neem gerust contact op!",
       email_label: "E-mail", location_label: "Locatie", location_value: "Haarlem, Nederland",
       form: {
@@ -240,7 +240,7 @@ export const translations = {
   en: {
     nav: {
       about: "About me", skills: "Skills", projects: "Projects",
-      education: "Education", contact: "Contact",
+      education: "Education", contact: "Contact", news: "News",
     },
     hero: {
       subtitle: "Business, IT & Management student",
@@ -338,10 +338,10 @@ export const translations = {
       ],
     },
     news: {
-      label: "05 —", title: "Tech News", subtitle: "Live via Hacker News",
+      label: "06 —", title: "Tech News", subtitle: "Live via Hacker News",
     },
     contact: {
-      label: "06 —", title: "Contact",
+      label: "05 —", title: "Contact",
       intro: "I'm always open to new opportunities, collaborations, or a casual conversation about tech. Feel free to reach out!",
       email_label: "Email", location_label: "Location", location_value: "Haarlem, Netherlands",
       form: {
@@ -470,7 +470,7 @@ export const translations = {
   ar: {
     nav: {
       about: "عني", skills: "المهارات", projects: "المشاريع",
-      education: "التعليم", contact: "اتصل بي",
+      education: "التعليم", contact: "اتصل بي", news: "الأخبار",
     },
     hero: {
       subtitle: "طالب إدارة الأعمال وتكنولوجيا المعلومات",
@@ -568,10 +568,10 @@ export const translations = {
       ],
     },
     news: {
-      label: "05 —", title: "أخبار التقنية", subtitle: "مباشر عبر Hacker News",
+      label: "06 —", title: "أخبار التقنية", subtitle: "مباشر عبر BBC عربي",
     },
     contact: {
-      label: "06 —", title: "اتصل بي",
+      label: "05 —", title: "اتصل بي",
       intro: "أنا دائمًا منفتح على الفرص الجديدة والتعاون أو محادثة عادية حول التقنية. لا تتردد في التواصل!",
       email_label: "البريد الإلكتروني", location_label: "الموقع", location_value: "هارلم، هولندا",
       form: {
@@ -700,7 +700,7 @@ export const translations = {
   es: {
     nav: {
       about: "Sobre mí", skills: "Habilidades", projects: "Proyectos",
-      education: "Educación", contact: "Contacto",
+      education: "Educación", contact: "Contacto", news: "Noticias",
     },
     hero: {
       subtitle: "Estudiante de Negocios, IT y Gestión",
@@ -798,10 +798,10 @@ export const translations = {
       ],
     },
     news: {
-      label: "05 —", title: "Noticias Tech", subtitle: "En vivo vía Hacker News",
+      label: "06 —", title: "Noticias Tech", subtitle: "En vivo vía BBC Mundo",
     },
     contact: {
-      label: "06 —", title: "Contacto",
+      label: "05 —", title: "Contacto",
       intro: "Siempre estoy abierto a nuevas oportunidades, colaboraciones o una conversación casual sobre tecnología. ¡No dudes en contactarme!",
       email_label: "Correo electrónico", location_label: "Ubicación", location_value: "Haarlem, Países Bajos",
       form: {
@@ -930,7 +930,7 @@ export const translations = {
   zh: {
     nav: {
       about: "关于我", skills: "技能", projects: "项目",
-      education: "教育", contact: "联系",
+      education: "教育", contact: "联系", news: "新闻",
     },
     hero: {
       subtitle: "商业、IT与管理专业学生",
@@ -1028,10 +1028,10 @@ export const translations = {
       ],
     },
     news: {
-      label: "05 —", title: "科技新闻", subtitle: "实时来自 Hacker News",
+      label: "06 —", title: "科技新闻", subtitle: "实时来自 BBC 中文",
     },
     contact: {
-      label: "06 —", title: "联系",
+      label: "05 —", title: "联系",
       intro: "我随时欢迎新机会、合作或关于技术的随意交流。随时联系我！",
       email_label: "邮箱", location_label: "位置", location_value: "哈勒姆，荷兰",
       form: {

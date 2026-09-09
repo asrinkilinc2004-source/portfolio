@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { TrendingUp, Clock, ExternalLink, Newspaper } from "lucide-react";
+import { TrendingUp, Clock, ExternalLink } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
+
+const RSS_SOURCES = {
+  nl: "https://www.nu.nl/rss/tech",
+  ar: "https://feeds.bbci.co.uk/arabic/science_and_tech/rss.xml",
+  es: "https://feeds.bbci.co.uk/mundo/rss.xml",
+  zh: "https://feeds.bbci.co.uk/zhongwen/simp/science-and-tech/rss.xml",
+};
 
 function timeAgo(unix) {
   const s = Math.floor(Date.now() / 1000 - unix);
@@ -20,7 +27,7 @@ function timeAgoDate(dateStr) {
 
 function domain(url) {
   try { return new URL(url).hostname.replace("www.", ""); }
-  catch { return "hackernews"; }
+  catch { return ""; }
 }
 
 function NewsCard({ href, title, meta, i }) {
@@ -53,39 +60,36 @@ function SkeletonGrid() {
 }
 
 export default function TechNewsSection() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { label, title, subtitle } = t.news;
-  const [hnStories, setHnStories] = useState([]);
-  const [nuStories, setNuStories] = useState([]);
-  const [loadingHn, setLoadingHn] = useState(true);
-  const [loadingNu, setLoadingNu] = useState(true);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setData(null);
+    setLoading(true);
     (async () => {
       try {
-        const ids = await fetch("https://hacker-news.firebaseio.com/v0/topstories.json").then(r => r.json());
-        const items = await Promise.all(
-          ids.slice(0, 6).map(id =>
-            fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json())
-          )
-        );
-        setHnStories(items.filter(Boolean));
+        if (lang === "en") {
+          const ids = await fetch("https://hacker-news.firebaseio.com/v0/topstories.json").then(r => r.json());
+          const items = await Promise.all(
+            ids.slice(0, 6).map(id =>
+              fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json())
+            )
+          );
+          setData({ type: "hn", items: items.filter(Boolean) });
+        } else {
+          const rssUrl = RSS_SOURCES[lang];
+          if (!rssUrl) return;
+          const res = await fetch(
+            `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`
+          ).then(r => r.json());
+          if (res.status === "ok") setData({ type: "rss", items: res.items.slice(0, 6) });
+        }
       } catch {}
-      finally { setLoadingHn(false); }
+      finally { setLoading(false); }
     })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(
-          "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.nu.nl%2Frss%2Ftech"
-        ).then(r => r.json());
-        if (res.status === "ok") setNuStories(res.items.slice(0, 6));
-      } catch {}
-      finally { setLoadingNu(false); }
-    })();
-  }, []);
+  }, [lang]);
 
   return (
     <section id="technews" className="py-32 px-6">
@@ -98,10 +102,11 @@ export default function TechNewsSection() {
           <p className="text-muted-foreground mt-3 text-sm font-mono">{subtitle}</p>
         </motion.div>
 
-        {/* Hacker News grid */}
-        {loadingHn ? <SkeletonGrid /> : (
+        {loading ? (
+          <SkeletonGrid />
+        ) : data?.type === "hn" ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {hnStories.map((story, i) => (
+            {data.items.map((story, i) => (
               <NewsCard
                 key={story.id}
                 href={story.url || `https://news.ycombinator.com/item?id=${story.id}`}
@@ -120,18 +125,9 @@ export default function TechNewsSection() {
               />
             ))}
           </div>
-        )}
-
-        {/* Nu.nl divider */}
-        <motion.div {...fadeUp(0.1)} className="mt-16 mb-6 flex items-center gap-3">
-          <Newspaper className="w-4 h-4 text-primary" />
-          <p className="text-muted-foreground text-sm font-mono">Live via Nu.nl</p>
-        </motion.div>
-
-        {/* Nu.nl grid */}
-        {loadingNu ? <SkeletonGrid /> : (
+        ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {nuStories.map((item, i) => (
+            {data?.items?.map((item, i) => (
               <NewsCard
                 key={item.guid || i}
                 href={item.link}
@@ -140,8 +136,8 @@ export default function TechNewsSection() {
                 meta={
                   <>
                     <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{timeAgoDate(item.pubDate)}</span>
-                    <span className="ml-auto flex items-center gap-1">
-                      <span>nu.nl</span>
+                    <span className="ml-auto flex items-center gap-1 truncate">
+                      <span className="truncate">{domain(item.link)}</span>
                       <ExternalLink className="w-3 h-3 flex-shrink-0" />
                     </span>
                   </>
