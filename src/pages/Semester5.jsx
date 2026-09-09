@@ -31,7 +31,7 @@ function Semester5Content() {
       <main className="pt-32 pb-24 px-6 max-w-4xl mx-auto">
         <motion.button
           {...fadeUp(0)}
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/", { state: { scrollTo: "projects" } })}
           className="mb-10 flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
