@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
 import { useLenis } from "../lib/useLenis";
@@ -23,28 +23,30 @@ export default function Home() {
 
   // Skip splash when returning from a subpage (e.g. Semester4)
   const skipSplash = !!location.state?.scrollTo || sessionStorage.getItem("splashShown") === "true";
-  const [splashDone, setSplashDone] = useState(skipSplash);
+
+  // Detect back navigation synchronously before first render
+  const isBackNav = useRef(
+    typeof performance !== "undefined" && (
+      performance?.navigation?.type === 2 ||
+      performance?.getEntriesByType?.("navigation")?.[0]?.type === "back_forward"
+    )
+  ).current;
+
+  // On back nav: start hidden so scroll can be restored before content appears
+  const [splashDone, setSplashDone] = useState(skipSplash && !isBackNav);
 
   // Remember splash was shown so it won't replay this session
   useEffect(() => { sessionStorage.setItem("splashShown", "true"); }, []);
 
-  // Restore scroll position when coming back via browser back button
-  useEffect(() => {
-    if (!splashDone) return;
-    const isBackNav =
-      performance?.navigation?.type === 2 ||
-      performance?.getEntriesByType?.("navigation")?.[0]?.type === "back_forward";
+  // Restore scroll before first paint — no flash at Y=0
+  useLayoutEffect(() => {
     if (!isBackNav) return;
     const savedY = sessionStorage.getItem("portfolioScrollY");
-    if (!savedY) return;
-    setTimeout(() => {
-      if (window.__lenis) {
-        window.__lenis.scrollTo(parseInt(savedY), { immediate: true });
-      } else {
-        window.scrollTo(0, parseInt(savedY));
-      }
-    }, 150);
-  }, [splashDone]);
+    if (savedY) window.scrollTo(0, parseInt(savedY));
+    // Short delay so Lenis can init at the correct position, then reveal content
+    const t = setTimeout(() => setSplashDone(true), 60);
+    return () => clearTimeout(t);
+  }, []);
 
   // Save scroll position continuously so back navigation can restore it
   useEffect(() => {
