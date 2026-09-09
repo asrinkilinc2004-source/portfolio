@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigationType } from "react-router-dom";
 
 import { useLenis } from "../lib/useLenis";
 import Navbar from "../components/portfolio/Navbar";
@@ -24,13 +24,8 @@ export default function Home() {
   // Skip splash when returning from a subpage (e.g. Semester4)
   const skipSplash = !!location.state?.scrollTo || sessionStorage.getItem("splashShown") === "true";
 
-  // Detect back navigation synchronously before first render
-  const isBackNav = useRef(
-    typeof performance !== "undefined" && (
-      performance?.navigation?.type === 2 ||
-      performance?.getEntriesByType?.("navigation")?.[0]?.type === "back_forward"
-    )
-  ).current;
+  // "POP" = browser back/forward in React Router (reliable for SPA navigation)
+  const isBackNav = useNavigationType() === "POP";
 
   // On back nav: start hidden so scroll can be restored before content appears
   const [splashDone, setSplashDone] = useState(skipSplash && !isBackNav);
