@@ -20,11 +20,18 @@ export default function WebcamScene3D({ className = "", isStatic = false }) {
 
     const readThemeColors = () => {
       const isDark = document.documentElement.classList.contains("dark");
-      const boost  = isDark ? 1.0 : 1.55;
-      // Always KLM blue — hsl(197,100%,44%) = #00A1DE
+      const boost  = isDark ? 1.0 : 1.4;
+      const raw    = getComputedStyle(document.documentElement)
+        .getPropertyValue("--primary").trim();
+      const [hRaw, sRaw, lRaw] = raw.split(/\s+/);
+      const h = parseFloat(hRaw) / 360;
+      const s = parseFloat(sRaw) / 100;
+      const l = parseFloat(lRaw) / 100;
+      // dim: mid-grey that works on both light and dark backgrounds
+      const dimL = isDark ? 0.35 : 0.55;
       return {
-        primary: new THREE.Color("#00A1DE"),
-        dim:     new THREE.Color().setHSL(197 / 360, 0.50, 0.23),
+        primary: new THREE.Color().setHSL(h, s, l),
+        dim:     new THREE.Color().setHSL(h, s * 0.3, dimL),
         boost,
       };
     };
