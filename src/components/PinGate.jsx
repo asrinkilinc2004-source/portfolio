@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const PIN = "1313";
+const PIN = "190304";
 const SESSION_KEY = "portfolio_unlocked";
 
 export default function PinGate({ children }) {
@@ -15,7 +15,7 @@ export default function PinGate({ children }) {
   useEffect(() => {
     if (unlocked) return;
     const onKey = (e) => {
-      if (e.key >= "0" && e.key <= "9" && digits.length < 4) {
+      if (e.key >= "0" && e.key <= "9" && digits.length < PIN.length) {
         setDigits((d) => [...d, e.key]);
       }
       if (e.key === "Backspace") {
@@ -27,7 +27,7 @@ export default function PinGate({ children }) {
   }, [unlocked, digits]);
 
   useEffect(() => {
-    if (digits.length !== 4) return;
+    if (digits.length !== PIN.length) return;
     if (digits.join("") === PIN) {
       sessionStorage.setItem(SESSION_KEY, "true");
       setTimeout(() => setUnlocked(true), 200);
@@ -74,7 +74,7 @@ export default function PinGate({ children }) {
             transition={{ duration: 0.5 }}
             className="flex gap-4"
           >
-            {[0,1,2,3].map((i) => (
+            {Array.from({ length: PIN.length }, (_, i) => i).map((i) => (
               <div key={i} className={`w-4 h-4 rounded-full border-2 transition-all duration-150 ${
                 digits.length > i
                   ? "border-primary bg-primary"
