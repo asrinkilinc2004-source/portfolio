@@ -78,24 +78,8 @@ export default function PinGate({ children }) {
         key="pin-gate"
         initial={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-[#020b16] text-white"
+        className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black text-white"
       >
-        <div
-          className="absolute -top-1/3 -left-1/4 h-[75vw] w-[75vw] max-h-[48rem] max-w-[48rem] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(0,161,222,0.28) 0%, rgba(0,161,222,0.08) 35%, transparent 70%)" }}
-        />
-        <div
-          className="absolute -right-1/4 -bottom-1/3 h-[65vw] w-[65vw] max-h-[42rem] max-w-[42rem] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(0,48,135,0.38) 0%, transparent 68%)" }}
-        />
-
-        {/* KLM-blue technical grid */}
-        <div className="absolute inset-0 opacity-[0.13] pointer-events-none"
-          style={{
-            backgroundImage: "linear-gradient(rgba(0,161,222,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(0,161,222,0.8) 1px,transparent 1px)",
-            backgroundSize: "60px 60px",
-          }} />
-
         <div className="absolute top-5 right-5 flex rounded-lg border border-[#00A1DE]/45 bg-[#061827]/90 p-1 shadow-lg shadow-black/30">
           {[
             ["nl", "NL"],
