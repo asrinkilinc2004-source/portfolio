@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const PIN = "190304";
@@ -10,7 +10,6 @@ export default function PinGate({ children }) {
   );
   const [digits, setDigits] = useState([]);
   const [shake, setShake] = useState(false);
-  const containerRef = useRef(null);
 
   useEffect(() => {
     if (unlocked) return;
@@ -39,7 +38,7 @@ export default function PinGate({ children }) {
 
   const handlePad = (val) => {
     if (val === "del") { setDigits((d) => d.slice(0, -1)); return; }
-    if (digits.length < 4) setDigits((d) => [...d, val]);
+    setDigits((d) => d.length < PIN.length ? [...d, val] : d);
   };
 
   if (unlocked) return children;
@@ -61,7 +60,7 @@ export default function PinGate({ children }) {
             backgroundSize: "60px 60px",
           }} />
 
-        <div className="relative flex flex-col items-center gap-10 px-8">
+        <div className="relative flex flex-col items-center gap-7 sm:gap-10 px-6 sm:px-8">
           {/* Logo / name */}
           <div className="text-center">
             <p className="font-mono text-xs text-primary tracking-[0.3em] uppercase mb-2">Portfolio</p>
@@ -72,7 +71,7 @@ export default function PinGate({ children }) {
           <motion.div
             animate={shake ? { x: [0, -10, 10, -8, 8, -4, 4, 0] } : {}}
             transition={{ duration: 0.5 }}
-            className="flex gap-4"
+            className="flex gap-3 sm:gap-4"
           >
             {Array.from({ length: PIN.length }, (_, i) => i).map((i) => (
               <div key={i} className={`w-4 h-4 rounded-full border-2 transition-all duration-150 ${
@@ -84,14 +83,16 @@ export default function PinGate({ children }) {
           </motion.div>
 
           {/* Numpad */}
-          <div ref={containerRef} className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             {padKeys.map((k, i) => {
               if (k === "") return <div key={i} />;
               return (
                 <button
                   key={i}
+                  type="button"
                   onClick={() => handlePad(k)}
-                  className={`w-16 h-16 rounded-2xl border text-lg font-medium transition-all duration-100 active:scale-95 ${
+                  aria-label={k === "del" ? "Verwijder laatste cijfer" : `Cijfer ${k}`}
+                  className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border text-lg font-medium transition-all duration-100 active:scale-95 ${
                     k === "del"
                       ? "border-border text-muted-foreground hover:text-foreground hover:border-primary/40 text-sm"
                       : "border-border text-foreground hover:border-primary/50 hover:bg-primary/5"
@@ -103,7 +104,20 @@ export default function PinGate({ children }) {
             })}
           </div>
 
-          <p className="text-xs text-muted-foreground/50 font-mono">voer pincode in</p>
+          <div className="max-w-xs text-center space-y-2">
+            <p className="text-xs text-muted-foreground/60 font-mono">Voer je pincode in</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Een toegangscode aanvragen?{" "}
+              <a
+                href="https://www.linkedin.com/in/asrin-k/"
+                target="_blank"
+                rel="noreferrer"
+                className="text-primary font-medium underline underline-offset-2 hover:opacity-75 transition-opacity"
+              >
+                Stuur mij een persoonlijk bericht via LinkedIn.
+              </a>
+            </p>
+          </div>
         </div>
       </motion.div>
     </AnimatePresence>
