@@ -4,12 +4,39 @@ import { motion, AnimatePresence } from "framer-motion";
 const PIN = "190304";
 const SESSION_KEY = "portfolio_unlocked";
 
+const COPY = {
+  nl: {
+    enterPin: "Voer je pincode in",
+    requestCode: "Een toegangscode aanvragen?",
+    linkedin: "Stuur mij een persoonlijk bericht via LinkedIn.",
+    deleteDigit: "Verwijder laatste cijfer",
+    digit: "Cijfer",
+  },
+  en: {
+    enterPin: "Enter your PIN",
+    requestCode: "Need an access code?",
+    linkedin: "Send me a personal message on LinkedIn.",
+    deleteDigit: "Delete last digit",
+    digit: "Digit",
+  },
+};
+
 export default function PinGate({ children }) {
   const [unlocked, setUnlocked] = useState(
     () => sessionStorage.getItem(SESSION_KEY) === "true"
   );
+  const [language, setLanguage] = useState(
+    () => localStorage.getItem("lang") === "en" ? "en" : "nl"
+  );
   const [digits, setDigits] = useState([]);
   const [shake, setShake] = useState(false);
+  const copy = COPY[language];
+
+  useEffect(() => {
+    localStorage.setItem("lang", language);
+    document.documentElement.setAttribute("lang", language);
+    document.documentElement.setAttribute("dir", "ltr");
+  }, [language]);
 
   useEffect(() => {
     if (unlocked) return;
@@ -60,6 +87,27 @@ export default function PinGate({ children }) {
             backgroundSize: "60px 60px",
           }} />
 
+        <div className="absolute top-5 right-5 flex rounded-lg border border-primary/25 bg-card p-1 shadow-sm">
+          {[
+            ["nl", "NL"],
+            ["en", "EN"],
+          ].map(([code, label]) => (
+            <button
+              key={code}
+              type="button"
+              onClick={() => setLanguage(code)}
+              aria-pressed={language === code}
+              className={`rounded-md px-2.5 py-1.5 font-mono text-xs font-semibold transition-colors ${
+                language === code
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
         <div className="relative flex flex-col items-center gap-7 sm:gap-10 px-6 sm:px-8">
           {/* Logo / name */}
           <div className="text-center">
@@ -91,7 +139,7 @@ export default function PinGate({ children }) {
                   key={i}
                   type="button"
                   onClick={() => handlePad(k)}
-                  aria-label={k === "del" ? "Verwijder laatste cijfer" : `Cijfer ${k}`}
+                  aria-label={k === "del" ? copy.deleteDigit : `${copy.digit} ${k}`}
                   className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border text-lg font-medium transition-all duration-100 active:scale-95 ${
                     k === "del"
                       ? "border-border text-muted-foreground hover:text-foreground hover:border-primary/40 text-sm"
@@ -105,16 +153,16 @@ export default function PinGate({ children }) {
           </div>
 
           <div className="max-w-xs text-center space-y-2">
-            <p className="text-xs text-muted-foreground/60 font-mono">Voer je pincode in</p>
+            <p className="text-xs text-muted-foreground/60 font-mono">{copy.enterPin}</p>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Een toegangscode aanvragen?{" "}
+              {copy.requestCode}{" "}
               <a
                 href="https://www.linkedin.com/in/asrin-k/"
                 target="_blank"
                 rel="noreferrer"
                 className="text-primary font-medium underline underline-offset-2 hover:opacity-75 transition-opacity"
               >
-                Stuur mij een persoonlijk bericht via LinkedIn.
+                {copy.linkedin}
               </a>
             </p>
           </div>
