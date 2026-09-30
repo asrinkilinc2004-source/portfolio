@@ -6,7 +6,7 @@ const SESSION_KEY = "portfolio_unlocked";
 
 const COPY = {
   nl: {
-    enterPin: "Voer je pincode in",
+    enterPin: "Voer de pincode in",
     requestCode: "Een toegangscode aanvragen?",
     linkedin: "Stuur mij een persoonlijk bericht via LinkedIn.",
     deleteDigit: "Verwijder laatste cijfer",
@@ -78,16 +78,25 @@ export default function PinGate({ children }) {
         key="pin-gate"
         initial={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background"
+        className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-[#020b16] text-white"
       >
-        {/* Subtle grid */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        <div
+          className="absolute -top-1/3 -left-1/4 h-[75vw] w-[75vw] max-h-[48rem] max-w-[48rem] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(0,161,222,0.28) 0%, rgba(0,161,222,0.08) 35%, transparent 70%)" }}
+        />
+        <div
+          className="absolute -right-1/4 -bottom-1/3 h-[65vw] w-[65vw] max-h-[42rem] max-w-[42rem] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(0,48,135,0.38) 0%, transparent 68%)" }}
+        />
+
+        {/* KLM-blue technical grid */}
+        <div className="absolute inset-0 opacity-[0.13] pointer-events-none"
           style={{
-            backgroundImage: "linear-gradient(hsl(var(--primary)) 1px,transparent 1px),linear-gradient(90deg,hsl(var(--primary)) 1px,transparent 1px)",
+            backgroundImage: "linear-gradient(rgba(0,161,222,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(0,161,222,0.8) 1px,transparent 1px)",
             backgroundSize: "60px 60px",
           }} />
 
-        <div className="absolute top-5 right-5 flex rounded-lg border border-primary/25 bg-card p-1 shadow-sm">
+        <div className="absolute top-5 right-5 flex rounded-lg border border-[#00A1DE]/45 bg-[#061827]/90 p-1 shadow-lg shadow-black/30">
           {[
             ["nl", "NL"],
             ["en", "EN"],
@@ -99,8 +108,8 @@ export default function PinGate({ children }) {
               aria-pressed={language === code}
               className={`rounded-md px-2.5 py-1.5 font-mono text-xs font-semibold transition-colors ${
                 language === code
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                  ? "bg-[#00A1DE] text-white"
+                  : "text-white/65 hover:bg-[#00A1DE]/15 hover:text-[#00A1DE]"
               }`}
             >
               {label}
@@ -111,8 +120,8 @@ export default function PinGate({ children }) {
         <div className="relative flex flex-col items-center gap-7 sm:gap-10 px-6 sm:px-8">
           {/* Logo / name */}
           <div className="text-center">
-            <p className="font-mono text-xs text-primary tracking-[0.3em] uppercase mb-2">Portfolio</p>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Asrin Kilinc</h1>
+            <p className="font-mono text-xs text-[#00A1DE] tracking-[0.3em] uppercase mb-2">Portfolio</p>
+            <h1 className="text-2xl font-bold tracking-tight text-white">Asrin Kilinc</h1>
           </div>
 
           {/* Dots */}
@@ -124,8 +133,8 @@ export default function PinGate({ children }) {
             {Array.from({ length: PIN.length }, (_, i) => i).map((i) => (
               <div key={i} className={`w-4 h-4 rounded-full border-2 transition-all duration-150 ${
                 digits.length > i
-                  ? "border-primary bg-primary"
-                  : "border-border bg-transparent"
+                  ? "border-[#00A1DE] bg-[#00A1DE]"
+                  : "border-white/30 bg-transparent"
               }`} />
             ))}
           </motion.div>
@@ -142,9 +151,9 @@ export default function PinGate({ children }) {
                   aria-label={k === "del" ? copy.deleteDigit : `${copy.digit} ${k}`}
                   className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border text-lg font-medium transition-all duration-100 active:scale-95 ${
                     k === "del"
-                      ? "border-border text-muted-foreground hover:text-foreground hover:border-primary/40 text-sm"
-                      : "border-border text-foreground hover:border-primary/50 hover:bg-primary/5"
-                  } bg-card`}
+                      ? "border-white/20 text-white/60 hover:text-white hover:border-[#00A1DE]/70 hover:bg-[#00A1DE]/15 text-sm"
+                      : "border-white/20 text-white hover:border-[#00A1DE] hover:bg-[#00A1DE]"
+                  } bg-white/[0.04]`}
                 >
                   {k === "del" ? "⌫" : k}
                 </button>
@@ -153,14 +162,14 @@ export default function PinGate({ children }) {
           </div>
 
           <div className="max-w-xs text-center space-y-2">
-            <p className="text-xs text-muted-foreground/60 font-mono">{copy.enterPin}</p>
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <p className="text-xs text-white/65 font-mono">{copy.enterPin}</p>
+            <p className="text-xs text-white/65 leading-relaxed">
               {copy.requestCode}{" "}
               <a
                 href="https://www.linkedin.com/in/asrin-k/"
                 target="_blank"
                 rel="noreferrer"
-                className="text-primary font-medium underline underline-offset-2 hover:opacity-75 transition-opacity"
+                className="text-[#00A1DE] font-medium underline underline-offset-2 hover:opacity-75 transition-opacity"
               >
                 {copy.linkedin}
               </a>
