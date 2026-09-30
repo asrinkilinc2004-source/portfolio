@@ -13,7 +13,7 @@ const COPY = {
     digit: "Cijfer",
   },
   en: {
-    enterPin: "Enter your PIN",
+    enterPin: "Enter the PIN",
     requestCode: "Need an access code?",
     linkedin: "Send me a personal message on LinkedIn.",
     deleteDigit: "Delete last digit",
