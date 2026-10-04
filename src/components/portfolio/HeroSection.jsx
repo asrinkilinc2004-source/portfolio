@@ -4,7 +4,7 @@ import { ArrowDown, Linkedin, Mail, Download } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import MagneticButton from "./MagneticButton";
 
-const AVATAR_URL = "/avatar.jpeg";
+const AVATAR_URL = "/ik.png";
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
 // Title scribble — single wavy line drawn under/through the title, viewBox 0 0 520 30
