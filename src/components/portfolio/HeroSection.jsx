@@ -162,7 +162,7 @@ export default function HeroSection({ splashReady = true }) {
       <AnimatedOrbs ready={splashReady} />
 
       <div className="relative max-w-6xl mx-auto w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-20 pt-20">
-        <div className="flex-1 text-center lg:text-left">
+        <div className="w-full min-w-0 flex-1 text-center lg:text-left">
           <motion.div
             initial={{ opacity: 0, y: isMobile ? 10 : 30 }}
             animate={splashReady ? { opacity: 1, y: 0 } : { opacity: 0, y: isMobile ? 10 : 30 }}
@@ -196,12 +196,18 @@ export default function HeroSection({ splashReady = true }) {
                 {/* Text */}
                 <span className="relative text-white" style={{ zIndex: 1 }}>Asrin <span className="text-white/90">Kilinc</span></span>
               </motion.span>
-              <br />
-              <span className="text-white/90 text-3xl">
-                {displayed}
-                {showCursor && (
-                  <span className="inline-block w-0.5 h-7 bg-white ml-0.5 align-middle animate-pulse" />
-                )}
+              <span className="relative block mt-6 text-white/90 text-3xl leading-tight">
+                {/* Reserve the full subtitle's wrapped height throughout typing/deleting. */}
+                <span className="invisible block" aria-hidden="true">{t.hero.subtitle}</span>
+                <span className="sr-only">{t.hero.subtitle}</span>
+                <span className="absolute inset-0" aria-hidden="true">
+                  {displayed}
+                  {showCursor && (
+                    <span className="relative inline-block w-0 align-middle">
+                      <span className="absolute left-0.5 bottom-0 w-0.5 h-7 bg-white animate-pulse" />
+                    </span>
+                  )}
+                </span>
               </span>
             </h1>
           </motion.div>
