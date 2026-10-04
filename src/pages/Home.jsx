@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 
 import { useLenis } from "../lib/useLenis";
@@ -22,20 +22,21 @@ export default function Home() {
   const location = useLocation();
 
   // Skip splash when returning from a subpage (e.g. Semester4)
-  const skipSplash = !!location.state?.scrollTo || sessionStorage.getItem("splashShown") === "true";
+  const [skipSplash] = useState(() => !!location.state?.scrollTo || sessionStorage.getItem("splashShown") === "true");
 
   // "POP" = browser back/forward in React Router (reliable for SPA navigation)
   const isBackNav = useNavigationType() === "POP";
 
   // On back nav: start hidden so scroll can be restored before content appears
   const [splashDone, setSplashDone] = useState(skipSplash && !isBackNav);
+  const finishSplash = useCallback(() => setSplashDone(true), []);
 
   // Remember splash was shown so it won't replay this session
   useEffect(() => { sessionStorage.setItem("splashShown", "true"); }, []);
 
   // Restore scroll before first paint — no flash at Y=0
   useLayoutEffect(() => {
-    if (!isBackNav) return;
+    if (!isBackNav || !skipSplash) return;
     const savedY = parseInt(sessionStorage.getItem("portfolioScrollY") || "0");
     if (!savedY) { setSplashDone(true); return; }
     window.scrollTo(0, savedY);
@@ -83,24 +84,27 @@ export default function Home() {
   const pattern2Ref = useRef(null);
 
   useEffect(() => {
-    let ticking = false;
+    let frame = null;
     const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
+      if (frame !== null) return;
+      frame = requestAnimationFrame(() => {
         const scrollY = window.scrollY;
 
         if (patternRef.current) {
-          patternRef.current.style.transform = `translate3d(0,${-scrollY * 0.35}px,0)`;
+          patternRef.current.style.transform = `translate3d(0,${-(scrollY * 0.35 % 28)}px,0)`;
         }
         if (pattern2Ref.current) {
-          pattern2Ref.current.style.transform = `translate3d(0,${-scrollY * 0.6}px,0)`;
+          pattern2Ref.current.style.transform = `translate3d(0,${-(scrollY * 0.6 % 95)}px,0)`;
         }
-        ticking = false;
+        frame = null;
       });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    onScroll();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame !== null) cancelAnimationFrame(frame);
+    };
   }, []);
 
   return (
@@ -109,7 +113,7 @@ export default function Home() {
       <div ref={patternRef} aria-hidden="true" className="fixed pointer-events-none opacity-20 dark:opacity-[0.08]"
         style={{
           zIndex: 10,
-          top: "-200vh", left: "-10%", width: "120%", height: "900vh",
+          top: 0, left: 0, width: "100%", height: "calc(100% + 28px)",
           willChange: "transform",
           backgroundImage: "radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
@@ -120,23 +124,22 @@ export default function Home() {
       <div ref={pattern2Ref} aria-hidden="true" className="fixed pointer-events-none opacity-[0.35] dark:opacity-[0.18]"
         style={{
           zIndex: 11,
-          top: "-200vh", left: "-10%", width: "120%", height: "900vh",
+          top: 0, left: 0, width: "100%", height: "calc(100% + 95px)",
           willChange: "transform",
           backgroundImage: "radial-gradient(circle, hsl(var(--muted-foreground)) 1.5px, transparent 1.5px)",
           backgroundSize: "95px 95px",
         }}
       />
 
-{!skipSplash && <SplashIntro onDone={() => setSplashDone(true)} />}
-      {/* These stay visible at all times — outside the fading div */}
+      {!skipSplash && <SplashIntro onDone={finishSplash} />}
+      {/* Keep navigation available during the opening moment. */}
       <CustomCursor />
       <Navbar />
       <ScrollProgressBar />
       <div
         className="min-h-screen bg-background text-foreground"
         style={{
-          opacity:       splashDone ? 1 : 0,
-          transition:    "opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+          visibility: splashDone ? "visible" : "hidden",
           pointerEvents: splashDone ? "auto" : "none",
         }}
       >
