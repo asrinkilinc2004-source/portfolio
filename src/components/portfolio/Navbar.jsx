@@ -97,14 +97,14 @@ export default function Navbar() {
     <motion.nav
       dir="ltr"
       initial={{ y: -80 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-background/85 backdrop-blur-xl ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-background/85 dark:bg-[#080f18] backdrop-blur-xl ${
         scrolled ? "border-b border-primary/30" : ""
       }`}>
 
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Home button */}
         <a href="/" onClick={(e) => { if (isHome) { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
-          className="text-sm font-semibold text-primary hover:text-primary/80 transition-colors duration-200 tracking-wide">
+          className="text-sm font-semibold text-primary hover:text-primary/80 dark:text-white dark:hover:text-white transition-colors duration-200 tracking-wide">
           AK
         </a>
 
@@ -118,11 +118,11 @@ export default function Navbar() {
                 onClick={(e) => handleNavClick(e, link)}
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
-                className={`relative text-sm transition-colors duration-200 pb-1 ${
+                className={`relative text-sm transition-colors duration-200 pb-1 dark:text-white dark:hover:text-white ${
                   isActive ? "text-primary" : "text-muted-foreground hover:text-primary"
                 }`}>
                 {link.label}
-                <span className="absolute bottom-0 left-0 w-full h-[6px] pointer-events-none text-primary">
+                <span className="absolute bottom-0 left-0 w-full h-[6px] pointer-events-none text-primary dark:text-white">
                   <svg height="6" width="100%" preserveAspectRatio="none" viewBox="0 0 100 6">
                     <motion.path
                       d={UNDERLINES[i]}
@@ -147,12 +147,12 @@ export default function Navbar() {
 
           {/* Theme toggle */}
           <button onClick={toggleTheme}
-            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-white hover:border-primary transition-all duration-200">
+            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground dark:text-white hover:bg-primary dark:hover:bg-[#15609e] hover:text-white hover:border-primary transition-all duration-200">
             {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
 
           {/* Mobile toggle */}
-          <button className="md:hidden text-foreground" onClick={() => setMobileOpen(!mobileOpen)}>
+          <button className="md:hidden text-foreground dark:text-white" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
@@ -161,11 +161,11 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background/95 backdrop-blur-xl border-b border-border overflow-hidden">
+            className="md:hidden bg-background/95 dark:bg-[#080f18] backdrop-blur-xl border-b border-border overflow-hidden">
             <div className="px-6 py-4 flex flex-col gap-4">
               {links.map((link) => (
                 <a key={link.href} href={link.href} onClick={(e) => { handleNavClick(e, link); setMobileOpen(false); }}
-                  className={`text-sm transition-colors ${
+                  className={`text-sm transition-colors dark:text-white dark:hover:text-white ${
                     activeSection === link.href ? "text-primary" : "text-muted-foreground hover:text-primary"
                   }`}>
                   {link.label}

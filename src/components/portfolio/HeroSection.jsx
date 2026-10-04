@@ -157,7 +157,7 @@ export default function HeroSection({ splashReady = true }) {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative z-[20] min-h-screen flex items-center justify-center overflow-x-hidden px-6 bg-primary">
+    <section ref={sectionRef} className="relative z-[20] min-h-screen flex items-center justify-center overflow-x-hidden px-6 bg-primary dark:bg-[#15609e]">
 
       <AnimatedOrbs ready={splashReady} />
 
