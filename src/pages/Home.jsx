@@ -138,8 +138,10 @@ export default function Home() {
       <ScrollProgressBar />
       <div
         className="min-h-screen bg-background text-foreground"
+        inert={!splashDone ? "" : undefined}
         style={{
-          visibility: splashDone ? "visible" : "hidden",
+          // Paint the page beneath the opaque loader before starting its animations.
+          visibility: skipSplash && !splashDone ? "hidden" : "visible",
           pointerEvents: splashDone ? "auto" : "none",
         }}
       >

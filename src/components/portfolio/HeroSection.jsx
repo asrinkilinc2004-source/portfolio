@@ -253,7 +253,8 @@ export default function HeroSection({ splashReady = true }) {
         <motion.div
           initial={{ scale: isMobile ? 0.95 : 0.8 }}
           animate={{ scale: splashReady ? 1 : isMobile ? 0.95 : 0.8 }}
-          transition={{ duration: isMobile ? 0.3 : 0.8, delay: isMobile ? 0.1 : 0.2 }}
+          transition={{ type: "tween", ease: "easeOut", duration: isMobile ? 0.3 : 0.8, delay: isMobile ? 0.1 : 0.2 }}
+          style={{ willChange: "transform" }}
           className="flex-shrink-0">
           <motion.div
             whileHover={{ scale: 1.1 }}
@@ -295,7 +296,7 @@ export default function HeroSection({ splashReady = true }) {
             </svg>
 
             <div className="relative z-10 w-48 h-48 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-primary/20 shadow-2xl shadow-primary/10">
-              <img src={AVATAR_URL} alt="Profile" className="w-full h-full object-cover object-top" />
+              <img src={AVATAR_URL} alt="Profile" decoding="async" fetchPriority="high" className="w-full h-full object-cover object-top" />
             </div>
             <div className="rounded-full absolute inset-0 border border-primary/10 animate-pulse" style={{ zIndex: 10 }} />
           </motion.div>

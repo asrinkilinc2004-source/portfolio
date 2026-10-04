@@ -11,13 +11,12 @@ export default function SplashIntro({ onDone }) {
     let maximumTimer;
     const photo = new Image();
     photo.src = "/ik.png";
-    const minimum = new Promise(resolve => { minimumTimer = setTimeout(resolve, 700); });
-    const maximum = new Promise(resolve => { maximumTimer = setTimeout(resolve, 1800); });
+    const minimum = new Promise(resolve => { minimumTimer = setTimeout(resolve, 1500); });
+    const maximum = new Promise(resolve => { maximumTimer = setTimeout(resolve, 3000); });
     const assets = Promise.allSettled([document.fonts.ready, photo.decode()]);
     Promise.all([minimum, Promise.race([assets, maximum])]).then(() => {
       if (cancelled) return;
       clearTimeout(maximumTimer);
-      onDone?.();
       setLeaving(true);
     });
 
@@ -29,7 +28,7 @@ export default function SplashIntro({ onDone }) {
   }, [onDone]);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence onExitComplete={onDone}>
       {!leaving && (
         <motion.div
           className="fixed inset-0 z-[200] flex items-center justify-center bg-background"
