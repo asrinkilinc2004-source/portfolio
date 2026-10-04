@@ -67,7 +67,7 @@ const ORB_STYLE = `
   ::view-transition-old(orb-bg), ::view-transition-new(orb-bg) { animation: none; }
 `;
 
-function AnimatedOrbs() {
+function AnimatedOrbs({ ready }) {
   const orbs = [
     { top: "-25%",   left: "-15%",  w: "78vmax", anim: "orb1 38s ease-in-out infinite",      delay: "0s"    },
     { top: "-35%",   right:"-20%",  w: "90vmax", anim: "orb2 50s ease-in-out infinite",      delay: "-15s"  },
@@ -87,6 +87,7 @@ function AnimatedOrbs() {
             width: o.w, height: o.w,
             borderRadius: "50%",
             animation: `${o.anim} ${o.delay}`,
+            animationPlayState: ready ? "running" : "paused",
             willChange: "transform",
           }} />
         ))}
@@ -158,13 +159,13 @@ export default function HeroSection({ splashReady = true }) {
   return (
     <section ref={sectionRef} className="relative z-[20] min-h-screen flex items-center justify-center overflow-x-hidden px-6 bg-primary">
 
-      <AnimatedOrbs />
+      <AnimatedOrbs ready={splashReady} />
 
       <div className="relative max-w-6xl mx-auto w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-20 pt-20">
         <div className="flex-1 text-center lg:text-left">
           <motion.div
             initial={{ opacity: 0, y: isMobile ? 10 : 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={splashReady ? { opacity: 1, y: 0 } : { opacity: 0, y: isMobile ? 10 : 30 }}
             transition={{ duration: isMobile ? 0.3 : 0.7 }}>
             <h1 className="text-5xl md:text-7xl font-inter font-bold tracking-tight leading-[1.1] mb-6">
               {/* Asrin Kilinc — hover scale + layered scribble */}
@@ -207,7 +208,7 @@ export default function HeroSection({ splashReady = true }) {
 
           <motion.div
             initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={splashReady ? { opacity: 1, y: 0 } : { opacity: 0, y: isMobile ? 10 : 20 }}
             transition={{ duration: isMobile ? 0.3 : 0.7, delay: isMobile ? 0.1 : 0.3 }}
             className="flex items-center gap-4 mt-8 justify-center lg:justify-start flex-wrap">
             <MagneticButton>
@@ -230,7 +231,7 @@ export default function HeroSection({ splashReady = true }) {
 
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={{ opacity: splashReady ? 1 : 0 }}
             transition={{ duration: isMobile ? 0.3 : 0.7, delay: isMobile ? 0.15 : 0.5 }}
             className="flex items-center gap-5 mt-8 justify-center lg:justify-start">
             {[
@@ -251,7 +252,7 @@ export default function HeroSection({ splashReady = true }) {
 
         <motion.div
           initial={{ scale: isMobile ? 0.95 : 0.8 }}
-          animate={{ scale: 1 }}
+          animate={{ scale: splashReady ? 1 : isMobile ? 0.95 : 0.8 }}
           transition={{ duration: isMobile ? 0.3 : 0.8, delay: isMobile ? 0.1 : 0.2 }}
           className="flex-shrink-0">
           <motion.div
@@ -303,10 +304,10 @@ export default function HeroSection({ splashReady = true }) {
 
       <motion.button
         onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth", block: "start" })}
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }} animate={{ opacity: splashReady ? 1 : 0 }}
         transition={{ delay: isMobile ? 0.4 : 1.2 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 hover:text-white transition-colors">
-        <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
+        <motion.div animate={{ y: splashReady ? [0, 8, 0] : 0 }} transition={{ duration: 1.5, repeat: Infinity }}>
           <ArrowDown className="w-5 h-5" />
         </motion.div>
       </motion.button>

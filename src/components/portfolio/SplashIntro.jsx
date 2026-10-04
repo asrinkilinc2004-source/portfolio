@@ -1,17 +1,30 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-// Keep the first visit immediate, with only a short branded opening moment.
+// Give fonts and the hero photo a short, bounded preparation window.
 export default function SplashIntro({ onDone }) {
   const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
-    const leaveTimer = setTimeout(() => setLeaving(true), 750);
-    const doneTimer = setTimeout(() => onDone?.(), 1000);
+    let cancelled = false;
+    let minimumTimer;
+    let maximumTimer;
+    const photo = new Image();
+    photo.src = "/ik.png";
+    const minimum = new Promise(resolve => { minimumTimer = setTimeout(resolve, 700); });
+    const maximum = new Promise(resolve => { maximumTimer = setTimeout(resolve, 1800); });
+    const assets = Promise.allSettled([document.fonts.ready, photo.decode()]);
+    Promise.all([minimum, Promise.race([assets, maximum])]).then(() => {
+      if (cancelled) return;
+      clearTimeout(maximumTimer);
+      onDone?.();
+      setLeaving(true);
+    });
 
     return () => {
-      clearTimeout(leaveTimer);
-      clearTimeout(doneTimer);
+      cancelled = true;
+      clearTimeout(minimumTimer);
+      clearTimeout(maximumTimer);
     };
   }, [onDone]);
 
@@ -20,6 +33,8 @@ export default function SplashIntro({ onDone }) {
       {!leaving && (
         <motion.div
           className="fixed inset-0 z-[200] flex items-center justify-center bg-background"
+          role="status"
+          aria-label="Portfolio laden"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.24, ease: "easeOut" }}
