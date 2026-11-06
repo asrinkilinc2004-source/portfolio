@@ -20,7 +20,7 @@ export default function HeroSection() {
           </motion.h1>
 
           <motion.div {...fadeUp(0.12)} className="flex items-center gap-4 mt-8 justify-center lg:justify-start flex-wrap">
-            <a href="#contact" className="inline-block bg-white text-primary px-6 py-3 text-sm font-medium rounded-lg hover:opacity-90 transition-opacity active:scale-[0.98]">
+            <a href="#contact" className="inline-block bg-white text-[hsl(197,100%,32%)] px-6 py-3 text-sm font-medium rounded-lg hover:opacity-90 transition-opacity active:scale-[0.98]">
               {t.hero.cta_contact}
             </a>
             <a href="#projects" className="inline-block bg-white/15 text-white px-6 py-3 text-sm font-medium rounded-lg border border-white/30 hover:bg-white/25 transition-colors active:scale-[0.98]">
