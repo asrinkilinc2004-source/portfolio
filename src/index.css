@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -32,7 +32,8 @@
     --chart-5: 220 78% 48%;
     --radius: 0.75rem;
 
-    --font-inter: 'Work Sans', sans-serif;
+    --font-inter: 'Nunito Sans', sans-serif;
+    --font-heading: 'Manrope', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
   }
 
@@ -71,6 +72,10 @@
 
   body {
     @apply bg-background text-foreground font-inter;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
   }
 }
 

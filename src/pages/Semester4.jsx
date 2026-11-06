@@ -64,7 +64,7 @@ function Semester4Content() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground lg:pl-64">
       <Lightbox src={lightbox?.src} alt={lightbox?.alt} onClose={() => setLightbox(null)} />
 
       <Navbar />

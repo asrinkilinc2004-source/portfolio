@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
-import { Code2, GraduationCap, Lightbulb, Rocket } from "lucide-react";
+import { GraduationCap, Lightbulb, Palette, Rocket } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
 
-const ICONS = [Lightbulb, GraduationCap, Code2, Rocket];
+const ICONS = [Lightbulb, GraduationCap, Palette, Rocket];
 
 export default function AboutSection() {
   const { t } = useLanguage();
@@ -32,15 +32,15 @@ export default function AboutSection() {
             </div>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="divide-y divide-border border-t border-border">
             {highlights.map(({ label: hl, desc }, i) => {
               const Icon = ICONS[i];
               return (
-                <motion.div key={hl} {...fadeUp(0.1 * i)}>
-                  <div className="p-5 rounded-xl bg-card border border-border border-l-4 border-l-primary hover:border-primary/40 hover:shadow-md hover:shadow-primary/5 transition-colors duration-300 h-full">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                      <Icon className="w-5 h-5 text-primary" />
-                    </div>
+                <motion.div key={hl} {...fadeUp(0.08 * i)} className="flex items-start gap-4 py-5">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
                     <h3 className="font-semibold text-foreground mb-1">{hl}</h3>
                     <p className="text-sm text-muted-foreground">{desc}</p>
                   </div>

@@ -67,7 +67,7 @@ export default function Home() {
     <LanguageProvider>
       <Navbar />
       <ScrollProgressBar />
-      <div className="min-h-screen bg-background text-foreground">
+      <div className="min-h-screen bg-background text-foreground lg:pl-64">
         <HeroSection />
         <AboutSection />
         <SkillsSection />

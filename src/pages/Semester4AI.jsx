@@ -32,7 +32,7 @@ function Semester4AIContent() {
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground lg:pl-64">
       <Navbar />
       <ScrollProgressBar />
 

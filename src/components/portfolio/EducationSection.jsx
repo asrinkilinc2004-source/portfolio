@@ -1,25 +1,10 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
-import { fadeLeft, fadeUp } from "@/lib/motion";
+import { fadeUp } from "@/lib/motion";
 
 export default function EducationSection() {
   const { t } = useLanguage();
   const { label, title, timeline } = t.education;
-  const containerRef = useRef(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start 85%", "end 60%"],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 20,
-    restDelta: 0.001,
-  });
-
-  const scaleY = useTransform(smoothProgress, [0, 1], [0, 1]);
 
   return (
     <section id="education" className="py-24 md:py-32 px-6">
@@ -29,28 +14,21 @@ export default function EducationSection() {
           <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">{title}</h2>
         </motion.div>
 
-        <div ref={containerRef} className="relative">
-          <motion.div
-            className="absolute left-[22px] md:left-[34px] top-0 bottom-0 origin-top"
-            style={{ scaleY, width: "3px", background: "hsl(var(--primary) / 0.8)" }}
-          />
-          <div className="space-y-12">
-            {timeline.map((item, i) => (
-              <motion.div
-                key={i}
-                {...fadeLeft(i * 0.08)}
-                className="relative pl-16 md:pl-20"
-              >
-                <div className="absolute left-3 md:left-6 top-1 w-6 h-6 rounded-full border-[3px] border-primary bg-background flex items-center justify-center">
-                  <div className="w-2.5 h-2.5 rounded-full bg-primary" />
-                </div>
-                <span className="font-mono text-xs text-primary tracking-wider">{item.year}</span>
-                <h3 className="text-xl font-bold mt-1 mb-1">{item.title}</h3>
+        <div className="divide-y divide-border border-t border-border">
+          {timeline.map((item, i) => (
+            <motion.div
+              key={i}
+              {...fadeUp(Math.min(i * 0.05, 0.3))}
+              className="grid sm:grid-cols-[9rem_1fr] gap-2 sm:gap-8 py-6"
+            >
+              <span className="font-mono text-xs text-primary tracking-wider">{item.year}</span>
+              <div>
+                <h3 className="text-lg font-bold">{item.title}</h3>
                 <p className="text-sm text-muted-foreground mb-2">{item.institution}</p>
                 <p className="text-muted-foreground leading-relaxed">{item.description}</p>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

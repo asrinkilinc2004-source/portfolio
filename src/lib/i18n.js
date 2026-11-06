@@ -23,7 +23,7 @@ export const translations = {
       highlights: [
         { label: "Consultant Mindset",  desc: "Tech vertalen naar bedrijfswaarde" },
         { label: "IT Student",          desc: "Informatietechnologie studeren aan de HvA" },
-        { label: "Tech-Savvy",          desc: "Begrijp code, architectuur & systemen" },
+        { label: "Design Mindset",      desc: "Oog voor gebruiksvriendelijke, doordachte interfaces" },
         { label: "Hands-On Builder",    desc: "Echte apps gebouwd van idee tot lancering" },
       ],
       stats: [
@@ -252,7 +252,7 @@ export const translations = {
       highlights: [
         { label: "Consultant Mindset",  desc: "Translating tech into business value" },
         { label: "IT Student",          desc: "Studying Information Technology at HvA" },
-        { label: "Tech-Savvy",          desc: "Understand code, architecture & systems" },
+        { label: "Design Mindset",      desc: "An eye for clean, user-friendly interfaces" },
         { label: "Hands-On Builder",    desc: "Built real-world apps from idea to launch" },
       ],
       stats: [
@@ -481,7 +481,7 @@ export const translations = {
       highlights: [
         { label: "عقلية الاستشارة",      desc: "تحويل التقنية إلى قيمة أعمال" },
         { label: "طالب تقنية معلومات",   desc: "دراسة تكنولوجيا المعلومات في الجامعة" },
-        { label: "متمكن من التقنية",     desc: "فهم الكود والبنية والأنظمة" },
+        { label: "عقلية التصميم",        desc: "حس بتصميم واجهات واضحة وسهلة الاستخدام" },
         { label: "مبني بالممارسة",       desc: "بناء تطبيقات حقيقية من الفكرة للإطلاق" },
       ],
       stats: [
@@ -710,7 +710,7 @@ export const translations = {
       highlights: [
         { label: "Mentalidad Consultora",  desc: "Traducir tecnología en valor empresarial" },
         { label: "Estudiante de TI",       desc: "Estudiando Tecnología de la Información en la HvA" },
-        { label: "Conocedor de Tecnología",desc: "Entiendo código, arquitectura y sistemas" },
+        { label: "Mentalidad de Diseño",   desc: "Ojo para interfaces claras y fáciles de usar" },
         { label: "Constructor Práctico",   desc: "Apps reales construidas desde idea hasta lanzamiento" },
       ],
       stats: [
@@ -939,7 +939,7 @@ export const translations = {
       highlights: [
         { label: "咨询思维",   desc: "将技术转化为商业价值" },
         { label: "IT学生",     desc: "在阿姆斯特丹应用科技大学学习信息技术" },
-        { label: "技术达人",   desc: "理解代码、架构与系统" },
+        { label: "设计思维",   desc: "注重清晰、易用的界面设计" },
         { label: "实践构建者", desc: "从创意到上线构建真实应用" },
       ],
       stats: [

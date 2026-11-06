@@ -24,7 +24,7 @@ function ProjectCard({ project, index, viewCurrentLabel }) {
     <motion.div {...fadeUp(index * 0.08)} id={project.link === "/semester4" ? "ai-project" : undefined}>
       <div className="group relative rounded-xl overflow-hidden bg-card border border-border hover:border-primary/40 hover:shadow-md hover:shadow-primary/5 transition-colors duration-300"
         style={{ boxShadow: "inset 0 4px 0 0 hsl(var(--primary) / 0.7)" }}>
-        <div className="flex flex-col lg:flex-row">
+        <div className={`flex flex-col ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"}`}>
 
           {/* Image / placeholder */}
           <div className="lg:w-1/2 overflow-hidden relative">

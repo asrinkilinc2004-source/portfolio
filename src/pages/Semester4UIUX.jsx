@@ -36,7 +36,7 @@ function Semester4UiuxContent() {
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground lg:pl-64">
       <Lightbox src={lightbox?.src} alt={lightbox?.alt} onClose={() => setLightbox(null)} />
       <Navbar />
       <ScrollProgressBar />

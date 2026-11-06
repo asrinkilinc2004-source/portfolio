@@ -1,7 +1,7 @@
-import { ArrowDown, Linkedin, Mail, Download } from "lucide-react";
+import { Linkedin, Mail, Download } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
-import { fadeUp, fadeIn } from "@/lib/motion";
+import { fadeUp } from "@/lib/motion";
 
 const AVATAR_URL = "/ik.png";
 
@@ -9,10 +9,10 @@ export default function HeroSection() {
   const { t } = useLanguage();
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-x-hidden px-6 bg-primary dark:bg-[#15609e]">
-      <div className="relative max-w-6xl mx-auto w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-20 pt-20">
+    <section className="relative overflow-x-hidden px-6 lg:px-16 pt-28 pb-20 lg:pt-24 lg:pb-24 bg-primary dark:bg-[#15609e]">
+      <div className="relative max-w-5xl w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
         <div className="w-full min-w-0 flex-1 text-center lg:text-left">
-          <motion.h1 {...fadeUp(0)} className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-6">
+          <motion.h1 {...fadeUp(0)} className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
             <span className="text-white">Asrin <span className="text-white/90">Kilinc</span></span>
             <span className="block mt-6 text-white/90 text-3xl leading-tight font-medium">
               {t.hero.subtitle}
@@ -48,23 +48,13 @@ export default function HeroSection() {
         </div>
 
         <motion.div {...fadeUp(0.1)} className="flex-shrink-0">
-          <div className="relative p-6">
-            <div className="relative z-10 w-48 h-48 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-primary/20 shadow-2xl shadow-primary/10">
+          <div className="relative p-4">
+            <div className="relative z-10 w-40 h-40 md:w-56 md:h-56 rounded-full overflow-hidden border-2 border-white/20 shadow-xl">
               <img src={AVATAR_URL} alt="Profile" decoding="async" fetchPriority="high" className="w-full h-full object-cover object-top" />
             </div>
-            <div className="rounded-full absolute inset-0 border border-primary/10" />
           </div>
         </motion.div>
       </div>
-
-      <motion.button
-        onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth", block: "start" })}
-        {...fadeIn(0.4)}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 hover:text-white transition-colors">
-        <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-          <ArrowDown className="w-5 h-5" />
-        </motion.div>
-      </motion.button>
     </section>
   );
 }
