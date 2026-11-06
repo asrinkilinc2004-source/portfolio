@@ -4,12 +4,14 @@ import { translations, LANGUAGES } from "./i18n";
 const LanguageContext = createContext(null);
 
 export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState(() => localStorage.getItem("lang") || "nl");
+  const [lang, setLang] = useState(() => {
+    const stored = localStorage.getItem("lang");
+    return LANGUAGES.some((l) => l.code === stored) ? stored : "nl";
+  });
 
   useEffect(() => {
     localStorage.setItem("lang", lang);
-    const isRtl = LANGUAGES.find((l) => l.code === lang)?.rtl ?? false;
-    document.documentElement.setAttribute("dir", isRtl ? "rtl" : "ltr");
+    document.documentElement.setAttribute("dir", "ltr");
     document.documentElement.setAttribute("lang", lang);
   }, [lang]);
 
