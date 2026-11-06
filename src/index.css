@@ -4,17 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@keyframes non-clickable-popup {
-  0%   { opacity: 0; transform: translate(-50%, -160%); }
-  15%  { opacity: 1; transform: translate(-50%, -140%); }
-  75%  { opacity: 1; transform: translate(-50%, -140%); }
-  100% { opacity: 0; transform: translate(-50%, -150%); }
-}
-
-.animate-non-clickable-popup {
-  animation: non-clickable-popup 1.8s ease forwards;
-}
-
 @layer base {
   :root {
     --background: 210 30% 98%;
@@ -96,50 +85,6 @@ img {
   pointer-events: none;
 }
 
-/* Marker/graffiti highlight on section titles — desktop only */
-@media (pointer: fine) {
-  .marker-highlight {
-    background-image: linear-gradient(
-      104deg,
-      transparent 1%,
-      hsl(var(--primary) / 0.45) 3%,
-      hsl(var(--primary) / 0.68) 8%,
-      hsl(var(--primary) / 0.68) 89%,
-      hsl(var(--primary) / 0.45) 94%,
-      transparent 97%
-    );
-    background-repeat: no-repeat;
-    background-size: 0% 46%;
-    background-position: 0% 90%;
-    transition: background-size 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .marker-highlight:hover {
-    background-size: 100% 46%;
-  }
-
-  .marker-highlight-group {
-    background-image: linear-gradient(
-      104deg,
-      transparent 1%,
-      hsl(var(--primary) / 0.45) 3%,
-      hsl(var(--primary) / 0.68) 8%,
-      hsl(var(--primary) / 0.68) 89%,
-      hsl(var(--primary) / 0.45) 94%,
-      transparent 97%
-    );
-    background-repeat: no-repeat;
-    background-size: 0% 46%;
-    background-position: 0% 90%;
-    transition: background-size 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .group:hover .marker-highlight-group {
-    background-size: 100% 46%;
-  }
-}
-
-
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -199,16 +144,6 @@ img {
 }
 .glow-field:focus-within {
   box-shadow: 0 0 30px hsl(var(--primary) / 0.22);
-}
-
-/* Marquee infinite scroll */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-.group:hover .marquee-track {
-  animation-play-state: paused;
 }
 
 /* Mobile performance: disable expensive GPU effects on touch devices */

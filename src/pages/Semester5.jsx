@@ -1,22 +1,12 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { ThemeProvider } from "next-themes";
 import Navbar from "../components/portfolio/Navbar";
-import CustomCursor from "../components/portfolio/CustomCursor";
 import ScrollProgressBar from "../components/portfolio/ScrollProgressBar";
 import BackToTop from "../components/portfolio/BackToTop";
 import { LanguageProvider } from "../lib/LanguageContext";
 import { useLenis } from "../lib/useLenis";
-
-const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 28 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] },
-});
+import { fadeUp } from "../lib/motion";
 
 function Semester5Content() {
   const navigate = useNavigate();
@@ -25,7 +15,6 @@ function Semester5Content() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <ScrollProgressBar />
-      <CustomCursor />
       <Navbar />
 
       <main className="pt-32 pb-24 px-6 max-w-4xl mx-auto">
@@ -81,10 +70,8 @@ function Semester5Content() {
 
 export default function Semester5Page() {
   return (
-    <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
-      <LanguageProvider>
-        <Semester5Content />
-      </LanguageProvider>
-    </ThemeProvider>
+    <LanguageProvider>
+      <Semester5Content />
+    </LanguageProvider>
   );
 }

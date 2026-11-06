@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -6,33 +6,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/lib/LanguageContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 
-
 export default function Navbar() {
   const [scrolled,       setScrolled]       = useState(false);
   const [mobileOpen,     setMobileOpen]     = useState(false);
   const [activeSection,  setActiveSection]  = useState("");
-  const [hovered,        setHovered]        = useState(null);
   const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
-
-  // Each link gets a unique hand-drawn underline path
-  const UNDERLINES = [
-    // About — gentle single S-wave
-    "M1,4.5 C18,1.5 38,5.5 55,2.8 C72,0.5 88,4.8 99,3.2",
-    // Skills — tight high-frequency squiggle
-    "M1,3.5 C10,1 19,5.5 28,3 C37,0.5 46,5 55,3 C64,0.5 73,5.5 82,3 C90,1 96,4.5 99,3.5",
-    // Projects — one deep asymmetric dip
-    "M1,2.5 C22,2 38,6 55,3.5 C68,1.5 82,4.5 99,2",
-    // Education — two peaks like a heartbeat
-    "M1,4 C12,4 18,1 28,1 C38,1 44,5 55,5 C64,5 72,1 82,1 C90,1 95,3.5 99,3.5",
-    // Contact — starts high, ends with a final flick
-    "M1,2 C20,2 40,5 58,4 C72,3 84,1.5 92,3 C95,3.8 97,5 99,4.5",
-    // News — gentle double wave
-    "M1,3 C15,1 25,5 40,3 C55,1 65,5 80,3 C88,1.5 94,4 99,3",
-  ];
 
   const links = [
     { label: t.nav.about,     href: "#about",      id: "about"      },
@@ -40,7 +22,6 @@ export default function Navbar() {
     { label: t.nav.projects,  href: "#projects",   id: "projects"   },
     { label: t.nav.education, href: "#education",  id: "education"  },
     { label: t.nav.contact,   href: "#contact",    id: "contact"    },
-    { label: t.nav.news,      href: "#technews",   id: "technews"   },
   ];
 
   const scrollTo = (id) => {
@@ -65,7 +46,6 @@ export default function Navbar() {
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 40);
-      // Clear active section when back in the hero (top half of first viewport)
       if (window.scrollY < window.innerHeight * 0.5) {
         setActiveSection("");
       }
@@ -75,7 +55,7 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const ids = ["about", "skills", "projects", "education", "contact", "technews"];
+    const ids = ["about", "skills", "projects", "education", "contact"];
     const observers = ids.map((id) => {
       const el = document.getElementById(id);
       if (!el) return null;
@@ -110,33 +90,19 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
-          {links.map((link, i) => {
+          {links.map((link) => {
             const isActive = activeSection === link.href;
-            const drawn = isActive || hovered === i;
             return (
               <a key={link.href} href={link.href}
                 onClick={(e) => handleNavClick(e, link)}
-                onMouseEnter={() => setHovered(i)}
-                onMouseLeave={() => setHovered(null)}
                 className={`relative text-sm transition-colors duration-200 pb-1 dark:text-white dark:hover:text-white ${
                   isActive ? "text-primary" : "text-muted-foreground hover:text-primary"
                 }`}>
                 {link.label}
-                <span className="absolute bottom-0 left-0 w-full h-[6px] pointer-events-none text-primary dark:text-white">
-                  <svg height="6" width="100%" preserveAspectRatio="none" viewBox="0 0 100 6">
-                    <motion.path
-                      d={UNDERLINES[i]}
-                      stroke="currentColor" strokeWidth="2.8" fill="none"
-                      strokeLinecap="round" strokeLinejoin="round"
-                      initial={{ pathLength: 0, opacity: 0 }}
-                      animate={{ pathLength: drawn ? 1 : 0, opacity: drawn ? 1 : 0 }}
-                      transition={{
-                        pathLength: { duration: 0.35, ease: "easeInOut" },
-                        opacity: { duration: 0, delay: drawn ? 0 : 0.35 },
-                      }}
-                    />
-                  </svg>
-                </span>
+                <span
+                  className="absolute bottom-0 left-0 h-[2px] bg-current rounded-full origin-left transition-transform duration-300 ease-out w-full"
+                  style={{ transform: `scaleX(${isActive ? 1 : 0})` }}
+                />
               </a>
             );
           })}

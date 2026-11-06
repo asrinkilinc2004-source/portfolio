@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Send, Linkedin } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -6,13 +6,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
-import SplitText from "./SplitText";
 
 /* Wrapper that adds glow + left accent bar on focus */
 function GlowField({ children }) {
   return (
     <div className="glow-field group/glow relative">
-      {/* Left accent bar — slides in on focus */}
       <span
         className="absolute left-0 top-[20%] bottom-[20%] w-[2px] rounded-full bg-primary
           scale-y-0 group-focus-within/glow:scale-y-100
@@ -47,17 +45,14 @@ export default function ContactSection() {
     finally { setSending(false); }
   };
 
-  const inputCls =
-    "bg-card border-border hover:bg-primary hover:border-primary hover:text-white hover:placeholder:text-white/60 focus:border-primary/70 focus:bg-card focus:!text-foreground focus:!placeholder:text-muted-foreground h-12 transition-all duration-300 pl-4";
+  const inputCls = "bg-card border-border hover:border-primary/40 focus:border-primary/70 h-12 transition-colors duration-300 pl-4";
 
   return (
-    <section id="contact" className="py-32 px-6">
+    <section id="contact" className="py-24 md:py-32 px-6">
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{c.label}</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">
-            <span className="marker-highlight"><SplitText text={c.title} delay={0.3} /></span>
-          </h2>
+          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">{c.title}</h2>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16">
@@ -138,7 +133,7 @@ export default function ContactSection() {
             <GlowField>
               <Textarea
                 placeholder={c.form.message}
-                className="bg-card border-border hover:bg-primary hover:border-primary hover:text-white hover:placeholder:text-white/60 focus:border-primary/70 focus:bg-card focus:!text-foreground focus:!placeholder:text-muted-foreground min-h-[140px] resize-none transition-all duration-300 pl-4"
+                className="bg-card border-border hover:border-primary/40 focus:border-primary/70 min-h-[140px] resize-none transition-colors duration-300 pl-4"
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 required

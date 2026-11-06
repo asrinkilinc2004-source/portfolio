@@ -1,320 +1,67 @@
-import React, { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion";
 import { ArrowDown, Linkedin, Mail, Download } from "lucide-react";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
-import MagneticButton from "./MagneticButton";
+import { fadeUp, fadeIn } from "@/lib/motion";
 
 const AVATAR_URL = "/ik.png";
-const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
-// Title scribble — single wavy line drawn under/through the title, viewBox 0 0 520 30
-const TITLE_SCRIBBLE_PATH = "M -5,18 C 55,8 115,24 178,14 C 241,4 302,22 365,12 C 415,4 468,18 528,12";
-
-// Three organic scribble loops around the photo (viewBox 300x300, center 150,150)
-const SCRIBBLE_PATHS = [
-  // Outer wobbly orbit
-  "M 148,18 C 175,8 210,14 235,32 C 260,50 272,80 270,112 C 268,144 255,175 238,197 C 221,219 196,235 168,244 C 140,253 108,250 82,236 C 56,222 37,196 30,166 C 23,136 30,100 48,74 C 66,48 98,26 130,18 C 138,16 143,20 148,18",
-  // Second crossing loop — starts from bottom-left
-  "M 55,215 C 35,192 24,160 28,130 C 32,100 48,72 72,54 C 96,36 128,28 158,32 C 188,36 216,52 232,76 C 248,100 252,132 244,160 C 236,188 218,212 194,226 C 170,240 140,244 112,238 C 88,232 65,228 55,215",
-  // Inner tighter loop with slight irregularity
-  "M 150,42 C 178,36 208,50 224,74 C 240,98 240,130 228,156 C 216,182 192,200 164,206 C 136,212 104,202 86,182 C 68,162 64,130 74,104 C 84,78 108,58 136,48 C 142,46 148,44 150,42",
-];
-
-const START_DELAY = isMobile ? 350 : 850;
-
-const ORB_STYLE = `
-  @keyframes orb1 {
-    0%   { transform: translate(0px,0px)      scale(0.65); }
-    20%  { transform: translate(110px,-85px)  scale(1.4);  }
-    45%  { transform: translate(-70px,55px)   scale(0.75); }
-    70%  { transform: translate(60px,100px)   scale(1.3);  }
-    100% { transform: translate(0px,0px)      scale(0.65); }
-  }
-  @keyframes orb2 {
-    0%   { transform: translate(0px,0px)      scale(1.25); }
-    25%  { transform: translate(-120px,70px)  scale(0.55); }
-    55%  { transform: translate(80px,-95px)   scale(1.45); }
-    80%  { transform: translate(-40px,40px)   scale(0.8);  }
-    100% { transform: translate(0px,0px)      scale(1.25); }
-  }
-  @keyframes orb3 {
-    0%   { transform: translate(0px,0px)       scale(0.85); }
-    30%  { transform: translate(90px,80px)     scale(1.5);  }
-    60%  { transform: translate(-80px,-70px)   scale(0.6);  }
-    100% { transform: translate(0px,0px)       scale(0.85); }
-  }
-  @keyframes orb4 {
-    0%   { transform: translate(0px,0px)       scale(1.1);  }
-    35%  { transform: translate(-95px,-105px)  scale(0.5);  }
-    65%  { transform: translate(115px,60px)    scale(1.45); }
-    100% { transform: translate(0px,0px)       scale(1.1);  }
-  }
-  @keyframes orb5 {
-    0%   { transform: translate(0px,0px)      scale(0.7);  }
-    40%  { transform: translate(85px,75px)    scale(1.38); }
-    75%  { transform: translate(-60px,-85px)  scale(0.8);  }
-    100% { transform: translate(0px,0px)      scale(0.7);  }
-  }
-  @keyframes orb6 {
-    0%   { transform: translate(0px,0px)      scale(1.2);  }
-    50%  { transform: translate(-75px,55px)   scale(0.55); }
-    80%  { transform: translate(55px,-75px)   scale(1.4);  }
-    100% { transform: translate(0px,0px)      scale(1.2);  }
-  }
-  .orb-line { border: 1.5px solid rgba(255,255,255,0.18); }
-  /* Exclude orb container from view-transition so theme switch doesn't pause animations */
-  .orb-bg { view-transition-name: orb-bg; }
-  ::view-transition-old(orb-bg), ::view-transition-new(orb-bg) { animation: none; }
-`;
-
-function AnimatedOrbs({ ready }) {
-  const orbs = [
-    { top: "-25%",   left: "-15%",  w: "78vmax", anim: "orb1 38s ease-in-out infinite",      delay: "0s"    },
-    { top: "-35%",   right:"-20%",  w: "90vmax", anim: "orb2 50s ease-in-out infinite",      delay: "-15s"  },
-    { top: "10%",    left: "25%",   w: "54vmax", anim: "orb3 32s ease-in-out infinite",      delay: "-22s"  },
-    { bottom:"-30%", left: "5%",    w: "72vmax", anim: "orb4 44s ease-in-out infinite",      delay: "-8s"   },
-    { top: "25%",    right:"-10%",  w: "60vmax", anim: "orb5 42s ease-in-out infinite",      delay: "-30s"  },
-    { bottom:"-8%",  right:"18%",   w: "46vmax", anim: "orb6 36s ease-in-out infinite",      delay: "-18s"  },
-  ];
-  return (
-    <>
-      <style>{ORB_STYLE}</style>
-      <div className="orb-bg absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        {orbs.map((o, i) => (
-          <div key={i} className="orb-line" style={{
-            position: "absolute",
-            top: o.top, bottom: o.bottom, left: o.left, right: o.right,
-            width: o.w, height: o.w,
-            borderRadius: "50%",
-            animation: `${o.anim} ${o.delay}`,
-            animationPlayState: ready ? "running" : "paused",
-            willChange: "transform",
-          }} />
-        ))}
-      </div>
-    </>
-  );
-}
-
-function useTypingLoop(text, ready, typeSpeed = 55, deleteSpeed = 25, pauseMs = 10000) {
-  const [displayed, setDisplayed] = useState("");
-  const [phase, setPhase] = useState("idle");
-
-  // Only start when splash is done
-  useEffect(() => {
-    if (!ready) return;
-    setDisplayed("");
-    setPhase("idle");
-    const timer = setTimeout(() => setPhase("typing"), START_DELAY);
-    return () => clearTimeout(timer);
-  }, [text, ready]);
-
-  useEffect(() => {
-    if (phase === "idle") return;
-    let timeout;
-    if (phase === "typing") {
-      if (displayed.length < text.length) {
-        timeout = setTimeout(() => setDisplayed(text.slice(0, displayed.length + 1)), typeSpeed);
-      } else {
-        timeout = setTimeout(() => setPhase("deleting"), pauseMs);
-      }
-    } else {
-      if (displayed.length > 0) {
-        timeout = setTimeout(() => setDisplayed(text.slice(0, displayed.length - 1)), deleteSpeed);
-      } else {
-        setPhase("typing");
-      }
-    }
-    return () => clearTimeout(timeout);
-  }, [displayed, phase, text]);
-
-  return { displayed, showCursor: phase === "typing" && displayed.length < text.length };
-}
-
-export default function HeroSection({ splashReady = true }) {
+export default function HeroSection() {
   const { t } = useLanguage();
-  const { displayed, showCursor } = useTypingLoop(t.hero.subtitle, splashReady);
-  const [photoHovered,  setPhotoHovered]  = useState(false);
-  const [titleHovered,  setTitleHovered]  = useState(false);
-  const sectionRef = useRef(null);
-
-  useEffect(() => {
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const sy = window.scrollY;
-        const vh = window.innerHeight;
-        if (sectionRef.current) {
-          sectionRef.current.style.transform = `translateY(${-sy * 0.35}px)`;
-        }
-        ticking = false;
-      });
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
-    <section ref={sectionRef} className="relative z-[20] min-h-screen flex items-center justify-center overflow-x-hidden px-6 bg-primary dark:bg-[#15609e]">
-
-      <AnimatedOrbs ready={splashReady} />
-
+    <section className="relative min-h-screen flex items-center justify-center overflow-x-hidden px-6 bg-primary dark:bg-[#15609e]">
       <div className="relative max-w-6xl mx-auto w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-20 pt-20">
         <div className="w-full min-w-0 flex-1 text-center lg:text-left">
-          <motion.div
-            initial={{ opacity: 0, y: isMobile ? 10 : 30 }}
-            animate={splashReady ? { opacity: 1, y: 0 } : { opacity: 0, y: isMobile ? 10 : 30 }}
-            transition={{ duration: isMobile ? 0.3 : 0.7 }}>
-            <h1 className="text-5xl md:text-7xl font-inter font-bold tracking-tight leading-[1.1] mb-6">
-              {/* Asrin Kilinc — hover scale + layered scribble */}
-              <motion.span
-                className="relative inline-block cursor-default"
-                onHoverStart={() => setTitleHovered(true)}
-                onHoverEnd={() => setTitleHovered(false)}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "tween", duration: 0.15, ease: "easeOut" }}
-              >
-                {/* Single scribble line — sits under/half-behind the title */}
-                <span className="absolute pointer-events-none" style={{ bottom: "-6px", left: "-8px", right: "-8px", height: "30px", zIndex: 0, overflow: "visible" }}>
-                  <svg width="100%" height="100%" viewBox="0 0 520 30" preserveAspectRatio="none" style={{ overflow: "visible" }}>
-                    <motion.path
-                      d={TITLE_SCRIBBLE_PATH}
-                      stroke="rgba(255,255,255,0.7)" strokeWidth="3.5" fill="none"
-                      strokeLinecap="round" strokeLinejoin="round"
-                      initial={{ pathLength: 0, opacity: 0 }}
-                      animate={{ pathLength: titleHovered ? 1 : 0, opacity: titleHovered ? 1 : 0 }}
-                      transition={{
-                        pathLength: { duration: 0.45, ease: [0.4, 0, 0.2, 1] },
-                        opacity:    { duration: 0, delay: titleHovered ? 0 : 0.45 },
-                      }}
-                    />
-                  </svg>
-                </span>
+          <motion.h1 {...fadeUp(0)} className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-6">
+            <span className="text-white">Asrin <span className="text-white/90">Kilinc</span></span>
+            <span className="block mt-6 text-white/90 text-3xl leading-tight font-medium">
+              {t.hero.subtitle}
+            </span>
+          </motion.h1>
 
-                {/* Text */}
-                <span className="relative text-white" style={{ zIndex: 1 }}>Asrin <span className="text-white/90">Kilinc</span></span>
-              </motion.span>
-              <span className="relative block mt-6 text-white/90 text-3xl leading-tight">
-                {/* Reserve the full subtitle's wrapped height throughout typing/deleting. */}
-                <span className="invisible block" aria-hidden="true">{t.hero.subtitle}</span>
-                <span className="sr-only">{t.hero.subtitle}</span>
-                <span className="absolute inset-0" aria-hidden="true">
-                  {displayed}
-                  {showCursor && (
-                    <span className="relative inline-block w-0 align-middle">
-                      <span className="absolute left-0.5 bottom-0 w-0.5 h-7 bg-white animate-pulse" />
-                    </span>
-                  )}
-                </span>
-              </span>
-            </h1>
+          <motion.div {...fadeUp(0.12)} className="flex items-center gap-4 mt-8 justify-center lg:justify-start flex-wrap">
+            <a href="#contact" className="inline-block bg-white text-primary px-6 py-3 text-sm font-medium rounded-lg hover:opacity-90 transition-opacity active:scale-[0.98]">
+              {t.hero.cta_contact}
+            </a>
+            <a href="#projects" className="inline-block bg-white/15 text-white px-6 py-3 text-sm font-medium rounded-lg border border-white/30 hover:bg-white/25 transition-colors active:scale-[0.98]">
+              {t.hero.cta_projects}
+            </a>
+            <a href="/cv_def.pdf" download="CV_Asrin_Kilinc.pdf" className="inline-flex items-center gap-2 bg-white/15 text-white px-6 py-3 text-sm font-medium rounded-lg border border-white/30 hover:bg-white/25 transition-colors active:scale-[0.98]">
+              <Download className="w-4 h-4" />
+              {t.hero.cta_cv}
+            </a>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
-            animate={splashReady ? { opacity: 1, y: 0 } : { opacity: 0, y: isMobile ? 10 : 20 }}
-            transition={{ duration: isMobile ? 0.3 : 0.7, delay: isMobile ? 0.1 : 0.3 }}
-            className="flex items-center gap-4 mt-8 justify-center lg:justify-start flex-wrap">
-            <MagneticButton>
-              <a href="#contact" className="inline-block bg-white text-primary px-6 py-3 text-sm font-medium rounded-lg hover:opacity-90 transition-opacity">
-                {t.hero.cta_contact}
-              </a>
-            </MagneticButton>
-            <MagneticButton>
-              <a href="#projects" className="inline-block bg-white/15 text-white px-6 py-3 text-sm font-medium rounded-lg border border-white/30 hover:bg-white/25 transition-colors">
-                {t.hero.cta_projects}
-              </a>
-            </MagneticButton>
-            <MagneticButton>
-              <a href="/cv_def.pdf" download="CV_Asrin_Kilinc.pdf" className="inline-flex items-center gap-2 bg-white/15 text-white px-6 py-3 text-sm font-medium rounded-lg border border-white/30 hover:bg-white/25 transition-colors">
-                <Download className="w-4 h-4" />
-                {t.hero.cta_cv}
-              </a>
-            </MagneticButton>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: splashReady ? 1 : 0 }}
-            transition={{ duration: isMobile ? 0.3 : 0.7, delay: isMobile ? 0.15 : 0.5 }}
-            className="flex items-center gap-5 mt-8 justify-center lg:justify-start">
+          <motion.div {...fadeUp(0.2)} className="flex items-center gap-5 mt-8 justify-center lg:justify-start">
             {[
               { icon: Linkedin, href: "https://www.linkedin.com/in/asrin-k/" },
               { icon: Mail,     href: "#contact" },
             ].map(({ icon: Icon, href }, i) => (
-              <MagneticButton key={i}>
-                <a href={href}
-                  target={href.startsWith("http") ? "_blank" : undefined}
-                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center text-white/70 hover:bg-white hover:text-primary hover:border-white transition-colors duration-200">
-                  <Icon className="w-4 h-4" />
-                </a>
-              </MagneticButton>
+              <a key={i} href={href}
+                target={href.startsWith("http") ? "_blank" : undefined}
+                rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center text-white/70 hover:bg-white hover:text-primary hover:border-white transition-colors duration-200">
+                <Icon className="w-4 h-4" />
+              </a>
             ))}
           </motion.div>
         </div>
 
-        <motion.div
-          initial={{ scale: isMobile ? 0.95 : 0.8 }}
-          animate={{ scale: splashReady ? 1 : isMobile ? 0.95 : 0.8 }}
-          transition={{ type: "tween", ease: "easeOut", duration: isMobile ? 0.3 : 0.8, delay: isMobile ? 0.1 : 0.2 }}
-          style={{ willChange: "transform" }}
-          className="flex-shrink-0">
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            onHoverStart={() => setPhotoHovered(true)}
-            onHoverEnd={() => setPhotoHovered(false)}
-            transition={{ type: "tween", duration: 0.15, ease: "easeOut" }}
-            className="relative cursor-pointer p-6">
-
-            {/* Hand-drawn scribble behind the photo */}
-            <svg
-              className="absolute pointer-events-none"
-              style={{ width: "135%", height: "135%", top: "-17.5%", left: "-17.5%", overflow: "visible", zIndex: 0 }}
-              viewBox="0 0 300 300"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {SCRIBBLE_PATHS.map((d, i) => (
-                <motion.path
-                  key={i}
-                  d={d}
-                  stroke="rgba(255,255,255,0.6)"
-                  strokeWidth={i === 0 ? 2 : 1.6}
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{
-                    pathLength: photoHovered ? 1 : 0,
-                    opacity: photoHovered ? 1 : 0,
-                  }}
-                  transition={{
-                    pathLength: { duration: 0.45, delay: photoHovered ? i * 0.18 : (SCRIBBLE_PATHS.length - 1 - i) * 0.18, ease: [0.4, 0, 0.2, 1] },
-                    opacity: {
-                      duration: 0,
-                      delay: photoHovered ? i * 0.18 : 0.45 + (SCRIBBLE_PATHS.length - 1) * 0.18,
-                    },
-                  }}
-                />
-              ))}
-            </svg>
-
+        <motion.div {...fadeUp(0.1)} className="flex-shrink-0">
+          <div className="relative p-6">
             <div className="relative z-10 w-48 h-48 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-primary/20 shadow-2xl shadow-primary/10">
               <img src={AVATAR_URL} alt="Profile" decoding="async" fetchPriority="high" className="w-full h-full object-cover object-top" />
             </div>
-            <div className="rounded-full absolute inset-0 border border-primary/10 animate-pulse" style={{ zIndex: 10 }} />
-          </motion.div>
+            <div className="rounded-full absolute inset-0 border border-primary/10" />
+          </div>
         </motion.div>
       </div>
 
       <motion.button
         onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth", block: "start" })}
-        initial={{ opacity: 0 }} animate={{ opacity: splashReady ? 1 : 0 }}
-        transition={{ delay: isMobile ? 0.4 : 1.2 }}
+        {...fadeIn(0.4)}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 hover:text-white transition-colors">
-        <motion.div animate={{ y: splashReady ? [0, 8, 0] : 0 }} transition={{ duration: 1.5, repeat: Infinity }}>
+        <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
           <ArrowDown className="w-5 h-5" />
         </motion.div>
       </motion.button>

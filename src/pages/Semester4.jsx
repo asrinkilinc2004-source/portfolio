@@ -1,23 +1,14 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Users, Calendar, Cpu } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { motion } from "framer-motion";
+import { ArrowLeft, Users, Calendar, Cpu, Camera } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { ThemeProvider } from "next-themes";
 import Navbar from "../components/portfolio/Navbar";
-import CustomCursor from "../components/portfolio/CustomCursor";
 import ScrollProgressBar from "../components/portfolio/ScrollProgressBar";
 import BackToTop from "../components/portfolio/BackToTop";
+import Lightbox from "../components/portfolio/Lightbox";
 import { LanguageProvider, useLanguage } from "../lib/LanguageContext";
 import { useLenis } from "../lib/useLenis";
-const WebcamScene3D = React.lazy(() => import("../components/portfolio/WebcamScene3D"));
-
-const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 28 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] },
-});
+import { fadeUp } from "../lib/motion";
 
 const GRID_STYLE = {
   backgroundImage:
@@ -37,193 +28,14 @@ const TEAM = [
 
 const MILESTONE_DONE = [true, true, true, true, true, true];
 
-// Tilt card wrapper — same as ProjectsSection
-function TiltCard({ children, className = "", onClick }) {
-  const ref = useRef(null);
-
-  const onMove = (e) => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width  - 0.5;
-    const y = (e.clientY - r.top)  / r.height - 0.5;
-    el.style.transition = "transform 0.05s linear";
-    el.style.transform  = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 6}deg) scale3d(1.02,1.02,1.02)`;
-  };
-
-  const onLeave = () => {
-    const el = ref.current;
-    if (!el) return;
-    el.style.transition = "transform 0.5s cubic-bezier(0.23,1,0.32,1)";
-    el.style.transform  = "perspective(900px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)";
-  };
-
+function Card({ children, className = "", onClick }) {
   return (
     <div
-      ref={ref}
-      onMouseMove={isMobile ? undefined : onMove}
-      onMouseLeave={isMobile ? undefined : onLeave}
       onClick={onClick}
-      className={`rounded-xl border border-border bg-card hover:border-primary/30 transition-colors duration-300 ${className}`}
-      style={{ willChange: "transform" }}
+      className={`rounded-xl border border-border bg-card hover:border-primary/40 transition-colors duration-300 ${className}`}
     >
       {children}
     </div>
-  );
-}
-
-function Lightbox({ src, alt, onClose }) {
-  const [scale, setScale]   = useState(1);
-  const [pos,   setPos]     = useState({ x: 0, y: 0 });
-  const overlayRef          = useRef(null);
-  const drag                = useRef({ active: false, sx: 0, sy: 0, ox: 0, oy: 0, moved: false });
-  const pinchDist           = useRef(null);
-
-  // Reset zoom + pan whenever a new image opens
-  useEffect(() => {
-    setScale(1);
-    setPos({ x: 0, y: 0 });
-  }, [src]);
-
-  // ESC to close
-  useEffect(() => {
-    if (!src) return;
-    const onKey = (e) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [src, onClose]);
-
-  // Non-passive wheel → zoom without zooming the page
-  useEffect(() => {
-    const el = overlayRef.current;
-    if (!el || !src) return;
-    const onWheel = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
-      setScale(s => Math.min(Math.max(s * factor, 1), 6));
-    };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, [src]);
-
-  // ── Mouse drag (pan when zoomed) ───────────────────────────────────
-  const onMouseDown = (e) => {
-    if (scale <= 1) return;
-    e.preventDefault();
-    drag.current = { active: true, sx: e.clientX, sy: e.clientY, ox: pos.x, oy: pos.y, moved: false };
-  };
-  const onMouseMove = (e) => {
-    if (!drag.current.active) return;
-    const dx = e.clientX - drag.current.sx;
-    const dy = e.clientY - drag.current.sy;
-    if (Math.abs(dx) + Math.abs(dy) > 2) drag.current.moved = true;
-    setPos({ x: drag.current.ox + dx, y: drag.current.oy + dy });
-  };
-  const onMouseUp = () => { drag.current.active = false; };
-
-  // Double-click resets zoom
-  const onDblClick = (e) => {
-    e.stopPropagation();
-    setScale(1);
-    setPos({ x: 0, y: 0 });
-  };
-
-  // ── Touch pinch-zoom (prevents browser pinch-zoom on page) ────────
-  const onTouchStart = (e) => {
-    if (e.touches.length === 2) {
-      pinchDist.current = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-    }
-  };
-  const onTouchMove = (e) => {
-    if (e.touches.length !== 2 || !pinchDist.current) return;
-    e.preventDefault();
-    const dist = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-    const factor = dist / pinchDist.current;
-    setScale(s => Math.min(Math.max(s * factor, 1), 6));
-    pinchDist.current = dist;
-  };
-  const onTouchEnd = () => { pinchDist.current = null; };
-
-  // Close only when clicking the backdrop (not when dragging)
-  const onBackdropClick = (e) => {
-    if (e.target === overlayRef.current && !drag.current.moved) onClose();
-    drag.current.moved = false;
-  };
-
-  const cursorClass = scale > 1
-    ? (drag.current.active ? "cursor-grabbing" : "cursor-grab")
-    : "cursor-zoom-in";
-
-  return (
-    <AnimatePresence>
-      {src && (
-        <motion.div
-          ref={overlayRef}
-          className="fixed inset-0 z-[300] flex items-center justify-center overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.22 }}
-          onClick={onBackdropClick}
-          onMouseMove={onMouseMove}
-          onMouseUp={onMouseUp}
-          onMouseLeave={onMouseUp}
-          style={{ background: "rgba(0,0,0,0.88)", backdropFilter: "blur(10px)", touchAction: "none" }}
-        >
-          <motion.div
-            className="relative max-w-5xl w-full px-4 md:px-12 select-none"
-            initial={{ scale: 0.86, opacity: 0, y: 20 }}
-            animate={{ scale: 1,    opacity: 1, y: 0  }}
-            exit={{    scale: 0.90, opacity: 0, y: 10 }}
-            transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={src}
-              alt={alt}
-              draggable={false}
-              onContextMenu={(e) => e.preventDefault()}
-              onMouseDown={onMouseDown}
-              onDoubleClick={onDblClick}
-              onTouchStart={onTouchStart}
-              onTouchMove={onTouchMove}
-              onTouchEnd={onTouchEnd}
-              className={`w-full max-h-[85vh] object-contain rounded-xl shadow-2xl ${cursorClass}`}
-              style={{
-                transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`,
-                transformOrigin: "center center",
-                transition: drag.current.active ? "none" : "transform 0.12s ease",
-                userSelect: "none",
-              }}
-            />
-            {alt && (
-              <p className="text-center text-xs text-white/60 font-mono italic mt-3"
-                style={{ transform: `translateY(${pos.y > 0 ? pos.y * 0.1 : 0}px)` }}>
-                {alt}
-              </p>
-            )}
-          </motion.div>
-
-          {/* Close + zoom hint */}
-          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-4">
-            <span className="text-white/30 font-mono text-xs">scroll = zoom · dubbelklik = reset</span>
-            <button
-              onClick={onClose}
-              className="text-white/40 hover:text-white/80 transition-colors font-mono text-xs"
-            >
-              ✕ sluiten
-            </button>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
   );
 }
 
@@ -237,38 +49,8 @@ function Semester4Content() {
   const [lightbox, setLightbox] = useState(null); // { src, alt }
   const openImg = useCallback((src, alt) => setLightbox({ src, alt }), []);
 
-  const patternRef  = useRef(null);
-  const pattern2Ref = useRef(null);
-
   // Always start at top when navigating to this page
   useEffect(() => { window.scrollTo(0, 0); }, []);
-
-  // Same parallax scroll handler as Home.jsx
-  useEffect(() => {
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const scrollY = window.scrollY;
-        const heroH   = window.innerHeight;
-        const progress = Math.min(Math.max((scrollY - heroH * 0.4) / (heroH * 0.4), 0), 1);
-        const isDark  = document.documentElement.classList.contains("dark");
-
-        if (patternRef.current) {
-          patternRef.current.style.opacity   = (progress * (isDark ? 0.08 : 0.20)).toString();
-          patternRef.current.style.transform = `translate3d(0,${-scrollY * 0.35}px,0)`;
-        }
-        if (pattern2Ref.current) {
-          pattern2Ref.current.style.opacity   = (progress * (isDark ? 0.18 : 0.35)).toString();
-          pattern2Ref.current.style.transform = `translate3d(0,${-scrollY * 0.6}px,0)`;
-        }
-        ticking = false;
-      });
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const milestones = s.milestones.map((label, i) => ({ label, done: MILESTONE_DONE[i] }));
   const doneCount  = milestones.filter((m) => m.done).length;
@@ -285,60 +67,12 @@ function Semester4Content() {
     <div className="min-h-screen bg-background text-foreground">
       <Lightbox src={lightbox?.src} alt={lightbox?.alt} onClose={() => setLightbox(null)} />
 
-      {/* ── Parallax pattern layers (identical to Home) ── */}
-      <div ref={patternRef} aria-hidden="true" className="fixed pointer-events-none"
-        style={{
-          zIndex: 10, opacity: 0,
-          top: "-200vh", left: "-10%", width: "120%", height: "900vh",
-          willChange: "transform",
-          backgroundImage: "radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
-      <div ref={pattern2Ref} aria-hidden="true" className="fixed pointer-events-none"
-        style={{
-          zIndex: 11, opacity: 0,
-          top: "-200vh", left: "-10%", width: "120%", height: "900vh",
-          willChange: "transform",
-          backgroundImage: "radial-gradient(circle, hsl(var(--muted-foreground)) 1.5px, transparent 1.5px)",
-          backgroundSize: "95px 95px",
-        }}
-      />
-
-      <CustomCursor />
       <Navbar />
       <ScrollProgressBar />
 
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-[55vh] flex items-end pb-16 px-6 overflow-hidden pt-28">
+      <section className="relative min-h-[45vh] flex items-end pb-16 px-6 overflow-hidden pt-28">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={GRID_STYLE} />
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 60% at 50% 0%, hsl(var(--primary)/0.18) 0%, transparent 70%)",
-          }}
-        />
-
-        {/* ── 3D Wireframe Webcam ── */}
-        <React.Suspense fallback={null}>
-          <div
-            className="absolute pointer-events-none select-none hidden md:block"
-            style={{
-              left: "50%",
-              top: "50%",
-              transform: "translate(-5%, -50%)",
-              width: "min(50%, 540px)",
-              height: "min(80vh, 440px)",
-              opacity: 0.88,
-              zIndex: 1,
-              maskImage: "radial-gradient(ellipse 75% 80% at 50% 50%, black 35%, transparent 100%)",
-              WebkitMaskImage: "radial-gradient(ellipse 75% 80% at 50% 50%, black 35%, transparent 100%)",
-            }}
-          >
-            <WebcamScene3D />
-          </div>
-        </React.Suspense>
 
         <div className="relative max-w-6xl mx-auto w-full">
           <motion.div {...fadeUp(0)}>
@@ -376,7 +110,7 @@ function Semester4Content() {
       </section>
 
       {/* ── Main content ─────────────────────────────────── */}
-      <section className="relative px-6 pb-32" style={{ zIndex: 12 }}>
+      <section className="relative px-6 pb-32">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
 
           {/* Left column */}
@@ -386,7 +120,7 @@ function Semester4Content() {
             <div className="grid grid-cols-2 gap-4">
               {["/webcam1.jpeg", "/webcam2.jpeg"].map((src, i) => (
                 <motion.div key={i} {...fadeUp(0.05 + i * 0.07)}>
-                  <TiltCard className="overflow-hidden cursor-zoom-in" onClick={() => openImg(src, `AI Face Tracking Camera ${i + 1}`)}>
+                  <Card className="overflow-hidden cursor-zoom-in" onClick={() => openImg(src, `AI Face Tracking Camera ${i + 1}`)}>
                     <img
                       src={src}
                       alt={`AI Face Tracking Camera ${i + 1}`}
@@ -394,32 +128,32 @@ function Semester4Content() {
                       onContextMenu={(e) => e.preventDefault()}
                       className="w-full h-64 object-cover hover:scale-105 transition-transform duration-500"
                     />
-                  </TiltCard>
+                  </Card>
                 </motion.div>
               ))}
             </div>
 
             {/* Over het project */}
             <motion.div {...fadeUp(0.1)}>
-              <TiltCard className="p-8 space-y-4">
+              <Card className="p-8 space-y-4">
                 <h2 className="text-xl font-bold">{s.about_title}</h2>
                 <p className="text-muted-foreground leading-relaxed">{s.about_p1}</p>
                 <p className="text-muted-foreground leading-relaxed">{s.about_p2}</p>
                 <p className="text-muted-foreground leading-relaxed">
                   {s.about_p3.split("Raspberry Pi").map((part, i, arr) =>
                     i < arr.length - 1 ? (
-                      <React.Fragment key={i}>
+                      <span key={i}>
                         {part}<strong className="text-foreground">Raspberry Pi</strong>
-                      </React.Fragment>
+                      </span>
                     ) : part
                   )}
                 </p>
-              </TiltCard>
+              </Card>
             </motion.div>
 
             {/* Voortgang */}
             <motion.div {...fadeUp(0.15)}>
-              <TiltCard className="p-8 space-y-5">
+              <Card className="p-8 space-y-5">
                 <h2 className="text-xl font-bold">{s.progress_title}</h2>
                 <div className="space-y-3">
                   {milestones.map((m, i) => (
@@ -451,15 +185,13 @@ function Semester4Content() {
                     <span className="font-mono">{doneCount}/{milestones.length}</span>
                   </div>
                   <div className="h-2 bg-border rounded-full overflow-hidden">
-                    <motion.div
+                    <div
                       className="h-full bg-primary rounded-full"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(doneCount / milestones.length) * 100}%` }}
-                      transition={{ duration: 1, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      style={{ width: `${(doneCount / milestones.length) * 100}%` }}
                     />
                   </div>
                 </div>
-              </TiltCard>
+              </Card>
             </motion.div>
           </div>
 
@@ -468,7 +200,7 @@ function Semester4Content() {
 
             {/* Tech stack */}
             <motion.div {...fadeUp(0.1)}>
-              <TiltCard className="p-6 space-y-4">
+              <Card className="p-6 space-y-4">
                 <div className="flex items-center gap-2">
                   <Cpu className="w-4 h-4 text-primary" />
                   <h3 className="font-semibold text-sm">{s.tech_title}</h3>
@@ -477,18 +209,18 @@ function Semester4Content() {
                   {TAGS.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20 hover:bg-primary/15 transition-colors cursor-default"
+                      className="px-3 py-1 text-xs font-mono rounded-md bg-primary/10 text-primary border border-primary/20"
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
-              </TiltCard>
+              </Card>
             </motion.div>
 
             {/* Team */}
             <motion.div {...fadeUp(0.15)}>
-              <TiltCard className="p-6 space-y-4">
+              <Card className="p-6 space-y-4">
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4 text-primary" />
                   <h3 className="font-semibold text-sm">{s.team_title}</h3>
@@ -500,7 +232,7 @@ function Semester4Content() {
                       className={`flex items-center gap-3 py-2.5 px-3 rounded-lg transition-colors ${
                         member.highlight
                           ? "bg-primary/10 border border-primary/20"
-                          : "bg-muted/30 hover:bg-muted/50"
+                          : "bg-muted/30"
                       }`}
                     >
                       {member.highlight && (
@@ -515,12 +247,12 @@ function Semester4Content() {
                     </div>
                   ))}
                 </div>
-              </TiltCard>
+              </Card>
             </motion.div>
 
             {/* Semester info */}
             <motion.div {...fadeUp(0.2)}>
-              <TiltCard className="p-6 space-y-3">
+              <Card className="p-6 space-y-3">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-primary" />
                   <h3 className="font-semibold text-sm">{s.info_title}</h3>
@@ -533,31 +265,26 @@ function Semester4Content() {
                     </div>
                   ))}
                 </div>
-              </TiltCard>
+              </Card>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* ── Navigatiekaarten ─────────────────────────────── */}
-      <section className="relative px-6 pb-32" style={{ zIndex: 12 }}>
+      <section className="relative px-6 pb-32">
         <div className="max-w-6xl mx-auto">
           <motion.div {...fadeUp(0.05)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             {/* AI Systeem */}
             <button
               onClick={() => navigate("/semester4/ai")}
-              className="group relative rounded-2xl border border-border bg-card hover:border-primary/40 transition-all duration-300 overflow-hidden text-left"
-              style={{ willChange: "transform" }}
+              className="group relative rounded-2xl border border-border bg-card hover:border-primary/40 transition-colors duration-300 overflow-hidden text-left"
             >
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, hsl(var(--primary)/0.10) 0%, transparent 70%)" }} />
               <div className="relative p-10 flex flex-col gap-5 h-full min-h-[220px]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                    </svg>
+                    <Camera className="w-5 h-5 text-primary" />
                   </div>
                   <span className="font-mono text-xs text-primary tracking-wider">{s.ai.label}</span>
                 </div>
@@ -577,11 +304,8 @@ function Semester4Content() {
             {/* UI/UX Progressie */}
             <button
               onClick={() => navigate("/semester4/uiux")}
-              className="group relative rounded-2xl border border-border bg-card hover:border-primary/40 transition-all duration-300 overflow-hidden text-left"
-              style={{ willChange: "transform" }}
+              className="group relative rounded-2xl border border-border bg-card hover:border-primary/40 transition-colors duration-300 overflow-hidden text-left"
             >
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, hsl(var(--primary)/0.10) 0%, transparent 70%)" }} />
               <div className="relative p-10 flex flex-col gap-5 h-full min-h-[220px]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
@@ -615,10 +339,8 @@ function Semester4Content() {
 
 export default function Semester4Page() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <LanguageProvider>
-        <Semester4Content />
-      </LanguageProvider>
-    </ThemeProvider>
+    <LanguageProvider>
+      <Semester4Content />
+    </LanguageProvider>
   );
 }

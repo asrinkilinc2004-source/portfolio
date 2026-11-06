@@ -1,22 +1,14 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState, useCallback } from "react";
+import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { ThemeProvider } from "next-themes";
 import Navbar from "../components/portfolio/Navbar";
-import CustomCursor from "../components/portfolio/CustomCursor";
 import ScrollProgressBar from "../components/portfolio/ScrollProgressBar";
 import BackToTop from "../components/portfolio/BackToTop";
+import Lightbox from "../components/portfolio/Lightbox";
 import { LanguageProvider, useLanguage } from "../lib/LanguageContext";
 import { useLenis } from "../lib/useLenis";
-
-const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 28 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] },
-});
+import { fadeUp } from "../lib/motion";
 
 const GRID_STYLE = {
   backgroundImage:
@@ -24,114 +16,11 @@ const GRID_STYLE = {
   backgroundSize: "60px 60px",
 };
 
-function TiltCard({ children, className = "" }) {
-  const ref = useRef(null);
-  const onMove = (e) => {
-    const el = ref.current; if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transition = "transform 0.05s linear";
-    el.style.transform = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 6}deg) scale3d(1.02,1.02,1.02)`;
-  };
-  const onLeave = () => {
-    const el = ref.current; if (!el) return;
-    el.style.transition = "transform 0.5s cubic-bezier(0.23,1,0.32,1)";
-    el.style.transform = "perspective(900px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)";
-  };
+function Card({ children, className = "" }) {
   return (
-    <div ref={ref}
-      onMouseMove={isMobile ? undefined : onMove}
-      onMouseLeave={isMobile ? undefined : onLeave}
-      className={`rounded-xl border border-border bg-card hover:border-primary/30 transition-colors duration-300 ${className}`}
-      style={{ willChange: "transform" }}>
+    <div className={`rounded-xl border border-border bg-card hover:border-primary/40 transition-colors duration-300 ${className}`}>
       {children}
     </div>
-  );
-}
-
-// ── Lightbox ─────────────────────────────────────────────────────────────────
-function Lightbox({ src, alt, onClose }) {
-  const [scale, setScale]   = useState(1);
-  const [pos,   setPos]     = useState({ x: 0, y: 0 });
-  const overlayRef          = useRef(null);
-  const drag                = useRef({ active: false, sx: 0, sy: 0, ox: 0, oy: 0, moved: false });
-  const pinchDist           = useRef(null);
-
-  useEffect(() => { setScale(1); setPos({ x: 0, y: 0 }); }, [src]);
-
-  useEffect(() => {
-    if (!src) return;
-    const onKey = (e) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [src, onClose]);
-
-  useEffect(() => {
-    const el = overlayRef.current;
-    if (!el || !src) return;
-    const onWheel = (e) => {
-      e.preventDefault(); e.stopPropagation();
-      const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
-      setScale(s => Math.min(Math.max(s * factor, 1), 6));
-    };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, [src]);
-
-  const onMouseDown = (e) => {
-    if (scale <= 1) return; e.preventDefault();
-    drag.current = { active: true, sx: e.clientX, sy: e.clientY, ox: pos.x, oy: pos.y, moved: false };
-  };
-  const onMouseMove = (e) => {
-    if (!drag.current.active) return;
-    const dx = e.clientX - drag.current.sx, dy = e.clientY - drag.current.sy;
-    if (Math.abs(dx) + Math.abs(dy) > 2) drag.current.moved = true;
-    setPos({ x: drag.current.ox + dx, y: drag.current.oy + dy });
-  };
-  const onMouseUp    = () => { drag.current.active = false; };
-  const onDblClick   = (e) => { e.stopPropagation(); setScale(1); setPos({ x: 0, y: 0 }); };
-  const onTouchStart = (e) => {
-    if (e.touches.length === 2)
-      pinchDist.current = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-  };
-  const onTouchMove  = (e) => {
-    if (e.touches.length !== 2 || !pinchDist.current) return; e.preventDefault();
-    const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    setScale(s => Math.min(Math.max(s * (dist / pinchDist.current), 1), 6));
-    pinchDist.current = dist;
-  };
-  const onTouchEnd   = () => { pinchDist.current = null; };
-  const onBackdrop   = (e) => { if (e.target === overlayRef.current && !drag.current.moved) onClose(); drag.current.moved = false; };
-  const cursorClass  = scale > 1 ? (drag.current.active ? "cursor-grabbing" : "cursor-grab") : "cursor-zoom-in";
-
-  return (
-    <AnimatePresence>
-      {src && (
-        <motion.div ref={overlayRef}
-          className="fixed inset-0 z-[300] flex items-center justify-center overflow-hidden"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.22 }}
-          onClick={onBackdrop} onMouseMove={onMouseMove} onMouseUp={onMouseUp} onMouseLeave={onMouseUp}
-          style={{ background: "rgba(0,0,0,0.88)", backdropFilter: "blur(10px)", touchAction: "none" }}>
-          <motion.div className="relative max-w-5xl w-full px-4 md:px-12 select-none"
-            initial={{ scale: 0.86, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.90, opacity: 0, y: 10 }} transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-            onClick={(e) => e.stopPropagation()}>
-            <img src={src} alt={alt} draggable={false} onContextMenu={(e) => e.preventDefault()}
-              onMouseDown={onMouseDown} onDoubleClick={onDblClick}
-              onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
-              className={`w-full max-h-[85vh] object-contain rounded-xl shadow-2xl ${cursorClass}`}
-              style={{ transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`, transformOrigin: "center center",
-                transition: drag.current.active ? "none" : "transform 0.12s ease", userSelect: "none" }} />
-            {alt && <p className="text-center text-xs text-white/60 font-mono italic mt-3">{alt}</p>}
-          </motion.div>
-          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-4">
-            <span className="text-white/30 font-mono text-xs">scroll = zoom · dubbelklik = reset</span>
-            <button onClick={onClose} className="text-white/40 hover:text-white/80 transition-colors font-mono text-xs">✕ sluiten</button>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
   );
 }
 
@@ -144,54 +33,17 @@ function Semester4UiuxContent() {
   const [lightbox, setLightbox] = useState(null);
   const openImg = useCallback((src, alt) => setLightbox({ src, alt }), []);
 
-  const patternRef  = useRef(null);
-  const pattern2Ref = useRef(null);
-
   useEffect(() => { window.scrollTo(0, 0); }, []);
-
-  useEffect(() => {
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const scrollY = window.scrollY;
-        const heroH   = window.innerHeight;
-        const progress = Math.min(Math.max((scrollY - heroH * 0.4) / (heroH * 0.4), 0), 1);
-        const isDark  = document.documentElement.classList.contains("dark");
-        if (patternRef.current) {
-          patternRef.current.style.opacity   = (progress * (isDark ? 0.08 : 0.20)).toString();
-          patternRef.current.style.transform = `translate3d(0,${-scrollY * 0.35}px,0)`;
-        }
-        if (pattern2Ref.current) {
-          pattern2Ref.current.style.opacity   = (progress * (isDark ? 0.18 : 0.35)).toString();
-          pattern2Ref.current.style.transform = `translate3d(0,${-scrollY * 0.6}px,0)`;
-        }
-        ticking = false;
-      });
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div ref={patternRef} aria-hidden="true" className="fixed pointer-events-none"
-        style={{ zIndex: 10, opacity: 0, top: "-200vh", left: "-10%", width: "120%", height: "900vh", willChange: "transform",
-          backgroundImage: "radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
-      <div ref={pattern2Ref} aria-hidden="true" className="fixed pointer-events-none"
-        style={{ zIndex: 11, opacity: 0, top: "-200vh", left: "-10%", width: "120%", height: "900vh", willChange: "transform",
-          backgroundImage: "radial-gradient(circle, hsl(var(--muted-foreground)) 1.5px, transparent 1.5px)", backgroundSize: "95px 95px" }} />
       <Lightbox src={lightbox?.src} alt={lightbox?.alt} onClose={() => setLightbox(null)} />
-      <CustomCursor />
       <Navbar />
       <ScrollProgressBar />
 
       {/* Hero */}
       <section className="relative min-h-[32vh] flex items-end pb-14 px-6 pt-28 overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={GRID_STYLE} />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[320px] pointer-events-none"
-          style={{ background: "radial-gradient(ellipse 70% 60% at 50% 0%, hsl(var(--primary)/0.15) 0%, transparent 70%)" }} />
         <div className="relative max-w-6xl mx-auto w-full">
           <motion.div {...fadeUp(0)}>
             <button onClick={() => navigate("/semester4")}
@@ -216,7 +68,7 @@ function Semester4UiuxContent() {
 
           {/* 1. Gebruikerstesten */}
           <motion.div {...fadeUp(0.05)}>
-            <TiltCard className="p-8 space-y-6">
+            <Card className="p-8 space-y-6">
               <h3 className="text-xl font-bold text-foreground">{s.uiux.tests_title}</h3>
               <p className="text-muted-foreground leading-relaxed">{s.uiux.tests_intro}</p>
               <figure className="space-y-2 max-w-sm mx-auto">
@@ -245,12 +97,12 @@ function Semester4UiuxContent() {
                 <h4 className="font-semibold text-foreground mb-2">{s.uiux.rename_title}</h4>
                 <p className="text-muted-foreground text-sm leading-relaxed">{s.uiux.rename_text}</p>
               </div>
-            </TiltCard>
+            </Card>
           </motion.div>
 
           {/* 2. UI Design */}
           <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-6">
+            <Card className="p-8 space-y-6">
               <h3 className="text-xl font-bold text-foreground">{s.uiux.design_title}</h3>
               <p className="text-muted-foreground leading-relaxed">{s.uiux.design_intro}</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -288,12 +140,12 @@ function Semester4UiuxContent() {
                   ))}
                 </ul>
               </div>
-            </TiltCard>
+            </Card>
           </motion.div>
 
           {/* Versie 3 */}
           <motion.div {...fadeUp(0.1)}>
-            <TiltCard className="p-8 space-y-6">
+            <Card className="p-8 space-y-6">
               <div>
                 <h3 className="text-xl font-bold text-foreground">{s.uiux.v3_title}</h3>
                 <p className="text-sm text-muted-foreground mt-1 font-mono">{s.uiux.v3_subtitle}</p>
@@ -311,12 +163,12 @@ function Semester4UiuxContent() {
                 <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img6_caption}</figcaption>
               </figure>
               <p className="text-xs text-muted-foreground italic text-center px-4">{s.uiux.img6_note}</p>
-            </TiltCard>
+            </Card>
           </motion.div>
 
           {/* Gebruikerstesten ronde 2 */}
           <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-6">
+            <Card className="p-8 space-y-6">
               <h3 className="text-xl font-bold text-foreground">{s.uiux.tests2_title}</h3>
               <p className="text-muted-foreground leading-relaxed">{s.uiux.tests2_text}</p>
               <figure className="space-y-2">
@@ -325,12 +177,12 @@ function Semester4UiuxContent() {
                 </div>
                 <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img7_caption}</figcaption>
               </figure>
-            </TiltCard>
+            </Card>
           </motion.div>
 
           {/* Final versie */}
           <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-6">
+            <Card className="p-8 space-y-6">
               <h3 className="text-xl font-bold text-foreground">{s.uiux.final_title}</h3>
               <p className="text-muted-foreground leading-relaxed">{s.uiux.final_text}</p>
               <figure className="space-y-2">
@@ -346,12 +198,12 @@ function Semester4UiuxContent() {
                 </div>
                 <figcaption className="text-center text-xs text-muted-foreground font-mono italic">{s.uiux.img9_caption}</figcaption>
               </figure>
-            </TiltCard>
+            </Card>
           </motion.div>
 
           {/* Verbeterpunten */}
           <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-5">
+            <Card className="p-8 space-y-5">
               <h3 className="text-xl font-bold text-foreground">{s.uiux.improvements_title}</h3>
               <div className="space-y-3">
                 {s.uiux.improvements.map((item, i) => (
@@ -364,15 +216,15 @@ function Semester4UiuxContent() {
                   </div>
                 ))}
               </div>
-            </TiltCard>
+            </Card>
           </motion.div>
 
           {/* Afsluiting */}
           <motion.div {...fadeUp(0.08)}>
-            <TiltCard className="p-8 space-y-3">
+            <Card className="p-8 space-y-3">
               <h3 className="text-xl font-bold text-foreground">{s.uiux.conclusion_title}</h3>
               <p className="text-muted-foreground leading-relaxed">{s.uiux.conclusion}</p>
-            </TiltCard>
+            </Card>
           </motion.div>
 
         </div>
@@ -385,10 +237,8 @@ function Semester4UiuxContent() {
 
 export default function Semester4UiuxPage() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <LanguageProvider>
-        <Semester4UiuxContent />
-      </LanguageProvider>
-    </ThemeProvider>
+    <LanguageProvider>
+      <Semester4UiuxContent />
+    </LanguageProvider>
   );
 }

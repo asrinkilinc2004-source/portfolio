@@ -1,90 +1,20 @@
-import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { animate } from "animejs";
 import { Code2, GraduationCap, Lightbulb, Rocket } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
-import SplitText from "./SplitText";
 
 const ICONS = [Lightbulb, GraduationCap, Code2, Rocket];
-const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
-
-function TiltCard({ children, className }) {
-  const ref = useRef(null);
-  const onMove = (e) => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width  - 0.5;
-    const y = (e.clientY - r.top)  / r.height - 0.5;
-    el.style.transition = "transform 0.05s linear, background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease";
-    el.style.transform  = `perspective(800px) rotateY(${x * 12}deg) rotateX(${-y * 8}deg) scale3d(1.03,1.03,1.03)`;
-  };
-  const onLeave = () => {
-    const el = ref.current;
-    if (!el) return;
-    el.style.transition = "transform 0.5s cubic-bezier(0.23,1,0.32,1), background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease";
-    el.style.transform  = "perspective(800px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)";
-  };
-  return (
-    <div ref={ref} onMouseMove={isMobile ? undefined : onMove} onMouseLeave={isMobile ? undefined : onLeave}
-      className={className} style={{ willChange: "transform" }}>
-      {children}
-    </div>
-  );
-}
-
-function CountUp({ value, suffix = "" }) {
-  const ref = useRef(null);
-  const animated = useRef(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    animated.current = false;
-    el.textContent = "0" + suffix;
-
-    const obj = { count: 0 };
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !animated.current) {
-          animated.current = true;
-          animate(obj, {
-            count: value,
-            duration: 1600,
-            ease: "out(3)",
-            round: 1,
-            onUpdate: () => {
-              if (el) el.textContent = Math.round(obj.count) + suffix;
-            },
-          });
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [value, suffix]);
-
-  return <span ref={ref}>0{suffix}</span>;
-}
 
 export default function AboutSection() {
   const { t } = useLanguage();
   const { label, title, p1, p2, highlights, stats } = t.about;
 
   return (
-    <section id="about" className="py-32 px-6">
+    <section id="about" className="py-24 md:py-32 px-6">
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{label}</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">
-            <span className="marker-highlight">
-              <SplitText text={title} delay={0.3} />
-            </span>
-          </h2>
+          <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">{title}</h2>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16">
@@ -92,15 +22,12 @@ export default function AboutSection() {
             <p className="text-muted-foreground text-lg leading-relaxed mb-6">{p1}</p>
             <p className="text-muted-foreground text-lg leading-relaxed mb-10">{p2}</p>
 
-            {/* Stat counters */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8 border-t-2 border-primary/30">
               {stats.map(({ value, suffix, label: statLabel }, i) => (
-                <motion.div key={i} {...fadeUp(0.15 + i * 0.07)} className="text-center lg:text-left">
-                  <p className="text-3xl font-bold text-primary font-mono">
-                    <CountUp value={value} suffix={suffix} />
-                  </p>
+                <div key={i} className="text-center lg:text-left">
+                  <p className="text-3xl font-bold text-primary font-mono">{value}{suffix}</p>
                   <p className="text-xs text-muted-foreground mt-1 font-mono tracking-wider">{statLabel}</p>
-                </motion.div>
+                </div>
               ))}
             </div>
           </motion.div>
@@ -110,13 +37,13 @@ export default function AboutSection() {
               const Icon = ICONS[i];
               return (
                 <motion.div key={hl} {...fadeUp(0.1 * i)}>
-                  <TiltCard className="p-5 rounded-xl bg-card border border-primary/30 border-l-4 border-l-primary hover:border-primary hover:bg-primary transition-colors duration-300 group h-full">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-white/20 transition-colors duration-300">
-                      <Icon className="w-5 h-5 text-primary group-hover:text-white transition-colors duration-300" />
+                  <div className="p-5 rounded-xl bg-card border border-border border-l-4 border-l-primary hover:border-primary/40 hover:shadow-md hover:shadow-primary/5 transition-colors duration-300 h-full">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                      <Icon className="w-5 h-5 text-primary" />
                     </div>
-                    <h3 className="font-semibold text-foreground mb-1 group-hover:text-white transition-colors duration-300">{hl}</h3>
-                    <p className="text-sm text-muted-foreground group-hover:text-white/80 transition-colors duration-300">{desc}</p>
-                  </TiltCard>
+                    <h3 className="font-semibold text-foreground mb-1">{hl}</h3>
+                    <p className="text-sm text-muted-foreground">{desc}</p>
+                  </div>
                 </motion.div>
               );
             })}

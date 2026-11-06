@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
