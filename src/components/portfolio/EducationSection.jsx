@@ -21,7 +21,14 @@ export default function EducationSection() {
               {...fadeUp(Math.min(i * 0.05, 0.3))}
               className="grid sm:grid-cols-[9rem_1fr] gap-2 sm:gap-8 py-6"
             >
-              <span className="font-mono text-xs text-primary tracking-wider">{item.year}</span>
+              <div className="flex flex-col gap-0.5">
+                {item.semester && (
+                  <span className="font-mono text-xs text-primary tracking-wider">{item.semester}</span>
+                )}
+                <span className={`font-mono text-xs tracking-wider ${item.semester ? "text-muted-foreground" : "text-primary"}`}>
+                  {item.year}
+                </span>
+              </div>
               <div>
                 <h3 className="text-lg font-bold">{item.title}</h3>
                 <p className="text-sm text-muted-foreground mb-2">{item.institution}</p>
