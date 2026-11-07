@@ -26,15 +26,15 @@ export default function Navbar() {
   const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
-    if (window.__lenis) {
-      window.__lenis.scrollTo(el, { duration: 0.9, easing: (t) => 1 - Math.pow(1 - t, 3) });
-    } else {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+    const headerOffset = isDesktop ? 24 : 84; // clear the fixed mobile top bar
+    const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+    window.scrollTo({ top, behavior: "smooth" });
   };
 
   const handleNavClick = (e, link) => {
     e.preventDefault();
+    setMobileOpen(false);
     if (!isHome) {
       navigate("/", { state: { scrollTo: link.id } });
     } else {
@@ -124,7 +124,7 @@ export default function Navbar() {
               className="bg-background/95 backdrop-blur-xl border-b border-border overflow-hidden">
               <div className="px-6 py-4 flex flex-col gap-4">
                 {links.map((link) => (
-                  <a key={link.href} href={link.href} onClick={(e) => { handleNavClick(e, link); setMobileOpen(false); }}
+                  <a key={link.href} href={link.href} onClick={(e) => handleNavClick(e, link)}
                     className={`text-sm transition-colors ${
                       activeSection === link.href ? "text-primary" : "text-muted-foreground hover:text-primary"
                     }`}>

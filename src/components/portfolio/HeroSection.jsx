@@ -49,7 +49,7 @@ export default function HeroSection() {
 
         <motion.div {...fadeUp(0.1)} className="flex-shrink-0">
           <div className="relative p-4">
-            <div className="relative z-10 w-40 h-40 md:w-56 md:h-56 rounded-full overflow-hidden border-2 border-white/20 shadow-xl">
+            <div className="relative z-10 w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-2 border-white/20 shadow-xl">
               <img src={AVATAR_URL} alt="Profile" decoding="async" fetchPriority="high" className="w-full h-full object-cover object-top" />
             </div>
           </div>

@@ -117,7 +117,7 @@ function Semester4Content() {
           <div className="lg:col-span-2 space-y-8">
 
             {/* Project photos */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {["/webcam1.jpeg", "/webcam2.jpeg"].map((src, i) => (
                 <motion.div key={i} {...fadeUp(0.05 + i * 0.07)}>
                   <Card className="overflow-hidden cursor-zoom-in" onClick={() => openImg(src, `AI Face Tracking Camera ${i + 1}`)}>
@@ -126,7 +126,7 @@ function Semester4Content() {
                       alt={`AI Face Tracking Camera ${i + 1}`}
                       draggable={false}
                       onContextMenu={(e) => e.preventDefault()}
-                      className="w-full h-64 object-cover hover:scale-105 transition-transform duration-500"
+                      className="w-full h-48 sm:h-64 object-cover hover:scale-105 transition-transform duration-500"
                     />
                   </Card>
                 </motion.div>
