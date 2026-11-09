@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 
 import { useLenis } from "../lib/useLenis";
+import { smoothScrollTo } from "../lib/scroll";
 import Navbar from "../components/portfolio/Navbar";
 import HeroSection from "../components/portfolio/HeroSection";
 import AboutSection from "../components/portfolio/AboutSection";
@@ -55,7 +56,7 @@ export default function Home() {
       const el = document.getElementById(id);
       if (el) {
         const top = el.getBoundingClientRect().top + window.scrollY - 90;
-        window.scrollTo({ top, behavior: "smooth" });
+        smoothScrollTo(top);
       } else if (tries < 8) {
         setTimeout(() => attempt(tries + 1), 80);
       }

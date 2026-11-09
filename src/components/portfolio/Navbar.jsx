@@ -4,6 +4,7 @@ import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/lib/LanguageContext";
+import { smoothScrollTo } from "@/lib/scroll";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Navbar() {
@@ -29,7 +30,7 @@ export default function Navbar() {
     const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
     const headerOffset = isDesktop ? 24 : 84; // clear the fixed mobile top bar
     const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
-    window.scrollTo({ top, behavior: "smooth" });
+    smoothScrollTo(top);
   };
 
   const handleNavClick = (e, link) => {
@@ -60,7 +61,7 @@ export default function Navbar() {
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
 
   const homeHref = () => (
-    <a href="/" onClick={(e) => { if (isHome) { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
+    <a href="/" onClick={(e) => { if (isHome) { e.preventDefault(); smoothScrollTo(0); } }}
       className="text-sm font-semibold text-primary hover:text-primary/80 tracking-wide">
       AK
     </a>
