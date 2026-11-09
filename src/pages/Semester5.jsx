@@ -13,7 +13,7 @@ function Semester5Content() {
   useLenis();
 
   return (
-    <div className="min-h-screen bg-background text-foreground lg:pl-64">
+    <div className="min-h-screen bg-background text-foreground lg:pl-56">
       <ScrollProgressBar />
       <Navbar />
 

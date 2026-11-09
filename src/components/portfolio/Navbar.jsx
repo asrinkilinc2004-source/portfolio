@@ -70,7 +70,7 @@ export default function Navbar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex fixed top-0 left-0 bottom-0 w-64 z-50 flex-col justify-between border-r border-border bg-background px-8 py-10">
+      <aside className="hidden lg:flex fixed top-0 left-0 bottom-0 w-56 z-50 flex-col justify-between border-r border-border bg-background px-6 py-10">
         <div>
           {homeHref()}
           <nav className="mt-12 flex flex-col gap-1">
