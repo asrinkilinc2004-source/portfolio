@@ -10,7 +10,7 @@ export default function AboutSection() {
   const { label, title, p1, p2, highlights, stats } = t.about;
 
   return (
-    <section id="about" className="py-24 md:py-32 px-6">
+    <section id="about" className="py-24 md:py-32 px-6 bg-background">
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{label}</span>

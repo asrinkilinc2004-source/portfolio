@@ -48,7 +48,7 @@ export default function ContactSection() {
   const inputCls = "bg-card border-border hover:border-primary/40 focus:border-primary/70 h-12 transition-colors duration-300 pl-4";
 
   return (
-    <section id="contact" className="py-24 md:py-32 px-6">
+    <section id="contact" className="py-24 md:py-32 px-6 bg-background">
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{c.label}</span>

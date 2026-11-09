@@ -118,7 +118,7 @@ export default function ProjectsSection() {
   const { label, title, items, view_current } = t.projects;
 
   return (
-    <section id="projects" className="py-24 md:py-32 px-6">
+    <section id="projects" className="py-24 md:py-32 px-6 bg-background">
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{label}</span>

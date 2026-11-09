@@ -7,7 +7,7 @@ export default function EducationSection() {
   const { label, title, timeline } = t.education;
 
   return (
-    <section id="education" className="py-24 md:py-32 px-6">
+    <section id="education" className="py-24 md:py-32 px-6 bg-card">
       <div className="max-w-6xl mx-auto">
         <motion.div {...fadeUp()} className="mb-16">
           <span className="font-mono text-sm text-primary tracking-wider">{label}</span>
