@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Users, Calendar, Cpu, Camera } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,8 @@ import Lightbox from "../components/portfolio/Lightbox";
 import { LanguageProvider, useLanguage } from "../lib/LanguageContext";
 import { useLenis } from "../lib/useLenis";
 import { fadeUp } from "../lib/motion";
+
+const WebcamScene3D = lazy(() => import("../components/portfolio/WebcamScene3D"));
 
 const GRID_STYLE = {
   backgroundImage:
@@ -73,6 +75,26 @@ function Semester4Content() {
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative min-h-[45vh] flex items-end pb-16 px-6 overflow-hidden pt-28">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={GRID_STYLE} />
+
+        {/* ── 3D Wireframe Eye ── */}
+        <Suspense fallback={null}>
+          <div
+            className="absolute pointer-events-none select-none hidden min-[1200px]:block"
+            style={{
+              left: "50%",
+              top: "50%",
+              transform: "translate(-5%, -50%)",
+              width: "min(50%, 540px)",
+              height: "min(80vh, 440px)",
+              opacity: 0.88,
+              zIndex: 1,
+              maskImage: "radial-gradient(ellipse 75% 80% at 50% 50%, black 35%, transparent 100%)",
+              WebkitMaskImage: "radial-gradient(ellipse 75% 80% at 50% 50%, black 35%, transparent 100%)",
+            }}
+          >
+            <WebcamScene3D />
+          </div>
+        </Suspense>
 
         <div className="relative max-w-6xl mx-auto w-full">
           <motion.div {...fadeUp(0)}>

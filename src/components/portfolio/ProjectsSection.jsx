@@ -1,9 +1,12 @@
+import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Camera } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { useLanguage } from "@/lib/LanguageContext";
 import { fadeUp } from "@/lib/motion";
+
+const WebcamScene3D = lazy(() => import("./WebcamScene3D"));
 
 // Per-project image overrides (index-based, language-independent)
 // Order: VistaTelecom (0), AI Camera (1), Defensie (2), Rituals (3), SafeNotes (4), DOKKI€ (5)
@@ -49,18 +52,11 @@ function ProjectCard({ project, index, viewCurrentLabel }) {
                 className={`w-full h-56 lg:h-full object-cover transition-transform duration-500 ${IMAGE_CLASS[index] ?? "group-hover:scale-105"}`}
               />
             ) : project.link === "/semester4" ? (
-              /* Semester 4 — static AI/camera placeholder */
-              <div className="w-full h-56 lg:h-full min-h-[14rem] flex items-center justify-center relative overflow-hidden"
-                style={{ background: "linear-gradient(135deg, hsl(var(--primary)/0.1) 0%, hsl(var(--primary)/0.2) 100%)" }}>
-                <div className="absolute inset-0 opacity-[0.07]"
-                  style={{
-                    backgroundImage: "linear-gradient(hsl(var(--primary)) 1px,transparent 1px),linear-gradient(90deg,hsl(var(--primary)) 1px,transparent 1px)",
-                    backgroundSize: "32px 32px",
-                  }}
-                />
-                <div className="relative w-14 h-14 rounded-full border-2 border-primary/30 flex items-center justify-center bg-background/40">
-                  <Camera className="w-6 h-6 text-primary" />
-                </div>
+              /* Semester 4 — 3D wireframe eye thumbnail */
+              <div className="w-full h-56 lg:h-full min-h-[14rem] relative overflow-hidden bg-white dark:bg-black">
+                <Suspense fallback={null}>
+                  <WebcamScene3D isStatic className="absolute inset-0 w-full h-full" />
+                </Suspense>
               </div>
             ) : (
               /* Placeholder for other projects without a screenshot yet */
